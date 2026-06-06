@@ -1,0 +1,41 @@
+<svg width="960" height="560" viewBox="0 0 960 560" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">币安 KYC 身份认证流程示意</title>
+  <desc id="desc">展示基础信息、证件上传、人脸识别和审核结果四个 KYC 步骤</desc>
+  <rect width="960" height="560" rx="28" fill="#F8FAFC"/>
+  <rect x="64" y="62" width="832" height="436" rx="26" fill="#FFFFFF" stroke="#E5E7EB" stroke-width="2"/>
+  <text x="96" y="120" fill="#111827" font-family="Arial, sans-serif" font-size="30" font-weight="700">KYC 身份认证怎么做</text>
+  <text x="96" y="152" fill="#6B7280" font-family="Arial, sans-serif" font-size="16">按顺序提交资料，重点是证件清晰、本人操作、信息一致。</text>
+  <line x1="164" y1="282" x2="796" y2="282" stroke="#E5E7EB" stroke-width="4" stroke-linecap="round"/>
+  <g>
+    <circle cx="164" cy="282" r="46" fill="#FFF7E1" stroke="#D4A843" stroke-width="2"/>
+    <rect x="145" y="260" width="38" height="45" rx="6" fill="#D4A843"/>
+    <rect x="153" y="270" width="22" height="4" rx="2" fill="#FFFFFF"/>
+    <rect x="153" y="282" width="22" height="4" rx="2" fill="#FFFFFF"/>
+    <text x="111" y="376" fill="#111827" font-family="Arial, sans-serif" font-size="19" font-weight="700">填写资料</text>
+    <text x="90" y="404" fill="#6B7280" font-family="Arial, sans-serif" font-size="14">姓名、国籍、出生日期</text>
+  </g>
+  <g>
+    <circle cx="376" cy="282" r="46" fill="#FFF7E1" stroke="#D4A843" stroke-width="2"/>
+    <rect x="344" y="262" width="64" height="40" rx="8" fill="#D4A843"/>
+    <circle cx="365" cy="282" r="9" fill="#FFFFFF"/>
+    <rect x="382" y="273" width="18" height="5" rx="2.5" fill="#FFFFFF"/>
+    <rect x="382" y="286" width="18" height="5" rx="2.5" fill="#FFFFFF"/>
+    <text x="323" y="376" fill="#111827" font-family="Arial, sans-serif" font-size="19" font-weight="700">上传证件</text>
+    <text x="306" y="404" fill="#6B7280" font-family="Arial, sans-serif" font-size="14">正反面完整、无反光</text>
+  </g>
+  <g>
+    <circle cx="588" cy="282" r="46" fill="#FFF7E1" stroke="#D4A843" stroke-width="2"/>
+    <circle cx="588" cy="274" r="18" fill="#D4A843"/>
+    <path d="M553 318c7-24 62-24 70 0" stroke="#D4A843" stroke-width="10" stroke-linecap="round"/>
+    <circle cx="582" cy="271" r="3" fill="#FFFFFF"/>
+    <circle cx="596" cy="271" r="3" fill="#FFFFFF"/>
+    <text x="535" y="376" fill="#111827" font-family="Arial, sans-serif" font-size="19" font-weight="700">人脸识别</text>
+    <text x="517" y="404" fill="#6B7280" font-family="Arial, sans-serif" font-size="14">摘口罩、保证光线充足</text>
+  </g>
+  <g>
+    <circle cx="796" cy="282" r="46" fill="#FFF7E1" stroke="#D4A843" stroke-width="2"/>
+    <path d="M772 282l16 16 34-38" stroke="#D4A843" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="743" y="376" fill="#111827" font-family="Arial, sans-serif" font-size="19" font-weight="700">等待审核</text>
+    <text x="731" y="404" fill="#6B7280" font-family="Arial, sans-serif" font-size="14">通常几分钟到几小时</text>
+  </g>
+</svg>

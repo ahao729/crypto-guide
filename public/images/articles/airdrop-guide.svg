@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" fill="none">
+  <defs>
+    <linearGradient id="bg1" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1a1a0f"/>
+      <stop offset="100%" stop-color="#2d2d1a"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="450" fill="url(#bg1)"/>
+  <!-- Decorative circles -->
+  <circle cx="650" cy="100" r="200" fill="#eab308" opacity="0.08"/>
+  <circle cx="150" cy="350" r="160" fill="#eab308" opacity="0.06"/>
+  <!-- Falling coins / airdrop visual -->
+  <circle cx="340" cy="100" r="18" fill="#eab308" opacity="0.3"/>
+  <text x="340" y="106" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="#eab308" opacity="0.6">$</text>
+  <circle cx="400" cy="80" r="18" fill="#eab308" opacity="0.25"/>
+  <text x="400" y="86" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="#eab308" opacity="0.5">$</text>
+  <circle cx="460" cy="100" r="18" fill="#eab308" opacity="0.3"/>
+  <text x="460" y="106" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="#eab308" opacity="0.6">$</text>
+  <circle cx="370" cy="140" r="16" fill="#eab308" opacity="0.2"/>
+  <circle cx="430" cy="145" r="16" fill="#eab308" opacity="0.2"/>
+  <circle cx="400" cy="165" r="14" fill="#eab308" opacity="0.15"/>
+  <!-- Parachute icon -->
+  <path d="M380 170 Q400 190 420 170" stroke="#eab308" stroke-width="1.5" fill="none" opacity="0.3"/>
+  <line x1="400" y1="170" x2="400" y2="200" stroke="#eab308" stroke-width="1" opacity="0.2"/>
+  <text x="400" y="270" text-anchor="middle" font-family="Arial, sans-serif" font-weight="bold" font-size="36" fill="#eab308">加密货币空投</text>
+  <text x="400" y="325" text-anchor="middle" font-family="Arial, sans-serif" font-weight="bold" font-size="42" fill="white">赚钱攻略</text>
+  <text x="400" y="380" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" fill="#a0a0b0">2026年必撸项目与交互技巧</text>
+  <rect x="300" y="410" width="200" height="3" rx="1.5" fill="#eab308"/>
+</svg>

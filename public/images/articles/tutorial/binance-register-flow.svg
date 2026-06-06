@@ -1,0 +1,36 @@
+<svg width="960" height="560" viewBox="0 0 960 560" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">币安开户注册流程示意</title>
+  <desc id="desc">展示从官网入口到填写邮箱、密码和邀请码的注册流程</desc>
+  <rect width="960" height="560" rx="28" fill="#FFFDF7"/>
+  <rect x="42" y="42" width="876" height="476" rx="24" fill="#FFFFFF" stroke="#E8D8AE" stroke-width="2"/>
+  <rect x="42" y="42" width="876" height="76" rx="24" fill="#1E2329"/>
+  <circle cx="82" cy="80" r="10" fill="#F87171"/>
+  <circle cx="114" cy="80" r="10" fill="#FBBF24"/>
+  <circle cx="146" cy="80" r="10" fill="#34D399"/>
+  <rect x="196" y="64" width="430" height="32" rx="16" fill="#2B3139"/>
+  <text x="220" y="85" fill="#E5E7EB" font-family="Arial, sans-serif" font-size="16">https://www.binance.com</text>
+  <rect x="78" y="154" width="260" height="330" rx="22" fill="#F8FAFC" stroke="#E5E7EB"/>
+  <text x="110" y="198" fill="#111827" font-family="Arial, sans-serif" font-size="28" font-weight="700">创建账户</text>
+  <text x="110" y="230" fill="#6B7280" font-family="Arial, sans-serif" font-size="16">填写邮箱、密码和推荐码</text>
+  <rect x="110" y="264" width="196" height="44" rx="10" fill="#FFFFFF" stroke="#D1D5DB"/>
+  <text x="126" y="292" fill="#6B7280" font-family="Arial, sans-serif" font-size="15">邮箱 / 手机号</text>
+  <rect x="110" y="324" width="196" height="44" rx="10" fill="#FFFFFF" stroke="#D1D5DB"/>
+  <text x="126" y="352" fill="#6B7280" font-family="Arial, sans-serif" font-size="15">高强度密码</text>
+  <rect x="110" y="384" width="196" height="44" rx="10" fill="#FFF7E1" stroke="#D4A843"/>
+  <text x="126" y="412" fill="#8A6A20" font-family="Arial, sans-serif" font-size="15" font-weight="700">推荐码 CROW5SEED</text>
+  <rect x="432" y="164" width="436" height="76" rx="18" fill="#FFF7E1" stroke="#D4A843"/>
+  <circle cx="470" cy="202" r="18" fill="#D4A843"/>
+  <text x="464" y="209" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="18" font-weight="700">1</text>
+  <text x="504" y="194" fill="#111827" font-family="Arial, sans-serif" font-size="21" font-weight="700">确认官方域名</text>
+  <text x="504" y="220" fill="#6B7280" font-family="Arial, sans-serif" font-size="15">优先使用官网或站内推荐链接，避开搜索广告钓鱼站</text>
+  <rect x="432" y="280" width="436" height="76" rx="18" fill="#F8FAFC" stroke="#E5E7EB"/>
+  <circle cx="470" cy="318" r="18" fill="#D4A843"/>
+  <text x="464" y="325" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="18" font-weight="700">2</text>
+  <text x="504" y="310" fill="#111827" font-family="Arial, sans-serif" font-size="21" font-weight="700">邮箱注册更适合长期管理</text>
+  <text x="504" y="336" fill="#6B7280" font-family="Arial, sans-serif" font-size="15">验证码、找回密码、安全通知都会更稳定</text>
+  <rect x="432" y="396" width="436" height="76" rx="18" fill="#F8FAFC" stroke="#E5E7EB"/>
+  <circle cx="470" cy="434" r="18" fill="#D4A843"/>
+  <text x="464" y="441" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="18" font-weight="700">3</text>
+  <text x="504" y="426" fill="#111827" font-family="Arial, sans-serif" font-size="21" font-weight="700">提交前检查邀请码</text>
+  <text x="504" y="452" fill="#6B7280" font-family="Arial, sans-serif" font-size="15">使用推荐链接会自动填入，手动注册时需主动填写</text>
+</svg>

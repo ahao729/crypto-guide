@@ -1,0 +1,13 @@
+:root {
+  --cgc-deep-black: #0B0D10;
+  --cgc-panel-black: #111419;
+  --cgc-guide-gold: #D4A843;
+  --cgc-light-gold: #E6C06F;
+  --cgc-dark-gold: #9F7528;
+  --cgc-text-white: #F8F3E4;
+  --cgc-muted-gray: #AEB3BC;
+  --cgc-safety-green: #22C55E;
+  --cgc-warning-orange: #F97316;
+  --cgc-alert-red: #EF4444;
+  --cgc-info-blue: #3B82F6;
+}

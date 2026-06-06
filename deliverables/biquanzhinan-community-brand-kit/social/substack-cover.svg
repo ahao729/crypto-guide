@@ -1,0 +1,11 @@
+<svg width="1600" height="900" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1600" height="900" fill="#F8F6EF"/>
+  <rect x="90" y="90" width="1420" height="720" rx="56" fill="#111419"/>
+  <circle cx="1300" cy="160" r="300" fill="#D4A843" fill-opacity="0.12"/>
+  <text x="170" y="235" font-family="Noto Sans SC, PingFang SC, Microsoft YaHei, sans-serif" font-size="54" font-weight="700" fill="#D4A843">币圈指南研究社周报</text>
+  <text x="170" y="365" font-family="Noto Sans SC, PingFang SC, Microsoft YaHei, sans-serif" font-size="92" font-weight="850" fill="#F8F3E4">看懂交易所，少走弯路</text>
+  <text x="174" y="466" font-family="Noto Sans SC, PingFang SC, Microsoft YaHei, sans-serif" font-size="38" font-weight="500" fill="#AEB3BC">每周整理交易所活动、注册教程、费率变化与风险提醒</text>
+  <rect x="170" y="570" width="260" height="72" rx="36" fill="#D4A843"/>
+  <text x="300" y="617" text-anchor="middle" font-family="Noto Sans SC, PingFang SC, Microsoft YaHei, sans-serif" font-size="28" font-weight="800" fill="#111419">订阅周报</text>
+  <text x="170" y="724" font-family="Inter, Arial, sans-serif" font-size="26" font-weight="700" letter-spacing="3" fill="#D4A843">CRYPTO GUIDE CLUB</text>
+</svg>

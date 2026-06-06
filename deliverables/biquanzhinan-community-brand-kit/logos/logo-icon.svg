@@ -1,0 +1,26 @@
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="96" y1="80" x2="936" y2="944" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#15181E"/>
+      <stop offset="1" stop-color="#050608"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="270" y1="196" x2="760" y2="812" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F2D779"/>
+      <stop offset="0.45" stop-color="#D4A843"/>
+      <stop offset="1" stop-color="#9F7528"/>
+    </linearGradient>
+    <filter id="shadow" x="124" y="118" width="780" height="780" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="24" stdDeviation="38" flood-color="#D4A843" flood-opacity="0.22"/>
+    </filter>
+  </defs>
+  <rect width="1024" height="1024" rx="224" fill="url(#bg)"/>
+  <circle cx="512" cy="512" r="334" fill="#D4A843" fill-opacity="0.08"/>
+  <circle cx="512" cy="512" r="274" stroke="#D4A843" stroke-opacity="0.32" stroke-width="3"/>
+  <g filter="url(#shadow)">
+    <circle cx="512" cy="512" r="230" fill="url(#gold)"/>
+    <path d="M512 208L603 421L816 512L603 603L512 816L421 603L208 512L421 421L512 208Z" fill="#101318"/>
+    <path d="M512 272L583 442L752 512L583 583L512 752L441 583L272 512L441 442L512 272Z" fill="url(#gold)"/>
+    <path d="M512 354L552 472L670 512L552 552L512 670L472 552L354 512L472 472L512 354Z" fill="#111419"/>
+    <text x="512" y="572" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="210" font-weight="800" fill="#F8F3E4">B</text>
+  </g>
+</svg>

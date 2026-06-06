@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" fill="none">
+  <defs>
+    <linearGradient id="bg1" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0f1a2e"/>
+      <stop offset="100%" stop-color="#1a2d3d"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="450" fill="url(#bg1)"/>
+  <!-- Decorative circles -->
+  <circle cx="650" cy="80" r="220" fill="#06b6d4" opacity="0.08"/>
+  <circle cx="120" cy="380" r="170" fill="#06b6d4" opacity="0.06"/>
+  <!-- Strategy payoff line visual -->
+  <polyline points="220,260 280,260 360,140 440,260 500,260" stroke="#06b6d4" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.4"/>
+  <polyline points="240,300 320,200 480,200" stroke="#f59e0b" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.3" stroke-dasharray="6 4"/>
+  <!-- Grid pattern -->
+  <line x1="180" y1="100" x2="180" y2="320" stroke="#ffffff" stroke-width="1" opacity="0.05"/>
+  <line x1="300" y1="100" x2="300" y2="320" stroke="#ffffff" stroke-width="1" opacity="0.05"/>
+  <line x1="420" y1="100" x2="420" y2="320" stroke="#ffffff" stroke-width="1" opacity="0.05"/>
+  <line x1="540" y1="100" x2="540" y2="320" stroke="#ffffff" stroke-width="1" opacity="0.05"/>
+  <line x1="180" y1="200" x2="620" y2="200" stroke="#ffffff" stroke-width="1" opacity="0.05"/>
+  <line x1="180" y1="260" x2="620" y2="260" stroke="#ffffff" stroke-width="1" opacity="0.05"/>
+  <text x="400" y="220" text-anchor="middle" font-family="Arial, sans-serif" font-weight="bold" font-size="46" fill="#22d3ee">加密货币期权</text>
+  <text x="400" y="280" text-anchor="middle" font-family="Arial, sans-serif" font-weight="bold" font-size="52" fill="white">策略详解</text>
+  <text x="400" y="340" text-anchor="middle" font-family="Arial, sans-serif" font-size="20" fill="#a0a0b0">深入解析各类期权交易策略组合</text>
+  <rect x="300" y="370" width="200" height="3" rx="1.5" fill="#22d3ee"/>
+</svg>

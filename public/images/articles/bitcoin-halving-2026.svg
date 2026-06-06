@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" fill="none">
+  <defs>
+    <linearGradient id="bg1" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1a1a0f"/>
+      <stop offset="100%" stop-color="#2d2d1a"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="450" fill="url(#bg1)"/>
+  <!-- Decorative circles -->
+  <circle cx="650" cy="80" r="220" fill="#f7931a" opacity="0.08"/>
+  <circle cx="120" cy="380" r="170" fill="#f7931a" opacity="0.06"/>
+  <!-- Bitcoin symbol large -->
+  <circle cx="400" cy="120" r="50" fill="#f7931a" opacity="0.1" stroke="#f7931a" stroke-width="2" stroke-opacity="0.3"/>
+  <text x="400" y="137" text-anchor="middle" font-family="Arial, sans-serif" font-weight="bold" font-size="48" fill="#f7931a" opacity="0.5">₿</text>
+  <!-- Halving countdown visual -->
+  <circle cx="340" cy="210" r="20" fill="#f7931a" opacity="0.15"/>
+  <text x="340" y="216" text-anchor="middle" font-family="Arial, sans-serif" font-weight="bold" font-size="14" fill="#f7931a">3</text>
+  <line x1="360" y1="210" x2="380" y2="210" stroke="#f7931a" stroke-width="1" opacity="0.3"/>
+  <circle cx="400" cy="210" r="20" fill="#f7931a" opacity="0.2"/>
+  <text x="400" y="216" text-anchor="middle" font-family="Arial, sans-serif" font-weight="bold" font-size="14" fill="#f7931a">2</text>
+  <line x1="420" y1="210" x2="440" y2="210" stroke="#f7931a" stroke-width="1" opacity="0.3"/>
+  <circle cx="460" cy="210" r="20" fill="#f7931a" opacity="0.25"/>
+  <text x="460" y="216" text-anchor="middle" font-family="Arial, sans-serif" font-weight="bold" font-size="14" fill="#f7931a">1</text>
+  <text x="400" y="290" text-anchor="middle" font-family="Arial, sans-serif" font-weight="bold" font-size="36" fill="#f7931a">比特币减半 2026</text>
+  <text x="400" y="350" text-anchor="middle" font-family="Arial, sans-serif" font-weight="bold" font-size="42" fill="white">历史规律与未来展望</text>
+  <text x="400" y="400" text-anchor="middle" font-family="Arial, sans-serif" font-size="20" fill="#a0a0b0">历史规律、市场影响与未来展望</text>
+  <rect x="300" y="430" width="200" height="3" rx="1.5" fill="#f7931a"/>
+</svg>

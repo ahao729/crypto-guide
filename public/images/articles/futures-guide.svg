@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" fill="none">
+  <defs>
+    <linearGradient id="bg3" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0a0a1a"/>
+      <stop offset="100%" stop-color="#1a0a2e"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="450" fill="url(#bg3)"/>
+  <polyline points="100,350 200,280 300,300 400,200 500,220 600,120 700,150" stroke="#00BFA5" stroke-width="4" fill="none" opacity="0.8"/>
+  <polyline points="100,370 200,310 300,320 400,230 500,250 600,160 700,180" stroke="#e94560" stroke-width="3" fill="none" opacity="0.5"/>
+  <text x="400" y="170" text-anchor="middle" font-family="Arial, sans-serif" font-weight="bold" font-size="48" fill="white">永续合约</text>
+  <text x="400" y="230" text-anchor="middle" font-family="Arial, sans-serif" font-weight="bold" font-size="44" fill="#00BFA5">什么是永续合约？</text>
+  <text x="400" y="290" text-anchor="middle" font-family="Arial, sans-serif" font-size="20" fill="#a0a0b0">深入了解永续合约交易机制</text>
+  <rect x="300" y="320" width="200" height="3" rx="1.5" fill="#00BFA5"/>
+</svg>

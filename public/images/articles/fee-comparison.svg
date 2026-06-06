@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" fill="none">
+  <defs>
+    <linearGradient id="bg4" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1a1a2e"/>
+      <stop offset="100%" stop-color="#2d1b3d"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="450" fill="url(#bg4)"/>
+  <rect x="120" y="200" width="100" height="150" rx="8" fill="#e94560" opacity="0.8"/>
+  <rect x="250" y="160" width="100" height="190" rx="8" fill="#F3BA2F" opacity="0.8"/>
+  <rect x="380" y="180" width="100" height="170" rx="8" fill="#00BFA5" opacity="0.8"/>
+  <rect x="510" y="140" width="100" height="210" rx="8" fill="#4A9FF5" opacity="0.8"/>
+  <rect x="640" y="210" width="100" height="140" rx="8" fill="#05C391" opacity="0.8"/>
+  <text x="400" y="110" text-anchor="middle" font-family="Arial, sans-serif" font-weight="bold" font-size="44" fill="white">交易所手续费</text>
+  <text x="400" y="430" text-anchor="middle" font-family="Arial, sans-serif" font-size="20" fill="#a0a0b0">主流交易所手续费全面对比</text>
+</svg>

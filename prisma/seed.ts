@@ -555,8 +555,14 @@ DeepCoin成立于2019年，是一家专注于加密货币衍生品交易的平�
     { question: "USDT有哪些不同的链？应该选哪个？", answer: "USDT支持多种区块链网络：TRC20（波场）、ERC20（以太坊）、BEP20（币安智能链）、Solana等。推荐使用TRC20网络，因为手续费低（约1 USDT）、到账快，且在各大交易所都支持。注意不要选错网络，否则资金可能无法找回。", category: "提现", sortOrder: 3 },
   ]
 
-  for (const faq of faqs) {
-    await prisma.fAQ.create({ data: faq })
+  // 只有在 FAQ 表为空时才插入，避免重复部署时重复创建
+  const existingFaqCount = await prisma.fAQ.count()
+  if (existingFaqCount === 0) {
+    for (const faq of faqs) {
+      await prisma.fAQ.create({ data: faq })
+    }
+  } else {
+    console.log(`   ⏭️  FAQ 表已有 ${existingFaqCount} 条数据，跳过`)
   }
 
   // ============================
@@ -591,14 +597,20 @@ DeepCoin成立于2019年，是一家专注于加密货币衍生品交易的平�
   // 7. 首页区块 (HomeSections)
   // ============================
   console.log("🏠 创建首页区块...")
-  const homeSections = [
-    { title: "热门交易所", subtitle: "全球最受欢迎的数字货币交易平台", type: "exchanges", sortOrder: 1, published: true },
-    { title: "推荐交易所", subtitle: "精心筛选的优质交易平台", type: "featured", sortOrder: 2, published: true },
-    { title: "最新文章", subtitle: "最新的加密货币知识和教程", type: "articles", sortOrder: 3, published: true },
-  ]
+  // 只有在 HomeSection 表为空时才插入
+  const existingHomeSectionCount = await prisma.homeSection.count()
+  if (existingHomeSectionCount === 0) {
+    const homeSections = [
+      { title: "热门交易所", subtitle: "全球最受欢迎的数字货币交易平台", type: "exchanges", sortOrder: 1, published: true },
+      { title: "推荐交易所", subtitle: "精心筛选的优质交易平台", type: "featured", sortOrder: 2, published: true },
+      { title: "最新文章", subtitle: "最新的加密货币知识和教程", type: "articles", sortOrder: 3, published: true },
+    ]
 
-  for (const section of homeSections) {
-    await prisma.homeSection.create({ data: section })
+    for (const section of homeSections) {
+      await prisma.homeSection.create({ data: section })
+    }
+  } else {
+    console.log(`   ⏭️  HomeSection 表已有 ${existingHomeSectionCount} 条数据，跳过`)
   }
 
   // ============================

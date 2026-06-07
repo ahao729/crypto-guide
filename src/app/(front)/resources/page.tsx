@@ -450,7 +450,7 @@ export default function ResourcesPage() {
             告诉我们您需要的资源，我们会尽快为您整理上传
           </p>
           <a
-            href="mailto:resources@biquanzhinan.com"
+            href="mailto:resources@bqzn.top"
             className="mt-6 inline-flex items-center justify-center rounded-lg bg-gradient-gold px-6 py-2.5 text-sm font-medium text-white shadow-md shadow-gold/20 transition-opacity hover:opacity-90"
           >
             请求资源

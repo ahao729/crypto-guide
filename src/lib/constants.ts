@@ -21,11 +21,11 @@ export const siteConfig: SiteConfig = {
   shortName: "币圈指南",
   description:
     "专业的数字货币交易所评测与推荐平台，提供最新交易所拉新活动、注册教程、手续费对比和深度评测，助您选择最合适的加密货币交易平台。",
-  url: "https://biquanzhinan.com",
+  url: "https://bqzn.top",
   ogImage: "/og.png",
   author: "币圈指南团队",
   locale: "zh-CN",
-  contactEmail: "hello@biquanzhinan.com",
+  contactEmail: "hello@bqzn.top",
   navItems: [
     { label: "首页", href: "/" },
     { label: "交易所", href: "/exchanges" },

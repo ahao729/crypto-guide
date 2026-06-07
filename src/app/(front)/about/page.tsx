@@ -3,6 +3,7 @@ import { siteConfig } from "@/lib/constants"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { MessageCircle, Users, Shield, Sparkles, Link, Gift, ExternalLink } from "lucide-react"
+import { prisma } from "@/lib/prisma"
 
 export const metadata: Metadata = {
   title: `加入社群 - ${siteConfig.name}`,
@@ -59,13 +60,20 @@ const features = [
   },
 ]
 
-const platforms = [
+interface Platform {
+  name: string
+  description: string
+  members: string
+  href: string
+  color: string
+}
+
+const defaultPlatforms: Platform[] = [
   {
     name: "Telegram 群",
     description: "最活跃的主阵地，实时讨论交易所评测、撸空投和链上机会",
     members: "3,000+ 群友",
     href: "https://t.me/your_group_link",
-    icon: ExternalLink,
     color: "bg-sky-500/10 text-sky-500",
   },
   {
@@ -73,7 +81,6 @@ const platforms = [
     description: "按主题分频道的深度交流空间，适合长文讨论和资源沉淀",
     members: "1,500+ 成员",
     href: "https://discord.gg/your_invite",
-    icon: ExternalLink,
     color: "bg-indigo-500/10 text-indigo-500",
   },
   {
@@ -81,7 +88,6 @@ const platforms = [
     description: "面向中文用户的便捷交流群，每日精选内容推送",
     members: "已开 5 群",
     href: "https://t.me/your_wechat_bot",
-    icon: ExternalLink,
     color: "bg-emerald-500/10 text-emerald-500",
   },
 ]
@@ -107,7 +113,44 @@ const aboutBreadcrumbJsonLd = {
   ],
 }
 
-export default function AboutPage() {
+async function getSettingsMap(): Promise<Record<string, string>> {
+  try {
+    const settings = await prisma.siteSetting.findMany()
+    const map: Record<string, string> = {}
+    for (const s of settings) {
+      map[s.key] = s.value
+    }
+    return map
+  } catch {
+    return {}
+  }
+}
+
+export default async function AboutPage() {
+  const settingsMap = await getSettingsMap()
+
+  // Community stats
+  const communityMembers = settingsMap.community_members || "5,000+"
+  const communityPlatformsCount = settingsMap.community_platforms_count || "3"
+  const communityActiveLabel = settingsMap.community_active_label || "每日"
+  const communityCostLabel = settingsMap.community_cost_label || "免费"
+
+  // Platforms
+  let platforms: Platform[] = defaultPlatforms
+  try {
+    if (settingsMap.community_platforms) {
+      const parsed = JSON.parse(settingsMap.community_platforms) as Platform[]
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        platforms = parsed
+      }
+    }
+  } catch {
+    // ignore parse errors, use defaults
+  }
+
+  const firstPlatform = platforms[0]
+  const secondPlatform = platforms[1]
+
   return (
     <div className="min-h-screen">
       <script
@@ -132,18 +175,22 @@ export default function AboutPage() {
               与万千加密货币投资者一起交流、分享、成长
             </p>
             <div className="mt-8 flex flex-wrap justify-center gap-4">
-              <Button className="bg-gradient-gold text-white shadow-md shadow-gold/20" asChild>
-                <a href="https://t.me/your_group_link" target="_blank" rel="noopener noreferrer">
-                  加入 Telegram 群
-                  <ExternalLink className="ml-2 h-4 w-4" />
-                </a>
-              </Button>
-              <Button variant="outline" asChild>
-                <a href="https://discord.gg/your_invite" target="_blank" rel="noopener noreferrer">
-                  加入 Discord
-                  <ExternalLink className="ml-2 h-4 w-4" />
-                </a>
-              </Button>
+              {firstPlatform && (
+                <Button className="bg-gradient-gold text-white shadow-md shadow-gold/20" asChild>
+                  <a href={firstPlatform.href} target="_blank" rel="noopener noreferrer">
+                    加入 {firstPlatform.name}
+                    <ExternalLink className="ml-2 h-4 w-4" />
+                  </a>
+                </Button>
+              )}
+              {secondPlatform && (
+                <Button variant="outline" asChild>
+                  <a href={secondPlatform.href} target="_blank" rel="noopener noreferrer">
+                    加入 {secondPlatform.name}
+                    <ExternalLink className="ml-2 h-4 w-4" />
+                  </a>
+                </Button>
+              )}
             </div>
           </div>
         </div>
@@ -153,19 +200,19 @@ export default function AboutPage() {
       <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
           <div className="rounded-xl border border-border/60 bg-card p-6 text-center">
-            <div className="text-3xl font-bold text-gold">5,000+</div>
+            <div className="text-3xl font-bold text-gold">{communityMembers}</div>
             <div className="mt-1 text-sm text-muted-foreground">社群成员</div>
           </div>
           <div className="rounded-xl border border-border/60 bg-card p-6 text-center">
-            <div className="text-3xl font-bold text-gold">3</div>
+            <div className="text-3xl font-bold text-gold">{communityPlatformsCount}</div>
             <div className="mt-1 text-sm text-muted-foreground">交流平台</div>
           </div>
           <div className="rounded-xl border border-border/60 bg-card p-6 text-center">
-            <div className="text-3xl font-bold text-gold">每日</div>
+            <div className="text-3xl font-bold text-gold">{communityActiveLabel}</div>
             <div className="mt-1 text-sm text-muted-foreground">活跃讨论</div>
           </div>
           <div className="rounded-xl border border-border/60 bg-card p-6 text-center">
-            <div className="text-3xl font-bold text-gold">免费</div>
+            <div className="text-3xl font-bold text-gold">{communityCostLabel}</div>
             <div className="mt-1 text-sm text-muted-foreground">加入社群</div>
           </div>
         </div>
@@ -213,8 +260,8 @@ export default function AboutPage() {
               className="group rounded-xl border border-border/60 bg-card p-6 transition-all hover:border-gold/30 hover:shadow-md"
             >
               <div className="flex items-center justify-between">
-                <div className={`flex h-12 w-12 items-center justify-center rounded-lg ${platform.color}`}>
-                  <platform.icon className="h-6 w-6" />
+                <div className={`flex h-12 w-12 items-center justify-center rounded-lg ${platform.color || "bg-gold/10 text-gold"}`}>
+                  <ExternalLink className="h-6 w-6" />
                 </div>
                 <span className="text-xs text-muted-foreground">{platform.members}</span>
               </div>
@@ -271,24 +318,22 @@ export default function AboutPage() {
             和数千名加密货币爱好者一起，在投资路上不再孤单
           </p>
           <div className="mt-6 flex flex-wrap justify-center gap-4">
-            <Button className="bg-gradient-gold text-white shadow-md shadow-gold/20" asChild>
-              <a href="https://t.me/your_group_link" target="_blank" rel="noopener noreferrer">
-                Telegram 群
-                <ExternalLink className="ml-2 h-4 w-4" />
-              </a>
-            </Button>
-            <Button variant="outline" asChild>
-              <a href="https://discord.gg/your_invite" target="_blank" rel="noopener noreferrer">
-                Discord 社区
-                <ExternalLink className="ml-2 h-4 w-4" />
-              </a>
-            </Button>
-            <Button variant="outline" asChild>
-              <a href="https://t.me/your_wechat_bot" target="_blank" rel="noopener noreferrer">
-                微信群
-                <ExternalLink className="ml-2 h-4 w-4" />
-              </a>
-            </Button>
+            {firstPlatform && (
+              <Button className="bg-gradient-gold text-white shadow-md shadow-gold/20" asChild>
+                <a href={firstPlatform.href} target="_blank" rel="noopener noreferrer">
+                  {firstPlatform.name}
+                  <ExternalLink className="ml-2 h-4 w-4" />
+                </a>
+              </Button>
+            )}
+            {platforms.slice(1).map((p) => (
+              <Button key={p.name} variant="outline" asChild>
+                <a href={p.href} target="_blank" rel="noopener noreferrer">
+                  {p.name}
+                  <ExternalLink className="ml-2 h-4 w-4" />
+                </a>
+              </Button>
+            ))}
           </div>
         </div>
       </section>

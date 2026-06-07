@@ -12,10 +12,10 @@ async function main() {
   console.log("📝 创建管理员用户...")
   const hashedPassword = await bcrypt.hash("admin123", 10)
   await prisma.user.upsert({
-    where: { email: "admin@biquanzhinan.com" },
+    where: { email: "admin@bqzn.top" },
     update: {},
     create: {
-      email: "admin@biquanzhinan.com",
+      email: "admin@bqzn.top",
       password: hashedPassword,
       name: "超级管理员",
       role: "admin",
@@ -576,7 +576,7 @@ DeepCoin成立于2019年，是一家专注于加密货币衍生品交易的平�
     { key: "site_logo", value: "/logo.svg" },
     { key: "site_footer_logo", value: "/logo-white.svg" },
     { key: "icp_beian", value: "京ICP备00000000号" },
-    { key: "contact_email", value: "contact@biquanzhinan.com" },
+    { key: "contact_email", value: "contact@bqzn.top" },
     { key: "stat_exchanges", value: "15" },
     { key: "stat_articles", value: "55" },
     { key: "stat_users", value: "10000" },
@@ -3511,7 +3511,7 @@ Block #100 → Block #101 → Block #102 → ...
    console.log(`   🏠 首页区块: ${existingHomeSectionCount}`)
   console.log(`   📄 文章: ${articles.length}`)
   console.log("\n🔑 管理员登录信息:")
-  console.log(`   邮箱: admin@biquanzhinan.com`)
+  console.log(`   邮箱: admin@bqzn.top`)
   console.log(`   密码: admin123`)
 }
 

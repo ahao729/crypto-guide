@@ -7,6 +7,7 @@ const nextConfig: NextConfig = {
   // 压缩响应 (Next.js 16 默认启用，显式声明)
   compress: true,
 
+
   images: {
     // 启用 AVIF 和 WebP 格式以获得更小的图片体积
     formats: ["image/avif", "image/webp"],

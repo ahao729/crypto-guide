@@ -3508,7 +3508,7 @@ Block #100 → Block #101 → Block #102 → ...
   console.log(`   🏛️ 交易所: ${exchanges.length}`)
   console.log(`   ❓ FAQ: ${faqs.length}`)
   console.log(`   ⚙️ 站点设置: ${settings.length}`)
-  console.log(`   🏠 首页区块: ${homeSections.length}`)
+   console.log(`   🏠 首页区块: ${existingHomeSectionCount}`)
   console.log(`   📄 文章: ${articles.length}`)
   console.log("\n🔑 管理员登录信息:")
   console.log(`   邮箱: admin@biquanzhinan.com`)

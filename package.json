@@ -9,7 +9,7 @@
     "lint": "eslint",
     "seed": "tsx prisma/seed.ts",
     "postinstall": "prisma generate",
-    "vercel-build": "prisma generate && prisma db push && prisma db seed && next build"
+    "vercel-build": "prisma generate --schema=prisma/schema.postgres.prisma && prisma db push --schema=prisma/schema.postgres.prisma && prisma db seed --schema=prisma/schema.postgres.prisma && next build"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"

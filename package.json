@@ -50,6 +50,7 @@
     "clsx": "^2.1.1",
     "date-fns": "^4.4.0",
     "gray-matter": "^4.0.3",
+    "lightningcss-darwin-arm64": "^1.32.0",
     "lowlight": "^3.3.0",
     "lucide-react": "^1.17.0",
     "next": "16.2.7",

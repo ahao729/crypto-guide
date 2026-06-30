@@ -5,9 +5,9 @@ import { useRouter, useParams } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { RichTextEditor } from "@/components/editor/RichTextEditor"
 import { apiClient } from "@/lib/api-client"
 import type { ResourceType } from "@/types"
 
@@ -146,7 +146,11 @@ export default function EditResourcePage() {
           <CardContent>
             <div className="space-y-2">
               <Label htmlFor="description">简介</Label>
-              <Textarea id="description" rows={4} value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} />
+              <RichTextEditor
+                value={form.description}
+                onChange={(val) => setForm({ ...form, description: val })}
+                placeholder="编写详细的资源介绍..."
+              />
             </div>
           </CardContent>
         </Card>

@@ -56,6 +56,7 @@ export async function PUT(
       data: {
         ...(body.title !== undefined && { title: body.title }),
         ...(body.description !== undefined && { description: body.description }),
+        ...(body.content !== undefined && { content: body.content }),
         ...(body.category !== undefined && { category: body.category }),
         ...(body.type !== undefined && { type: body.type }),
         ...(body.fileUrl !== undefined && { fileUrl: body.fileUrl }),

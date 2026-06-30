@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { RichTextEditor } from "@/components/editor/RichTextEditor"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { apiClient } from "@/lib/api-client"
 
@@ -16,6 +17,7 @@ export default function NewResourcePage() {
   const [form, setForm] = useState({
     title: "",
     description: "",
+    content: "",
     category: "newbie",
     type: "file",
     fileUrl: "",
@@ -113,10 +115,18 @@ export default function NewResourcePage() {
 
         <Card>
           <CardHeader><CardTitle>详细内容</CardTitle></CardHeader>
-          <CardContent>
+          <CardContent className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="description">简介</Label>
               <Textarea id="description" rows={4} value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} />
+            </div>
+            <div className="space-y-2">
+              <Label>正文（富文本）</Label>
+              <RichTextEditor
+                value={form.content}
+                onChange={(val) => setForm({ ...form, content: val })}
+                placeholder="编写详细的资源介绍..."
+              />
             </div>
           </CardContent>
         </Card>

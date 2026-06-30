@@ -107,8 +107,9 @@ export interface ResourceType {
   id: string
   title: string
   description: string | null
+  content: string | null
   category: string    // newbie, template, tool, link
-  type: string        // file, external
+  type: string        // page, file, external
   fileUrl: string | null
   fileSize: string | null
   externalUrl: string | null

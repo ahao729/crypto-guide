@@ -72,6 +72,7 @@ export async function POST(request: NextRequest) {
       data: {
         title: body.title,
         description: body.description || null,
+        content: body.content || null,
         category: body.category || "newbie",
         type: body.type || "file",
         fileUrl: body.fileUrl || null,

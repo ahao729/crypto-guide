@@ -1,4 +1,3 @@
-import { prisma } from "@/lib/prisma"
 import { siteConfig } from "@/lib/constants"
 import type { MetadataRoute } from "next"
 
@@ -45,52 +44,48 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   ]
 
-  // Category pages
-  const categories = await prisma.category.findMany({
-    select: {
-      slug: true,
-      updatedAt: true,
-    },
-  })
+  // Dynamic pages from database — gracefully skip if DB is unreachable during build
+  try {
+    const { prisma } = await import("@/lib/prisma")
 
-  const categoryPages: MetadataRoute.Sitemap = categories.map((category) => ({
-    url: `${baseUrl}/category/${category.slug}`,
-    lastModified: category.updatedAt,
-    changeFrequency: "weekly" as const,
-    priority: 0.6,
-  }))
+    // Category pages
+    const categories = await prisma.category.findMany({
+      select: { slug: true, updatedAt: true },
+    })
+    const categoryPages: MetadataRoute.Sitemap = categories.map((category) => ({
+      url: `${baseUrl}/category/${category.slug}`,
+      lastModified: category.updatedAt,
+      changeFrequency: "weekly" as const,
+      priority: 0.6,
+    }))
 
-  // Exchange detail pages
-  const exchanges = await prisma.exchange.findMany({
-    where: { status: "active" },
-    select: {
-      slug: true,
-      updatedAt: true,
-    },
-  })
+    // Exchange detail pages
+    const exchanges = await prisma.exchange.findMany({
+      where: { status: "active" },
+      select: { slug: true, updatedAt: true },
+    })
+    const exchangePages: MetadataRoute.Sitemap = exchanges.map((exchange) => ({
+      url: `${baseUrl}/exchanges/${exchange.slug}`,
+      lastModified: exchange.updatedAt,
+      changeFrequency: "weekly" as const,
+      priority: 0.7,
+    }))
 
-  const exchangePages: MetadataRoute.Sitemap = exchanges.map((exchange) => ({
-    url: `${baseUrl}/exchanges/${exchange.slug}`,
-    lastModified: exchange.updatedAt,
-    changeFrequency: "weekly" as const,
-    priority: 0.7,
-  }))
+    // Article detail pages
+    const articles = await prisma.article.findMany({
+      where: { published: true },
+      select: { slug: true, updatedAt: true },
+    })
+    const articlePages: MetadataRoute.Sitemap = articles.map((article) => ({
+      url: `${baseUrl}/articles/${article.slug}`,
+      lastModified: article.updatedAt,
+      changeFrequency: "weekly" as const,
+      priority: 0.7,
+    }))
 
-  // Article detail pages
-  const articles = await prisma.article.findMany({
-    where: { published: true },
-    select: {
-      slug: true,
-      updatedAt: true,
-    },
-  })
-
-  const articlePages: MetadataRoute.Sitemap = articles.map((article) => ({
-    url: `${baseUrl}/articles/${article.slug}`,
-    lastModified: article.updatedAt,
-    changeFrequency: "weekly" as const,
-    priority: 0.7,
-  }))
-
-  return [...staticPages, ...categoryPages, ...exchangePages, ...articlePages]
+    return [...staticPages, ...categoryPages, ...exchangePages, ...articlePages]
+  } catch (error) {
+    console.warn("[sitemap] 数据库不可达，仅返回静态页面 sitemap:", error)
+    return staticPages
+  }
 }

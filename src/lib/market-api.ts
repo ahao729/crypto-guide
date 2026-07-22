@@ -75,6 +75,17 @@ type BinanceKlineArray = [
   string,   // 11 ignore
 ]
 
+/** Gate.io kline API returns arrays (not objects). */
+interface GateKline {
+  t: number   // Unix timestamp in seconds
+  v: string   // Quote volume
+  c: string   // Close
+  h: string   // High
+  l: string   // Low
+  n: number   // Number of trades
+  o: string   // Open
+}
+
 export interface KlineItem {
   time: number
   dateLabel: string
@@ -1419,7 +1430,105 @@ async function fetchCryptoCompareKlines(
   }))
 }
 
-/** Fetch kline/candlestick data from Binance (with CoinGecko fallback) */
+/** Convert a Binance-style symbol (e.g. BTCUSDT) to Gate.io format (e.g. BTC_USDT) */
+function toGatePair(symbol: string): string {
+  const upper = symbol.toUpperCase()
+  for (const quote of ["USDT", "USDC", "BTC", "ETH", "USD"]) {
+    if (upper.endsWith(quote) && upper.length > quote.length) {
+      return `${upper.slice(0, upper.length - quote.length)}_${quote}`
+    }
+  }
+  return `${upper}_USDT`
+}
+
+/** Gate.io interval mapping */
+function toGateInterval(interval: KlineInterval): string {
+  const map: Record<string, string> = {
+    "1m": "1m", "3m": "3m", "5m": "5m", "15m": "15m", "30m": "30m",
+    "1h": "1h", "2h": "2h", "4h": "4h", "6h": "6h", "8h": "8h", "12h": "12h",
+    "1d": "1d", "3d": "3d", "1w": "1w", "1M": "30d",
+  }
+  return map[interval] ?? "1h"
+}
+
+/**
+ * Fetch klines from Binance mirror (data-api.binance.vision).
+ * This endpoint is accessible from China without VPN and requires no API key.
+ */
+async function fetchBinanceMirrorKlines(
+  symbol: string,
+  interval: KlineInterval,
+  limit: number
+): Promise<KlineItem[]> {
+  const pair = toBinancePair(symbol)
+  const url = `https://data-api.binance.vision/api/v3/klines?symbol=${pair}&interval=${interval}&limit=${limit}`
+
+  const controller = new AbortController()
+  const timeout = setTimeout(() => controller.abort(), 10_000)
+  try {
+    const res = await fetch(url, { signal: controller.signal })
+    if (!res.ok) throw new Error(`Binance mirror ${res.status}: ${res.statusText}`)
+    const raw: BinanceKlineArray[] = await res.json()
+    return raw.map((k) => ({
+      time: k[0],
+      dateLabel: formatKlineTime(k[0], interval),
+      open: parseFloat(k[1]),
+      high: parseFloat(k[2]),
+      low: parseFloat(k[3]),
+      close: parseFloat(k[4]),
+      volume: parseFloat(k[5]),
+    }))
+  } finally {
+    clearTimeout(timeout)
+  }
+}
+
+/**
+ * Fetch klines from Gate.io (api.gateio.ws).
+ * Accessible from China without VPN or API key.
+ * Returns up to 1000 candles per request.
+ */
+async function fetchGateKlines(
+  symbol: string,
+  interval: KlineInterval,
+  limit: number
+): Promise<KlineItem[]> {
+  const pair = toGatePair(symbol)
+  const gateInterval = toGateInterval(interval)
+  const url = `https://api.gateio.ws/api/v4/spot/candlesticks?currency_pair=${pair}&interval=${gateInterval}&limit=${limit}`
+
+  const controller = new AbortController()
+  const timeout = setTimeout(() => controller.abort(), 10_000)
+  try {
+    const res = await fetch(url, { signal: controller.signal })
+    if (!res.ok) throw new Error(`Gate.io ${res.status}: ${res.statusText}`)
+    const data: GateKline[] = await res.json()
+
+    // Gate.io returns oldest first — reverse to get newest last (same as Binance)
+    return data.reverse().map((k) => ({
+      time: k.t * 1000,
+      dateLabel: formatKlineTime(k.t * 1000, interval),
+      open: parseFloat(k.o),
+      high: parseFloat(k.h),
+      low: parseFloat(k.l),
+      close: parseFloat(k.c),
+      volume: parseFloat(k.v),
+    }))
+  } finally {
+    clearTimeout(timeout)
+  }
+}
+
+/**
+ * Fetch kline/candlestick data with multi-source fallback.
+ *
+ * Source priority:
+ * 1. CryptoCompare — broadest historical coverage
+ * 2. Binance official — standard API
+ * 3. Binance mirror (data-api.binance.vision) — accessible from China
+ * 4. Gate.io — accessible from China, no key required
+ * 5. CoinGecko — only for 1d interval
+ */
 export async function fetchKlines(
   symbol: string,
   interval: KlineInterval = "1d",
@@ -1437,7 +1546,7 @@ export async function fetchKlines(
     )
   }
 
-  // 2) Try Binance
+  // 2) Try Binance official API
   try {
     const pair = toBinancePair(symbol)
     const raw = await binanceFetch<BinanceKlineArray[]>(
@@ -1453,18 +1562,41 @@ export async function fetchKlines(
       volume: parseFloat(k[5]),
     }))
   } catch (binanceErr) {
-    // 3) Fall back to CoinGecko (only for 1d interval)
-    if (interval === "1d") {
-      const binanceMsg = binanceErr instanceof Error ? binanceErr.message : String(binanceErr)
-      console.warn(
-        `[market-api] Binance klines failed for ${symbol}/${interval}, ` +
-        `falling back to CoinGecko: ${binanceMsg}`
-      )
-      return fetchCoinGeckoKlines(symbol, interval, limit, forceRefresh)
-    }
-    // Non-1d intervals can't use CoinGecko — rethrow original error
-    throw binanceErr
+    const binanceMsg = binanceErr instanceof Error ? binanceErr.message : String(binanceErr)
+    console.warn(
+      `[market-api] Binance klines failed for ${symbol}/${interval}, ` +
+      `trying Binance mirror: ${binanceMsg}`
+    )
   }
+
+  // 3) Try Binance mirror (data-api.binance.vision) — accessible from China
+  try {
+    return await fetchBinanceMirrorKlines(symbol, interval, limit)
+  } catch (mirrorErr) {
+    const mirrorMsg = mirrorErr instanceof Error ? mirrorErr.message : String(mirrorErr)
+    console.warn(
+      `[market-api] Binance mirror klines failed for ${symbol}/${interval}, ` +
+      `trying Gate.io: ${mirrorMsg}`
+    )
+  }
+
+  // 4) Try Gate.io — accessible from China, no key required
+  try {
+    return await fetchGateKlines(symbol, interval, limit)
+  } catch (gateErr) {
+    const gateMsg = gateErr instanceof Error ? gateErr.message : String(gateErr)
+    console.warn(
+      `[market-api] Gate.io klines failed for ${symbol}/${interval}, ` +
+      `trying CoinGecko: ${gateMsg}`
+    )
+  }
+
+  // 5) Fall back to CoinGecko (only for 1d interval)
+  if (interval === "1d") {
+    return fetchCoinGeckoKlines(symbol, interval, limit, forceRefresh)
+  }
+  // Non-1d intervals can't use CoinGecko — throw with all sources exhausted
+  throw new Error(`All kline sources failed for ${symbol}/${interval}`)
 }
 
 /** Fetch 24hr ticker for a symbol (with CoinGecko fallback) */

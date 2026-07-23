@@ -19,6 +19,7 @@ const categoryLabels: Record<string, string> = {
 const typeLabels: Record<string, string> = {
   file: "文件",
   external: "外部链接",
+  page: "长文",
 }
 
 export default function AdminResourcesPage() {

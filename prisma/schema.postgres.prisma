@@ -161,6 +161,7 @@ model MediaFolder {
 
 model Resource {
   id            String   @id @default(cuid())
+  slug          String   @unique
   title         String
   description   String?
   content       String?  // rich text content for "page" type resources

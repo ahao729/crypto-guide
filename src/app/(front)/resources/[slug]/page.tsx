@@ -8,7 +8,7 @@ import { Badge } from "@/components/ui/badge"
 import { ArrowLeft, Download, ExternalLink, BookOpen, FileText, Wrench, Link2 } from "lucide-react"
 import { ResourceActions } from "./ResourceActions"
 
-export const dynamic = "force-dynamic"
+export const revalidate = 3600 // 1 hour
 
 const categoryConfig: Record<string, { label: string; icon: React.ElementType; color: string }> = {
   newbie: { label: "新手入门", icon: BookOpen, color: "text-blue-500" },
@@ -17,14 +17,19 @@ const categoryConfig: Record<string, { label: string; icon: React.ElementType; c
   link: { label: "优秀资源", icon: Link2, color: "text-orange-500" },
 }
 
+export async function generateStaticParams() {
+  const resources = await prisma.resource.findMany({ select: { slug: true } })
+  return resources.map((r) => ({ slug: r.slug }))
+}
+
 interface ResourcePageProps {
-  params: Promise<{ id: string }>
+  params: Promise<{ slug: string }>
 }
 
 export async function generateMetadata({ params }: ResourcePageProps): Promise<Metadata> {
-  const { id } = await params
+  const { slug } = await params
   const resource = await prisma.resource.findUnique({
-    where: { id },
+    where: { slug },
     select: { title: true, description: true },
   })
 
@@ -36,7 +41,7 @@ export async function generateMetadata({ params }: ResourcePageProps): Promise<M
     openGraph: {
       title: resource.title,
       description: resource.description || undefined,
-      url: `${siteConfig.url}/resources/${id}`,
+      url: `${siteConfig.url}/resources/${slug}`,
       siteName: siteConfig.name,
       locale: siteConfig.locale,
       type: "article",
@@ -47,7 +52,7 @@ export async function generateMetadata({ params }: ResourcePageProps): Promise<M
       description: resource.description || undefined,
     },
     alternates: {
-      canonical: `${siteConfig.url}/resources/${id}`,
+      canonical: `${siteConfig.url}/resources/${slug}`,
     },
   }
 }
@@ -61,10 +66,10 @@ function getTags(tags: string | null): string[] {
 }
 
 export default async function ResourceDetailPage({ params }: ResourcePageProps) {
-  const { id } = await params
+  const { slug } = await params
 
   const resource = await prisma.resource.findUnique({
-    where: { id },
+    where: { slug },
   })
 
   if (!resource || !resource.published) {
@@ -79,9 +84,9 @@ export default async function ResourceDetailPage({ params }: ResourcePageProps) 
   const Icon = cfg.icon
   const tags = getTags(resource.tags)
 
-  // 递增浏览量（简单计数）
+  // 递增浏览量
   await prisma.resource.update({
-    where: { id },
+    where: { id: resource.id },
     data: { downloadCount: { increment: 1 } },
   })
 
@@ -157,6 +162,7 @@ export default async function ResourceDetailPage({ params }: ResourcePageProps) 
       {/* 操作按钮 */}
       <ResourceActions
         resourceId={resource.id}
+        resourceSlug={resource.slug}
         type={resource.type}
         externalUrl={resource.externalUrl}
         fileUrl={resource.fileUrl}
@@ -166,31 +172,21 @@ export default async function ResourceDetailPage({ params }: ResourcePageProps) 
   )
 }
 
-/** 简易 Markdown → HTML 渲染（支持标题、粗体、列表、链接、代码块等） */
+/** 简易 Markdown → HTML 渲染 */
 function renderMarkdown(md: string): string {
   let html = md
-    // 代码块
     .replace(/```(\w*)\n([\s\S]*?)```/g, '<pre class="rounded-lg bg-muted p-4 overflow-x-auto text-sm"><code>$2</code></pre>')
-    // 行内代码
     .replace(/`([^`]+)`/g, '<code class="rounded bg-muted px-1.5 py-0.5 text-sm">$1</code>')
-    // 标题
     .replace(/^### (.+)$/gm, '<h3 class="text-lg font-semibold mt-6 mb-3">$1</h3>')
     .replace(/^## (.+)$/gm, '<h2 class="text-xl font-bold mt-8 mb-4 pb-2 border-b border-border/40">$1</h2>')
     .replace(/^# (.+)$/gm, '<h1 class="text-2xl font-bold mt-8 mb-4">$1</h1>')
-    // 粗体和斜体
     .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
     .replace(/\*(.+?)\*/g, '<em>$1</em>')
-    // 链接
     .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" class="text-gold hover:underline" target="_blank" rel="noopener noreferrer">$1</a>')
-    // 无序列表
     .replace(/^- (.+)$/gm, '<li class="ml-4 list-disc">$1</li>')
-    // 有序列表
     .replace(/^\d+\. (.+)$/gm, '<li class="ml-4 list-decimal">$1</li>')
-    // 引用
     .replace(/^> (.+)$/gm, '<blockquote class="border-l-4 border-gold/40 pl-4 italic text-muted-foreground">$1</blockquote>')
-    // 段落（双换行）
     .replace(/\n\n/g, '</p><p class="mt-4 leading-relaxed">')
-    // 单换行
     .replace(/\n/g, '<br />')
 
   return `<p class="leading-relaxed">${html}</p>`

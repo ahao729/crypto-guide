@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button"
 import { exchangeCategories, siteConfig } from "@/lib/constants"
 import { ArrowUpRight, TrendingUp, Shield, Zap, Coins } from "lucide-react"
 
-export const dynamic = "force-dynamic"
+export const revalidate = 1800 // 30 minutes
 
 export const metadata: Metadata = {
   title: `加密货币交易所对比评测 | ${siteConfig.shortName}`,

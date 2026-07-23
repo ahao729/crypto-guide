@@ -161,11 +161,12 @@ model MediaFolder {
 
 model Resource {
   id            String   @id @default(cuid())
+  slug          String   @unique
   title         String
   description   String?
-  content       String?  // rich text content for "page" type resources
+  content       String?  @db.Text
   category      String   @default("newbie") // newbie, template, tool, link
-  type          String   @default("page")   // page, file, external
+  type          String   @default("file")   // page, file, external
   fileUrl       String?
   fileSize      String?
   externalUrl   String?
@@ -173,7 +174,7 @@ model Resource {
   tags          String?
   downloadCount Int      @default(0)
   sortOrder     Int      @default(0)
-  published     Boolean  @default(true)
+  published     Boolean  @default(false)
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 }

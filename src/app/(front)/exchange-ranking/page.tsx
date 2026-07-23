@@ -18,7 +18,7 @@ import {
   ChevronRight,
 } from "lucide-react"
 
-export const dynamic = "force-dynamic"
+export const revalidate = 1800 // 30 minutes
 
 export const metadata: Metadata = {
   title: `交易所排名 | ${siteConfig.shortName}`,

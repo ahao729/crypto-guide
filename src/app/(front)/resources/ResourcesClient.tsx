@@ -37,6 +37,7 @@ import {
 
 interface Resource {
   id: string
+  slug: string
   title: string
   description: string | null
   content: string | null
@@ -160,8 +161,8 @@ export function ResourcesClient({
       return
     }
 
-    if (resource.type === "page" && resource.id) {
-      window.open(`/resources/${resource.id}`, "_blank")
+    if (resource.type === "page" && resource.slug) {
+      window.open(`/resources/${resource.slug}`, "_blank")
       return
     }
 

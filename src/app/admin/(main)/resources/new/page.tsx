@@ -77,6 +77,7 @@ export default function NewResourcePage() {
                 <SelectContent>
                   <SelectItem value="file">文件</SelectItem>
                   <SelectItem value="external">外部链接</SelectItem>
+                  <SelectItem value="page">长文</SelectItem>
                 </SelectContent>
               </Select>
             </div>

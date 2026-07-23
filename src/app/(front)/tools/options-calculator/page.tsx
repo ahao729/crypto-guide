@@ -306,6 +306,8 @@ export default function OptionsCalculatorPage() {
                   <DollarSign className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                   <Input
                     id="underlying"
+                    type="number"
+                    inputMode="decimal"
                     value={underlying}
                     onChange={(e) => setUnderlying(e.target.value)}
                     className="pl-9"
@@ -321,6 +323,8 @@ export default function OptionsCalculatorPage() {
                   <DollarSign className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                   <Input
                     id="strike"
+                    type="number"
+                    inputMode="decimal"
                     value={strike}
                     onChange={(e) => setStrike(e.target.value)}
                     className="pl-9"
@@ -336,6 +340,8 @@ export default function OptionsCalculatorPage() {
                   <DollarSign className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                   <Input
                     id="premium"
+                    type="number"
+                    inputMode="decimal"
                     value={premium}
                     onChange={(e) => setPremium(e.target.value)}
                     className="pl-9"
@@ -350,6 +356,8 @@ export default function OptionsCalculatorPage() {
                   <Label htmlFor="quantity">合约数量</Label>
                   <Input
                     id="quantity"
+                    type="number"
+                    inputMode="decimal"
                     value={quantity}
                     onChange={(e) => setQuantity(e.target.value)}
                     placeholder="1"
@@ -359,6 +367,8 @@ export default function OptionsCalculatorPage() {
                   <Label htmlFor="multiplier">合约乘数</Label>
                   <Input
                     id="multiplier"
+                    type="number"
+                    inputMode="decimal"
                     value={multiplier}
                     onChange={(e) => setMultiplier(e.target.value)}
                     placeholder="1"

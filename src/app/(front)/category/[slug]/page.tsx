@@ -9,7 +9,12 @@ import { Button } from "@/components/ui/button"
 import { siteConfig } from "@/lib/constants"
 import { ArrowLeft, Coins, FileText, TrendingUp, Zap, ArrowUpRight } from "lucide-react"
 
-export const dynamic = "force-dynamic"
+export const revalidate = 1800 // 30 minutes
+
+export async function generateStaticParams() {
+  const categories = await prisma.category.findMany({ select: { slug: true } })
+  return categories.map((c) => ({ slug: c.slug }))
+}
 
 interface CategoryPageProps {
   params: Promise<{ slug: string }>

@@ -2,17 +2,57 @@ import { NextRequest, NextResponse } from "next/server"
 import { revalidatePath } from "next/cache"
 import { prisma } from "@/lib/prisma"
 import { auth } from "@/lib/auth"
+import { z } from "zod"
+
+// ── Validation schemas ──────────────────────────────────────────
+
+const articlesQuerySchema = z.object({
+  page: z.coerce.number().int().min(1).default(1),
+  pageSize: z.coerce.number().int().min(1).max(50).default(10),
+  categoryId: z.string().optional(),
+  tagId: z.string().optional(),
+  published: z.enum(["true", "false"]).optional(),
+  search: z.string().trim().min(1).optional(),
+})
+
+const createArticleSchema = z.object({
+  title: z.string().trim().min(1, "文章标题不能为空").max(200, "文章标题不能超过 200 个字符"),
+  slug: z
+    .string()
+    .trim()
+    .min(1, "Slug 不能为空")
+    .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, "Slug 只能包含小写字母、数字和连字符"),
+  excerpt: z.string().max(500, "摘要不能超过 500 个字符").nullish(),
+  content: z.string().nullish(),
+  coverImage: z.string().url("封面图片格式无效").nullish(),
+  author: z.string().max(100).nullish(),
+  published: z.boolean().default(false),
+  categoryId: z.string().nullish(),
+  tags: z.array(z.string()).default([]),
+})
+
+// ── Handlers ────────────────────────────────────────────────────
 
 // GET /api/articles - List articles with pagination (public)
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url)
-    const page = Math.max(1, parseInt(searchParams.get("page") || "1", 10))
-    const pageSize = Math.min(50, Math.max(1, parseInt(searchParams.get("pageSize") || "10", 10)))
-    const categoryId = searchParams.get("categoryId")
-    const tagId = searchParams.get("tagId")
-    const published = searchParams.get("published")
-    const search = searchParams.get("search")
+    const parsed = articlesQuerySchema.safeParse(
+      Object.fromEntries(searchParams.entries()),
+    )
+    if (!parsed.success) {
+      return NextResponse.json(
+        {
+          error: "参数校验失败",
+          details: parsed.error.issues.map((i) => ({
+            field: i.path.join("."),
+            message: i.message,
+          })),
+        },
+        { status: 400 },
+      )
+    }
+    const { page, pageSize, categoryId, tagId, published, search } = parsed.data
 
     const where: Record<string, unknown> = {}
 
@@ -26,12 +66,8 @@ export async function GET(request: NextRequest) {
       }
     }
 
-    if (published !== null) {
-      if (published === "true") {
-        where.published = true
-      } else if (published === "false") {
-        where.published = false
-      }
+    if (published) {
+      where.published = published === "true"
     } else {
       // Default: only published articles for public
       where.published = true
@@ -89,41 +125,43 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json()
+    const parsed = createArticleSchema.safeParse(body)
+    if (!parsed.success) {
+      return NextResponse.json(
+        {
+          error: "参数校验失败",
+          details: parsed.error.issues.map((i) => ({
+            field: i.path.join("."),
+            message: i.message,
+          })),
+        },
+        { status: 400 },
+      )
+    }
 
-    // Validate required fields
-    if (!body.title || typeof body.title !== "string" || body.title.trim() === "") {
-      return NextResponse.json({ error: "文章标题不能为空" }, { status: 400 })
-    }
-    if (!body.slug || typeof body.slug !== "string" || body.slug.trim() === "") {
-      return NextResponse.json({ error: "Slug 不能为空" }, { status: 400 })
-    }
+    const data = parsed.data
 
     // Check slug uniqueness
     const existingSlug = await prisma.article.findUnique({
-      where: { slug: body.slug },
+      where: { slug: data.slug },
     })
     if (existingSlug) {
       return NextResponse.json({ error: "Slug 已存在" }, { status: 409 })
     }
 
-    // Handle tags: array of tag IDs
-    const tagIds: string[] = Array.isArray(body.tags) ? body.tags : []
-
     const article = await prisma.article.create({
       data: {
-        title: body.title,
-        slug: body.slug,
-        excerpt: body.excerpt || null,
-        content: body.content || null,
-        coverImage: body.coverImage || null,
-        author: body.author || null,
-        published: body.published === true,
-        publishedAt: body.published === true ? new Date() : null,
-        categoryId: body.categoryId || null,
+        title: data.title,
+        slug: data.slug,
+        excerpt: data.excerpt ?? null,
+        content: data.content ?? null,
+        coverImage: data.coverImage ?? null,
+        author: data.author ?? null,
+        published: data.published,
+        publishedAt: data.published ? new Date() : null,
+        categoryId: data.categoryId ?? null,
         tags: {
-          create: tagIds.map((tagId: string) => ({
-            tagId,
-          })),
+          create: data.tags.map((tagId) => ({ tagId })),
         },
       },
       include: {

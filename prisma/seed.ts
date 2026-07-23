@@ -3507,6 +3507,7 @@ Block #100 → Block #101 → Block #102 → ...
   const resources = [
     // ── 新手入门 ──
     {
+      slug: "crypto-beginner-guide",
       title: "加密货币入门完全指南",
       description: "从零开始了解加密货币：什么是区块链、比特币如何运作、钱包怎么创建、交易所如何注册，一本 PDF 搞定所有基础知识。",
       content: `# 加密货币入门完全指南
@@ -3661,6 +3662,7 @@ Block #100 → Block #101 → Block #102 → ...
       published: true,
     },
     {
+      slug: "exchange-registration-guide",
       title: "交易所注册与安全设置教程",
       description: "主流交易所（Binance、OKX、Bybit）的详细注册流程、KYC认证指南和安全设置教程，助你快速完成开户。",
       content: `# 交易所注册与安全设置教程
@@ -3769,6 +3771,7 @@ OKX 是全球领先的加密货币交易平台，支持法币交易、币币交�
       published: true,
     },
     {
+      slug: "wallet-security-manual",
       title: "钱包安全使用手册",
       description: "全面的加密货币钱包安全指南：助记词管理、私钥保护、硬件钱包使用、常见诈骗识别与防范。",
       content: `# 钱包安全使用手册
@@ -3933,6 +3936,7 @@ OKX 是全球领先的加密货币交易平台，支持法币交易、币币交�
     },
     // ── 模板表格 ──
     {
+      slug: "trading-record-template",
       title: "交易记录追踪模板",
       description: "专业的加密货币交易记录模板，自动计算盈亏、费率、收益率，支持多币种、多交易所记录管理。",
       content: `# 交易记录追踪模板
@@ -3969,6 +3973,7 @@ OKX 是全球领先的加密货币交易平台，支持法币交易、币币交�
       published: true,
     },
     {
+      slug: "position-management-calculator",
       title: "仓位管理计算表",
       description: "帮助你科学管理仓位大小的计算工具：凯利公式、固定比例法、ATR 波动率法，轻松控制每笔交易风险。",
       content: `# 仓位管理计算表
@@ -4039,6 +4044,7 @@ f = (bp - q) / b
       published: true,
     },
     {
+      slug: "dca-plan",
       title: "DCA 定投计划表",
       description: "定投策略（Dollar Cost Averaging）执行计划：设定每周/每月定投金额、目标币种和执行周期，轻松坚持长期投资。",
       content: `# DCA 定投计划表
@@ -4102,6 +4108,7 @@ DCA（Dollar Cost Averaging，美元成本平均法）是一种长期投资策�
     },
     // ── 实用工具 ──
     {
+      slug: "onchain-data-guide",
       title: "链上数据分析指南",
       description: "教你使用 Dune、Etherscan、Glassnode 等工具进行链上数据分析：追踪大户动向、监控资金流向、识别市场信号。",
       content: `# 链上数据分析指南
@@ -4190,6 +4197,7 @@ Dune 是最强大的链上数据分析平台，允许用户使用 SQL 查询链�
       published: true,
     },
     {
+      slug: "gas-optimization-guide",
       title: "Gas 费优化指南",
       description: "以太坊 Gas 费用完全指南：Gas 工作原理、省钱技巧、最佳交易时间，让你每笔交易都省 Gas。",
       content: `# Gas 费优化指南
@@ -4260,7 +4268,7 @@ Layer 2 解决方案可以大幅降低 Gas 费：
 
 ## 学习路径概览
 
-```
+\`\`\`
 第一阶段（1-2周）        第二阶段（2-4周）        第三阶段（1-3个月）       第四阶段（持续学习）
 ┌──────────────┐    ┌──────────────┐    ┌──────────────┐    ┌──────────────┐
 │  基础知识    │ →  │  安全与钱包  │ →  │  交易入门    │ →  │  进阶策略    │
@@ -4268,7 +4276,7 @@ Layer 2 解决方案可以大幅降低 Gas 费：
 │  BTC/ETH     │    │  钱包创建    │    │  K线基础     │    │  合约交易    │
 │  术语了解    │    │  安全设置    │    │  资金管理    │    │  DeFi参与    │
 └──────────────┘    └──────────────┘    └──────────────┘    └──────────────┘
-```
+\`\`\`
 
 ---
 

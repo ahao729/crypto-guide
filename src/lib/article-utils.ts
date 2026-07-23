@@ -1,8 +1,29 @@
 import { remark } from "remark"
 import remarkGfm from "remark-gfm"
 import remarkHtml from "remark-html"
+import DOMPurify from "isomorphic-dompurify"
 import { generateSlug } from "./utils"
 import { replaceEmojiWithIcons } from "./emoji-icons"
+
+const DOMPURIFY_CONFIG = {
+  ALLOWED_TAGS: [
+    "h1", "h2", "h3", "h4", "h5", "h6",
+    "p", "br", "strong", "em", "u", "s", "del", "ins", "mark", "sub", "sup",
+    "a", "img", "figure", "figcaption",
+    "ul", "ol", "li",
+    "blockquote", "pre", "code",
+    "table", "thead", "tbody", "tr", "th", "td",
+    "hr", "div", "span", "section", "article", "aside", "details", "summary",
+    "input", "label",
+  ],
+  ALLOWED_ATTR: [
+    "href", "src", "alt", "title", "width", "height", "loading",
+    "class", "id", "target", "rel",
+    "colspan", "rowspan", "align", "valign",
+    "type", "checked", "disabled",
+  ],
+  ALLOW_DATA_ATTR: false,
+}
 
 export interface TocEntry {
   id: string
@@ -40,12 +61,12 @@ export async function processArticleHtml(content: string): Promise<{
   let html: string
 
   if (isHtmlContent(content)) {
-    // Content is already HTML (from rich text editor), use directly
-    html = content
+    // Content is already HTML (from rich text editor), sanitize it
+    html = DOMPurify.sanitize(content, DOMPURIFY_CONFIG) as string
   } else {
     // Convert markdown to HTML
     const result = await remark().use(remarkGfm).use(remarkHtml).process(content)
-    html = result.toString()
+    html = DOMPurify.sanitize(result.toString(), DOMPURIFY_CONFIG) as string
   }
 
   // 2. Extract headings and inject anchor IDs

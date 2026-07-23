@@ -15,7 +15,12 @@ import TableOfContents from "@/components/front/TableOfContents"
 import ShareSection from "@/components/front/ShareSection"
 import ArticleNavigation from "@/components/front/ArticleNavigation"
 
-export const dynamic = "force-dynamic"
+export const revalidate = 1800 // 30 minutes
+
+export async function generateStaticParams() {
+  const articles = await prisma.article.findMany({ select: { slug: true }, where: { published: true } })
+  return articles.map((a) => ({ slug: a.slug }))
+}
 
 interface ArticlePageProps {
   params: Promise<{ slug: string }>
@@ -79,46 +84,55 @@ export default async function ArticleDetailPage({ params }: ArticlePageProps) {
     notFound()
   }
 
-  // Process article content: markdown → HTML + heading IDs + TOC
-  const { html: processedContent, headings } = article.content
-    ? await processArticleHtml(article.content)
-    : { html: "", headings: [] }
+  // Parallelize: process content + fetch prev/next/related articles simultaneously
+  const [
+    { html: processedContent, headings },
+    prevArticle,
+    nextArticle,
+    relatedArticles,
+  ] = await Promise.all([
+    // Process article content: markdown → HTML + heading IDs + TOC
+    article.content
+      ? processArticleHtml(article.content)
+      : Promise.resolve({ html: "", headings: [] }),
+
+    // Previous article
+    article.publishedAt
+      ? prisma.article.findFirst({
+          where: {
+            published: true,
+            publishedAt: { lt: article.publishedAt },
+          },
+          orderBy: { publishedAt: "desc" },
+          select: { slug: true, title: true },
+        })
+      : Promise.resolve(null),
+
+    // Next article
+    article.publishedAt
+      ? prisma.article.findFirst({
+          where: {
+            published: true,
+            publishedAt: { gt: article.publishedAt },
+          },
+          orderBy: { publishedAt: "asc" },
+          select: { slug: true, title: true },
+        })
+      : Promise.resolve(null),
+
+    // Related articles
+    prisma.article.findMany({
+      where: {
+        published: true,
+        id: { not: article.id },
+        ...(article.categoryId ? { categoryId: article.categoryId } : {}),
+      },
+      take: 3,
+      orderBy: { publishedAt: "desc" },
+    }),
+  ])
 
   const readingTime = article.content ? estimateReadingTime(processedContent) : 1
-
-  // Fetch previous and next articles
-  const prevArticle = article.publishedAt
-    ? await prisma.article.findFirst({
-        where: {
-          published: true,
-          publishedAt: { lt: article.publishedAt },
-        },
-        orderBy: { publishedAt: "desc" },
-        select: { slug: true, title: true },
-      })
-    : null
-
-  const nextArticle = article.publishedAt
-    ? await prisma.article.findFirst({
-        where: {
-          published: true,
-          publishedAt: { gt: article.publishedAt },
-        },
-        orderBy: { publishedAt: "asc" },
-        select: { slug: true, title: true },
-      })
-    : null
-
-  // Fetch related articles
-  const relatedArticles = await prisma.article.findMany({
-    where: {
-      published: true,
-      id: { not: article.id },
-      ...(article.categoryId ? { categoryId: article.categoryId } : {}),
-    },
-    take: 3,
-    orderBy: { publishedAt: "desc" },
-  })
 
   return (
     <>

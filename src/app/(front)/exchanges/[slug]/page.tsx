@@ -26,7 +26,12 @@ import {
   Award,
 } from "lucide-react"
 
-export const dynamic = "force-dynamic"
+export const revalidate = 3600 // 1 hour
+
+export async function generateStaticParams() {
+  const exchanges = await prisma.exchange.findMany({ select: { slug: true } })
+  return exchanges.map((e) => ({ slug: e.slug }))
+}
 
 interface ExchangeDetailPageProps {
   params: Promise<{ slug: string }>

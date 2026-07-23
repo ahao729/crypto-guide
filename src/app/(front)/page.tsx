@@ -6,7 +6,7 @@ import { prisma } from "@/lib/prisma"
 import { formatDate } from "@/lib/utils"
 import { Clock, ArrowRight } from "lucide-react"
 
-export const dynamic = "force-dynamic"
+export const revalidate = 600 // 10 minutes
 
 export const metadata: Metadata = {
   title: `专业的加密货币交易所评测与推荐 | ${siteConfig.shortName}`,

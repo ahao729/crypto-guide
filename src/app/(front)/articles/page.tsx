@@ -9,7 +9,7 @@ import { siteConfig } from "@/lib/constants"
 import { BookOpen, Clock, ArrowRight, Newspaper } from "lucide-react"
 import { ArticleSearchClient } from "@/components/article-search-client"
 
-export const dynamic = "force-dynamic"
+// 当有 searchParams 时 Next.js 自动降级为动态渲染，无需 force-dynamic
 
 export const metadata: Metadata = {
   title: `加密货币与区块链文章教程 | ${siteConfig.shortName}`,

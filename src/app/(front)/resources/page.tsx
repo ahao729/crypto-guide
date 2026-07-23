@@ -3,7 +3,7 @@ import type { Metadata } from "next"
 import { siteConfig } from "@/lib/constants"
 import { ResourcesClient } from "./ResourcesClient"
 
-export const dynamic = "force-dynamic"
+export const revalidate = 900 // 15 minutes
 
 export const metadata: Metadata = {
   title: `免费学习资源下载 | ${siteConfig.shortName}`,

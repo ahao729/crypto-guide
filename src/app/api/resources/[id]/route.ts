@@ -3,7 +3,7 @@ import { revalidatePath } from "next/cache"
 import { prisma } from "@/lib/prisma"
 import { auth } from "@/lib/auth"
 
-// GET /api/resources/[id] - Get single resource by ID
+// GET /api/resources/[id] - Get single resource by ID or slug
 export async function GET(
   _request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -11,9 +11,15 @@ export async function GET(
   try {
     const { id } = await params
 
-    const resource = await prisma.resource.findUnique({
-      where: { id },
+    // Try slug first, then fallback to id
+    let resource = await prisma.resource.findUnique({
+      where: { slug: id },
     })
+    if (!resource) {
+      resource = await prisma.resource.findUnique({
+        where: { id },
+      })
+    }
 
     if (!resource) {
       return NextResponse.json({ error: "资源不存在" }, { status: 404 })
@@ -66,6 +72,7 @@ export async function PUT(
         ...(body.tags !== undefined && { tags: body.tags }),
         ...(body.downloadCount !== undefined && { downloadCount: body.downloadCount }),
         ...(body.sortOrder !== undefined && { sortOrder: body.sortOrder }),
+        ...(body.slug !== undefined && { slug: body.slug }),
         ...(body.published !== undefined && { published: body.published }),
       },
     })

@@ -60,6 +60,7 @@ export default function ProfitCalculatorPage() {
       isNaN(lev) ||
       isNaN(fee) ||
       entry <= 0 ||
+      exit <= 0 ||
       qty <= 0 ||
       lev <= 0 ||
       lev > 125

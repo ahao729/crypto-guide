@@ -133,8 +133,8 @@ export default function ArticleContent({ html }: ArticleContentProps) {
 
       // Update button states when copiedCodeIndex changes
       preElements.forEach((pre) => {
-        const header = pre.parentElement?.previousElementSibling as HTMLElement
-        if (!header || !header.classList.contains("code-header")) return
+        const header = pre.parentElement?.querySelector(".code-header") as HTMLElement
+        if (!header) return
         const btn = header.querySelector(".copy-button") as HTMLButtonElement
         if (!btn) return
         const idx = parseInt(btn.dataset.index || "-1")

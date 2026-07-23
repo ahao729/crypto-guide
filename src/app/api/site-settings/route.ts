@@ -3,9 +3,18 @@ import { revalidatePath } from "next/cache"
 import { prisma } from "@/lib/prisma"
 import { auth } from "@/lib/auth"
 
+// In-memory cache for site settings (5 minute TTL)
+let settingsCache: { data: Record<string, string>; expiresAt: number } | null = null
+const SETTINGS_CACHE_TTL = 5 * 60 * 1000 // 5 minutes
+
 // GET /api/site-settings - Get all settings as key-value object (public)
 export async function GET() {
   try {
+    // Return cached settings if still valid
+    if (settingsCache && Date.now() < settingsCache.expiresAt) {
+      return NextResponse.json(settingsCache.data)
+    }
+
     const settings = await prisma.siteSetting.findMany()
 
     // Convert to a simple key-value object
@@ -13,6 +22,9 @@ export async function GET() {
     for (const setting of settings) {
       result[setting.key] = setting.value
     }
+
+    // Update cache
+    settingsCache = { data: result, expiresAt: Date.now() + SETTINGS_CACHE_TTL }
 
     return NextResponse.json(result)
   } catch (error) {
@@ -60,6 +72,9 @@ export async function PUT(request: NextRequest) {
     }
 
     revalidatePath("/")
+
+    // Invalidate cache after update
+    settingsCache = null
 
     return NextResponse.json(result)
   } catch (error) {

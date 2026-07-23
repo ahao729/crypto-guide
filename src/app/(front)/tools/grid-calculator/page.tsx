@@ -338,7 +338,7 @@ export default function GridCalculatorPage() {
                       <Lightbulb className="mt-0.5 h-4 w-4 shrink-0 text-gold" />
                       <div className="text-xs text-muted-foreground space-y-1">
                         <p>
-                          <strong>收益估算说明：</strong>以上年化收益为估算值，假设每月完成约 3 个完整买卖周期。
+                          <strong>收益估算说明：</strong>以上年化收益为估算值，保守假设每 2 个月完成约 1 个完整买卖周期（每月 0.5 个）。
                           实际收益取决于市场波动幅度和频率。震荡行情中网格策略表现最佳，单边行情可能产生亏损。
                         </p>
                         <p>

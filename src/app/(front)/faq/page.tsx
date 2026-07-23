@@ -4,7 +4,7 @@ import { siteConfig } from "@/lib/constants"
 import { HelpCircle } from "lucide-react"
 import { FAQClient } from "./FAQClient"
 
-export const dynamic = "force-dynamic"
+export const revalidate = 3600 // 1 hour
 
 export const metadata: Metadata = {
   title: `常见问题解答 | ${siteConfig.shortName}`,

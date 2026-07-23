@@ -22,8 +22,9 @@ interface ZoneInfo {
   label: string
   range: string
   description: string
-  color: string // Tailwind bg / border
+  color: string // Tailwind bg / border class
   textColor: string
+  hex: string // Valid CSS color for inline styles
 }
 
 const ZONES: ZoneInfo[] = [
@@ -34,6 +35,7 @@ const ZONES: ZoneInfo[] = [
     description: "极度低估，历史性买入机会。适合大额加仓。",
     color: "bg-red-500",
     textColor: "text-red-500",
+    hex: "#ef4444",
   },
   {
     key: "silver-pit",
@@ -42,6 +44,7 @@ const ZONES: ZoneInfo[] = [
     description: "显著低估，适合持续加大定投额度。",
     color: "bg-orange-500",
     textColor: "text-orange-500",
+    hex: "#f97316",
   },
   {
     key: "dca-zone",
@@ -50,6 +53,7 @@ const ZONES: ZoneInfo[] = [
     description: "估值合理，按计划正常定投。",
     color: "bg-emerald-500",
     textColor: "text-emerald-500",
+    hex: "#10b981",
   },
   {
     key: "watch-zone",
@@ -58,6 +62,7 @@ const ZONES: ZoneInfo[] = [
     description: "估值偏高，暂停定投或开始分批减仓。",
     color: "bg-yellow-500",
     textColor: "text-yellow-500",
+    hex: "#eab308",
   },
   {
     key: "danger-zone",
@@ -66,6 +71,7 @@ const ZONES: ZoneInfo[] = [
     description: "严重高估，市场过热，建议大幅减仓。",
     color: "bg-purple-600",
     textColor: "text-purple-600",
+    hex: "#9333ea",
   },
 ]
 
@@ -253,8 +259,8 @@ export default function DcaIndexPage() {
                       left: `${progressPct}%`,
                       width: "4px",
                       transform: "translateX(-2px)",
-                      backgroundColor: zoneInfo?.color.replace("bg-", "") || "currentColor",
-                      boxShadow: `0 0 8px 2px ${zoneInfo?.color.replace("bg-", "") || "currentColor"}`,
+                      backgroundColor: zoneInfo?.hex || "currentColor",
+                      boxShadow: `0 0 8px 2px ${zoneInfo?.hex || "currentColor"}`,
                     }}
                   />
                 </div>

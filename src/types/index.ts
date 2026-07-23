@@ -105,21 +105,23 @@ export interface MediaType {
 
 export interface ResourceType {
   id: string
+  slug: string
   title: string
-  description: string | null
-  content: string | null
-  category: string    // newbie, template, tool, link
-  type: string        // page, file, external
-  fileUrl: string | null
-  fileSize: string | null
-  externalUrl: string | null
-  icon: string | null
-  tags: string | null
+  description: string
+  content?: string
+  category: string
+  type: string
+  fileUrl?: string
+  fileSize?: string
+  externalUrl?: string
+  icon?: string
+  tags?: string
+  downloads?: number
   downloadCount: number
   sortOrder: number
   published: boolean
-  createdAt: Date
-  updatedAt: Date
+  createdAt?: string
+  updatedAt?: string
 }
 
 export interface MediaFolderType {

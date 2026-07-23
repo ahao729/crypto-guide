@@ -60,9 +60,9 @@ export const footerLinks: FooterLinkGroup[] = [
     links: [
       { label: "币安 Binance", href: "/exchanges/binance" },
       { label: "欧易 OKX", href: "/exchanges/okx" },
-      { label: "Bybit", href: "#" },
-      { label: "Bitget", href: "#" },
-      { label: "Gate.io", href: "#" },
+      { label: "Bybit", href: "/exchanges/bybit" },
+      { label: "Bitget", href: "/exchanges/bitget" },
+      { label: "Gate.io", href: "/exchanges/gate" },
     ],
   },
   {

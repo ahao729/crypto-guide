@@ -1,27 +1,47 @@
 import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { auth } from "@/lib/auth"
+import { z } from "zod"
+
+// ── Validation schemas ──────────────────────────────────────────
+
+const clicksQuerySchema = z.object({
+  page: z.coerce.number().int().min(1).default(1),
+  pageSize: z.coerce.number().int().min(1).max(100).default(20),
+  targetType: z.enum(["exchange", "article"]).optional(),
+  targetId: z.string().optional(),
+  dateFrom: z.string().datetime().optional(),
+  dateTo: z.string().datetime().optional(),
+})
+
+const createClickSchema = z.object({
+  targetId: z.string().min(1, "targetId 不能为空"),
+  targetType: z.enum(["exchange", "article"], {
+    error: "targetType 必须是 exchange 或 article",
+  }),
+})
+
+// ── Handlers ────────────────────────────────────────────────────
 
 // POST /api/clicks - Record a click (public)
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-
-    const { targetId, targetType } = body
-
-    if (!targetId || !targetType) {
+    const parsed = createClickSchema.safeParse(body)
+    if (!parsed.success) {
       return NextResponse.json(
-        { error: "缺少必要参数 targetId 或 targetType" },
-        { status: 400 }
+        {
+          error: "参数校验失败",
+          details: parsed.error.issues.map((i) => ({
+            field: i.path.join("."),
+            message: i.message,
+          })),
+        },
+        { status: 400 },
       )
     }
 
-    if (!["exchange", "article"].includes(targetType)) {
-      return NextResponse.json(
-        { error: "targetType 必须是 exchange 或 article" },
-        { status: 400 }
-      )
-    }
+    const { targetId, targetType } = parsed.data
 
     // Get IP, user agent, referer from headers
     const ip =
@@ -78,16 +98,26 @@ export async function GET(request: NextRequest) {
     }
 
     const { searchParams } = new URL(request.url)
-    const page = Math.max(1, parseInt(searchParams.get("page") || "1", 10))
-    const pageSize = Math.min(100, Math.max(1, parseInt(searchParams.get("pageSize") || "20", 10)))
-    const targetType = searchParams.get("targetType")
-    const targetId = searchParams.get("targetId")
-    const dateFrom = searchParams.get("dateFrom")
-    const dateTo = searchParams.get("dateTo")
+    const parsed = clicksQuerySchema.safeParse(
+      Object.fromEntries(searchParams.entries()),
+    )
+    if (!parsed.success) {
+      return NextResponse.json(
+        {
+          error: "参数校验失败",
+          details: parsed.error.issues.map((i) => ({
+            field: i.path.join("."),
+            message: i.message,
+          })),
+        },
+        { status: 400 },
+      )
+    }
+    const { page, pageSize, targetType, targetId, dateFrom, dateTo } = parsed.data
 
     const where: Record<string, unknown> = {}
 
-    if (targetType && ["exchange", "article"].includes(targetType)) {
+    if (targetType) {
       where.targetType = targetType
     }
     if (targetId) {

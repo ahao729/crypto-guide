@@ -4262,6 +4262,7 @@ Layer 2 解决方案可以大幅降低 Gas 费：
     },
     // ── 优秀资源 ──
     {
+      slug: "crypto-learning-roadmap",
       title: "加密货币学习路线图",
       description: "从零基础到进阶交易者的完整学习路线图：基础知识→安全设置→交易入门→技术分析→DeFi→高级策略。",
       content: `# 加密货币学习路线图
@@ -4362,6 +4363,7 @@ Layer 2 解决方案可以大幅降低 Gas 费：
       published: true,
     },
     {
+      slug: "global-exchange-navigation",
       title: "全球主流交易所导航",
       description: "汇总全球主流加密货币交易所的优劣势对比、费率比较和注册链接，帮你快速选择最适合的交易平台。",
       type: "external",
@@ -4373,6 +4375,7 @@ Layer 2 解决方案可以大幅降低 Gas 费：
       published: true,
     },
     {
+      slug: "coingecko-market-tracker",
       title: "CoinGecko 行情追踪",
       description: "全球最大的独立加密货币数据聚合平台，提供实时价格、市值排名、交易量、历史数据等全面信息。",
       type: "external",
@@ -4384,6 +4387,7 @@ Layer 2 解决方案可以大幅降低 Gas 费：
       published: true,
     },
     {
+      slug: "tradingview-pro-charts",
       title: "TradingView 专业图表",
       description: "全球最受欢迎的金融图表和社交交易平台，提供强大的技术分析工具和社区交流功能。",
       type: "external",

@@ -18,30 +18,30 @@ model User {
 }
 
 model Exchange {
-  id          String   @id @default(cuid())
-  name        String   @unique
-  slug        String   @unique
-  logo        String?
-  description String?
-  content     String?
-  rating      Float    @default(0)
-  referralUrl String?
-  feeRate     String?
-  spotFee    String?
-  futuresFee String?
-  features    String?
+  id             String    @id @default(cuid())
+  name           String    @unique
+  slug           String    @unique
+  logo           String?
+  description    String?
+  content        String?
+  rating         Float     @default(0)
+  referralUrl    String?
+  feeRate        String?
+  spotFee        String?
+  futuresFee     String?
+  features       String?
   supportedCoins String?
-  regulation  String?
-  inviteCode  String?
-  status      String   @default("active") // active, inactive
-  sortOrder   Int      @default(0)
-  isFeatured  Boolean  @default(false)
-  isPopular   Boolean  @default(false)
-  clickCount  Int      @default(0)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  categoryId  String?
-  category    Category? @relation(fields: [categoryId], references: [id])
+  regulation     String?
+  inviteCode     String?
+  status         String    @default("active") // active, inactive
+  sortOrder      Int       @default(0)
+  isFeatured     Boolean   @default(false)
+  isPopular      Boolean   @default(false)
+  clickCount     Int       @default(0)
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  categoryId     String?
+  category       Category? @relation(fields: [categoryId], references: [id])
 
   @@index([status, sortOrder, clickCount])
   @@index([status, categoryId, sortOrder, clickCount])
@@ -49,20 +49,20 @@ model Exchange {
 }
 
 model Article {
-  id          String   @id @default(cuid())
+  id          String         @id @default(cuid())
   title       String
-  slug        String   @unique
+  slug        String         @unique
   excerpt     String?
   content     String?
   coverImage  String?
   author      String?
-  published   Boolean  @default(false)
+  published   Boolean        @default(false)
   publishedAt DateTime?
-  clickCount  Int      @default(0)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  clickCount  Int            @default(0)
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
   categoryId  String?
-  category    Category? @relation(fields: [categoryId], references: [id])
+  category    Category?      @relation(fields: [categoryId], references: [id])
   tags        TagOnArticle[]
 
   @@index([published, publishedAt])
@@ -71,14 +71,14 @@ model Article {
 }
 
 model Category {
-  id          String      @id @default(cuid())
-  name        String      @unique
-  slug        String      @unique
+  id          String     @id @default(cuid())
+  name        String     @unique
+  slug        String     @unique
   description String?
-  type        String      @default("exchange") // exchange, article
-  sortOrder   Int         @default(0)
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
+  type        String     @default("exchange") // exchange, article
+  sortOrder   Int        @default(0)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
   exchanges   Exchange[]
   articles    Article[]
 
@@ -118,8 +118,8 @@ model FAQ {
 
 model ClickLog {
   id         String   @id @default(cuid())
-  targetId   String   // exchange or article id
-  targetType String   // "exchange" or "article"
+  targetId   String // exchange or article id
+  targetType String // "exchange" or "article"
   ip         String?
   userAgent  String?
   referer    String?
@@ -140,8 +140,8 @@ model Media {
   id        String       @id @default(cuid())
   filename  String
   url       String
-  type      String       // image/jpeg, image/png, image/webp, etc.
-  size      Int          // file size in bytes
+  type      String // image/jpeg, image/png, image/webp, etc.
+  size      Int // file size in bytes
   alt       String?
   sortOrder Int          @default(0)
   folderId  String?
@@ -164,9 +164,9 @@ model Resource {
   slug          String   @unique
   title         String
   description   String?
-  content       String?  // rich text content for "page" type resources
+  content       String?
   category      String   @default("newbie") // newbie, template, tool, link
-  type          String   @default("page")   // page, file, external
+  type          String   @default("file") // page, file, external
   fileUrl       String?
   fileSize      String?
   externalUrl   String?
@@ -174,7 +174,7 @@ model Resource {
   tags          String?
   downloadCount Int      @default(0)
   sortOrder     Int      @default(0)
-  published     Boolean  @default(true)
+  published     Boolean  @default(false)
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 }

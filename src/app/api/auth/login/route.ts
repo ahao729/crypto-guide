@@ -26,6 +26,11 @@ const attempts = new Map<string, { count: number; resetAt: number }>()
 const DUMMY_PASSWORD_HASH =
   "$2b$12$efOyKVYUTwr9Nd6iwyTr2Or/LTAWYzaqpAUVXJaYvUK1FI./fSjPW"
 
+// The old seed shipped this value in a public repository. Refuse it even if
+// the production database has not been rotated yet, so the known credential
+// cannot be used after this deploy.
+const BLOCKED_PASSWORDS = new Set(["admin123"])
+
 function getClientIp(request: NextRequest): string {
   // Vercel sets x-real-ip to the client address. Fall back to the last hop in
   // x-forwarded-for (the closest proxy), so a spoofed leading value cannot
@@ -92,6 +97,17 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         { error: "请输入邮箱和密码" },
         { status: 400 }
+      )
+    }
+
+    if (BLOCKED_PASSWORDS.has(password)) {
+      recordFailure(ip)
+      return NextResponse.json(
+        {
+          error:
+            "默认口令已禁用，请先在服务器上执行 npm run rotate-admin 更换管理员口令",
+        },
+        { status: 403 }
       )
     }
 

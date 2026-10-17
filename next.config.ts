@@ -7,6 +7,18 @@ const nextConfig: NextConfig = {
   // 压缩响应 (Next.js 16 默认启用，显式声明)
   compress: true,
 
+  // 旧链接兼容：数据库中的 slug 是 gate-io，历史链接/页脚曾使用 gate。
+  // 用 301 把外链权重和访问者带到正确页面，避免直接 500。
+  async redirects() {
+    return [
+      {
+        source: "/exchanges/gate",
+        destination: "/exchanges/gate-io",
+        statusCode: 301,
+      },
+    ];
+  },
+
 
   images: {
     // 启用 AVIF 和 WebP 格式以获得更小的图片体积

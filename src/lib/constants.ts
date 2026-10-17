@@ -62,7 +62,7 @@ export const footerLinks: FooterLinkGroup[] = [
       { label: "欧易 OKX", href: "/exchanges/okx" },
       { label: "Bybit", href: "/exchanges/bybit" },
       { label: "Bitget", href: "/exchanges/bitget" },
-      { label: "Gate.io", href: "/exchanges/gate" },
+      { label: "Gate.io", href: "/exchanges/gate-io" },
     ],
   },
   {

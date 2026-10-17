@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "seed": "tsx prisma/seed.ts",
+    "rotate-admin": "tsx scripts/rotate-admin-password.ts",
     "postinstall": "prisma generate",
     "vercel-build": "prisma generate && prisma db push && next build"
   },
@@ -55,7 +56,6 @@
     "lowlight": "^3.3.0",
     "lucide-react": "^1.17.0",
     "next": "16.2.7",
-    "next-auth": "^5.0.0-beta.31",
     "next-themes": "^0.4.6",
     "prisma": "^6.19.3",
     "react": "19.2.4",

@@ -82,6 +82,13 @@ npm run rotate-admin
 - 必需的生产环境变量：`DATABASE_URL`、`AUTH_SECRET`。
 - 域名：`bqzn.top`；`www` 需在 Vercel 项目中单独添加并配置跳转。
 
+## 监控
+
+- **健康检查**：`GET /api/health` 检查数据库连通性，正常返回 200，数据库异常返回 503（不缓存、不泄露配置）。
+- **可用性告警**：`.github/workflows/uptime.yml` 每 15 分钟探测一次生产 `/api/health`；连续失败会在 GitHub Issues 创建/更新 `monitoring` 工单，恢复后自动关闭。
+- **流量与性能**：根布局接入 Vercel Analytics / Speed Insights，需在 Vercel 项目里启用对应功能后生效。
+- **服务端错误**：`src/instrumentation.ts` 的 `onRequestError` 会把错误以单行 JSON（`"type":"request_error"`）写入 Vercel Logs，方便检索/后续接 Sentry 或 Log Drain。
+
 ## 目录
 
 ```

@@ -18,7 +18,6 @@ export async function generateStaticParams() {
 
 interface CategoryPageProps {
   params: Promise<{ slug: string }>
-  searchParams?: Promise<{ type?: string }>
 }
 
 export async function generateMetadata({ params }: CategoryPageProps): Promise<Metadata> {
@@ -55,10 +54,8 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
   }
 }
 
-export default async function CategoryPage({ params, searchParams }: CategoryPageProps) {
+export default async function CategoryPage({ params }: CategoryPageProps) {
   const { slug } = await params
-  const resolvedSearchParams = searchParams ? await searchParams : {}
-  const type = resolvedSearchParams?.type
 
   const category = await prisma.category.findUnique({
     where: { slug },
@@ -68,8 +65,8 @@ export default async function CategoryPage({ params, searchParams }: CategoryPag
     notFound()
   }
 
-  // Determine what to show based on category type or query param override
-  const showType = type || category.type
+  // Determine what to show based on the category type.
+  const showType = category.type
 
   const categoryJsonLd = {
     "@context": "https://schema.org",

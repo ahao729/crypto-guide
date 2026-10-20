@@ -1,4 +1,10 @@
-export default function ArticlesLoading() {
+/**
+ * Skeleton for the articles listing. Kept as a regular component (not
+ * `loading.tsx`) so it only wraps the listing inside the page and does not
+ * create a Suspense boundary around `/articles/[slug]`. A boundary at the
+ * segment level would force a 200 response for unknown slugs (soft 404).
+ */
+export function ArticlesLoading() {
   return (
     <div className="min-h-screen animate-pulse">
       {/* Hero Section */}
@@ -18,7 +24,6 @@ export default function ArticlesLoading() {
           {/* Sidebar */}
           <aside className="order-2 lg:order-1">
             <div className="sticky top-24 space-y-6">
-              {/* Categories */}
               <div className="rounded-xl border border-border/60 bg-card p-4">
                 <div className="mb-3 h-4 w-20 rounded bg-muted" />
                 <div className="space-y-1">
@@ -27,7 +32,6 @@ export default function ArticlesLoading() {
                   ))}
                 </div>
               </div>
-              {/* Quick links */}
               <div className="rounded-xl border border-border/60 bg-card p-4">
                 <div className="mb-3 h-4 w-16 rounded bg-muted" />
                 <div className="space-y-2">
@@ -41,7 +45,6 @@ export default function ArticlesLoading() {
 
           {/* Main Content */}
           <div className="order-1 lg:order-2">
-            {/* Featured / Latest Article */}
             <div className="mb-8 overflow-hidden rounded-xl border border-border/60 bg-card">
               <div className="grid md:grid-cols-2">
                 <div className="aspect-[16/10] bg-muted md:aspect-auto" />
@@ -60,7 +63,6 @@ export default function ArticlesLoading() {
               </div>
             </div>
 
-            {/* Article Grid */}
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {Array.from({ length: 6 }).map((_, i) => (
                 <div

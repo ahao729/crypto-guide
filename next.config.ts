@@ -29,6 +29,16 @@ const nextConfig: NextConfig = {
     minimumCacheTTL: 60 * 60 * 24 * 30, // 30 天
     remotePatterns: [
       {
+        // Media library (Cloudflare R2 / S3 public domain)
+        protocol: "https",
+        hostname: "cdn.bqzn.top",
+      },
+      {
+        // R2 default public development domain
+        protocol: "https",
+        hostname: "**.r2.dev",
+      },
+      {
         protocol: "https",
         hostname: "via.placeholder.com",
       },

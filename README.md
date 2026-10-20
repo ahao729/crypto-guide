@@ -50,6 +50,7 @@ npm run dev
 | `DATABASE_URL` | 是 | PostgreSQL 连接串；本地可 `file:./dev.db` |
 | `AUTH_SECRET` | 是 | 会话 Cookie 签名密钥，至少 32 字符；轮换后所有管理员会被登出 |
 | `COINGECKO_API_KEY` | 否 | CoinGecko Demo key，提升行情接口限额 |
+| `S3_ENDPOINT` / `S3_BUCKET` / `S3_ACCESS_KEY_ID` / `S3_SECRET_ACCESS_KEY` / `S3_PUBLIC_BASE_URL` / `S3_REGION` | 生产必需 | 媒体库对象存储（R2 / S3 / MinIO）。本地为空时回退到 `public/uploads` |
 | `ADMIN_EMAIL` / `ADMIN_PASSWORD` | 仅 seed/改密脚本 | 首次建号或轮换口令时使用，不要提交到仓库 |
 
 完整示例见 [`.env.example`](./.env.example)。
@@ -79,7 +80,12 @@ npm run rotate-admin
 - 托管在 Vercel，`main` 分支自动部署到 Production。
 - Vercel 会执行 `npm run vercel-build`：`prisma generate && prisma db push && next build`。
   - 当前 `db push` 会直接同步生产 schema，**没有 migration 历史**，属于已知技术债；改 schema 前务必先备份。
-- 必需的生产环境变量：`DATABASE_URL`、`AUTH_SECRET`。
+- 必需的生产环境变量：`DATABASE_URL`、`AUTH_SECRET`；媒体库还需要 `S3_*`。
+- 媒体库使用 S3 兼容存储（推荐 Cloudflare R2）：
+  - 建 bucket，创建 Object Read & Write 的 API Token；
+  - 给 bucket 绑定公开自定义域（如 `cdn.bqzn.top`），或先用 `pub-xxx.r2.dev`；
+  - 在 Vercel 配置 `S3_ENDPOINT`、`S3_BUCKET`、`S3_ACCESS_KEY_ID`、`S3_SECRET_ACCESS_KEY`、`S3_PUBLIC_BASE_URL`、`S3_REGION=auto`；
+  - 未配置时生产上传返回 503，本地开发回退到 `public/uploads`。
 - 域名：`bqzn.top`；`www` 需在 Vercel 项目中单独添加并配置跳转。
 
 ## 目录

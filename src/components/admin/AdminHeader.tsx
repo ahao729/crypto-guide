@@ -1,6 +1,8 @@
 "use client";
 
-import { usePathname } from "next/navigation";
+import { useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { LogOut } from "lucide-react";
 
 const pageTitles: Record<string, string> = {
   "/admin": "仪表盘",
@@ -16,6 +18,8 @@ const pageTitles: Record<string, string> = {
 
 export function AdminHeader() {
   const pathname = usePathname();
+  const router = useRouter();
+  const [loggingOut, setLoggingOut] = useState(false);
 
   // Find the best matching title
   let title = "管理后台";
@@ -32,8 +36,18 @@ export function AdminHeader() {
   if (pathname.includes("/new")) subtitle = "新建";
   else if (pathname.match(/\/\d+$/)) subtitle = "编辑";
 
+  async function handleLogout() {
+    setLoggingOut(true);
+    try {
+      await fetch("/api/auth/logout", { method: "POST" });
+    } finally {
+      router.replace("/admin/login");
+      router.refresh();
+    }
+  }
+
   return (
-    <header className="flex h-14 items-center border-b border-border bg-card px-6">
+    <header className="flex h-14 items-center justify-between border-b border-border bg-card px-6">
       <h1 className="text-lg font-semibold">
         {title}
         {subtitle && (
@@ -42,6 +56,16 @@ export function AdminHeader() {
           </span>
         )}
       </h1>
+
+      <button
+        type="button"
+        onClick={handleLogout}
+        disabled={loggingOut}
+        className="inline-flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground disabled:opacity-50"
+      >
+        <LogOut className="h-4 w-4" />
+        {loggingOut ? "退出中..." : "退出登录"}
+      </button>
     </header>
   );
 }

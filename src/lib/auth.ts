@@ -1,68 +1,31 @@
-import NextAuth from "next-auth"
-import CredentialsProvider from "next-auth/providers/credentials"
-import { compare } from "bcryptjs"
-import { prisma } from "./prisma"
+import { cookies } from "next/headers"
+import {
+  SESSION_COOKIE,
+  verifySessionToken,
+  type AdminSession,
+} from "./session"
 
-export const { handlers, signIn, signOut, auth } = NextAuth({
-  providers: [
-    CredentialsProvider({
-      name: "credentials",
-      credentials: {
-        email: { label: "Email", type: "email" },
-        password: { label: "Password", type: "password" },
-      },
-      async authorize(credentials) {
-        if (!credentials?.email || !credentials?.password) {
-          return null
-        }
+export interface AuthSession {
+  user: AdminSession
+}
 
-        const user = await prisma.user.findUnique({
-          where: { email: credentials.email as string },
-        })
-
-        if (!user) {
-          return null
-        }
-
-        const passwordMatch = await compare(
-          credentials.password as string,
-          user.password
-        )
-
-        if (!passwordMatch) {
-          return null
-        }
-
-        return {
-          id: user.id,
-          email: user.email,
-          name: user.name,
-          role: user.role,
-        }
-      },
-    }),
-  ],
-  session: {
-    strategy: "jwt",
-    maxAge: 30 * 24 * 60 * 60, // 30 days
-  },
-  pages: {
-    signIn: "/admin/login",
-  },
-  callbacks: {
-    async jwt({ token, user }) {
-      if (user) {
-        token.id = user.id as string | undefined
-        token.role = (user as { role?: string }).role as string | undefined
-      }
-      return token
-    },
-    async session({ session, token }) {
-      if (session.user) {
-        (session.user as { id?: string; role?: string }).id = token.id as string | undefined
-        ;(session.user as { id?: string; role?: string }).role = token.role as string | undefined
-      }
-      return session
-    },
-  },
-})
+/**
+ * Read and verify the admin session from the request cookies.
+ *
+ * Returns `null` for anonymous, expired, tampered, or unconfigured requests
+ * (fail closed). API routes should keep the existing pattern:
+ *
+ *   const session = await auth()
+ *   if (!session) return NextResponse.json({ error: "未登录" }, { status: 401 })
+ */
+export async function auth(): Promise<AuthSession | null> {
+  try {
+    const cookieStore = await cookies()
+    const token = cookieStore.get(SESSION_COOKIE)?.value
+    const session = await verifySessionToken(token)
+    return session ? { user: session } : null
+  } catch {
+    // cookies() can throw outside a request scope (e.g. during build).
+    return null
+  }
+}

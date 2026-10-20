@@ -10,17 +10,31 @@ async function main() {
   // 1. 管理员用户
   // ============================
   console.log("📝 创建管理员用户...")
-  const hashedPassword = await bcrypt.hash("admin123", 10)
-  await prisma.user.upsert({
-    where: { email: "admin@bqzn.top" },
-    update: {},
-    create: {
-      email: "admin@bqzn.top",
-      password: hashedPassword,
-      name: "超级管理员",
-      role: "admin",
-    },
-  })
+  const adminEmail = process.env.ADMIN_EMAIL || "admin@bqzn.top"
+  const adminPassword = process.env.ADMIN_PASSWORD
+
+  if (!adminPassword) {
+    console.log(
+      "⏭️  跳过管理员创建：未设置 ADMIN_PASSWORD。" +
+        "首次部署请先执行 `ADMIN_EMAIL=... ADMIN_PASSWORD=... npm run seed`。"
+    )
+  } else {
+    if (adminPassword.length < 12) {
+      throw new Error("ADMIN_PASSWORD 至少需要 12 个字符")
+    }
+    const hashedPassword = await bcrypt.hash(adminPassword, 12)
+    await prisma.user.upsert({
+      where: { email: adminEmail },
+      // 已存在的账号不覆盖密码，避免重复 seed 把线上口令改回去
+      update: {},
+      create: {
+        email: adminEmail,
+        password: hashedPassword,
+        name: "超级管理员",
+        role: "admin",
+      },
+    })
+  }
 
   // ============================
   // 2. 分类 (Categories)
@@ -4423,9 +4437,13 @@ Layer 2 解决方案可以大幅降低 Gas 费：
   console.log(`   🏠 首页区块: ${existingHomeSectionCount}`)
   console.log(`   📄 文章: ${articles.length}`)
   console.log(`   📦 资源: ${resources.length}`)
-  console.log("\n🔑 管理员登录信息:")
-  console.log(`   邮箱: admin@bqzn.top`)
-  console.log(`   密码: admin123`)
+  if (adminPassword) {
+    console.log("\n🔑 管理员账号:")
+    console.log(`   邮箱: ${adminEmail}`)
+    console.log("   密码: 使用 ADMIN_PASSWORD 环境变量中的值（未写入仓库）")
+  } else {
+    console.log("\n🔑 管理员账号: 未创建（ADMIN_PASSWORD 未设置）")
+  }
 }
 
 main()

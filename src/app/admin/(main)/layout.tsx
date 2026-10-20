@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { cookies } from "next/headers";
+import { auth } from "@/lib/auth";
 import { Sidebar } from "@/components/admin/Sidebar";
 import { AdminHeader } from "@/components/admin/AdminHeader";
 
@@ -8,10 +8,9 @@ export default async function AdminLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const cookieStore = await cookies();
-  const token = cookieStore.get("admin_token")?.value;
+  const session = await auth();
 
-  if (!token || token !== "authenticated") {
+  if (!session) {
     redirect("/admin/login");
   }
 

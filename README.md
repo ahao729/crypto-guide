@@ -77,8 +77,16 @@ npm run rotate-admin
 ## 部署
 
 - 托管在 Vercel，`main` 分支自动部署到 Production。
-- Vercel 会执行 `npm run vercel-build`：`prisma generate && prisma db push && next build`。
-  - 当前 `db push` 会直接同步生产 schema，**没有 migration 历史**，属于已知技术债；改 schema 前务必先备份。
+- Vercel 会执行 `npm run vercel-build`：`prisma generate && next build`，**构建期不再改数据库**。
+- schema 变更走 migration：先备份，再在本地用 Neon 的 **direct（非 pooler）** 连接串执行 `npm run db:migrate`，确认后再合并/部署。
+  ```bash
+  # 1) 备份
+  pg_dump "$DIRECT_URL" --no-owner --no-privileges -Fc -f backup.dump
+  # 2) 应用 migration（DATABASE_URL 用 direct 连接串，去掉 -pooler）
+  DATABASE_URL="$DIRECT_URL" npm run db:migrate
+  # 3) 查看状态
+  DATABASE_URL="$DIRECT_URL" npm run db:migrate:status
+  ```
 - 必需的生产环境变量：`DATABASE_URL`、`AUTH_SECRET`。
 - 域名：`bqzn.top`；`www` 需在 Vercel 项目中单独添加并配置跳转。
 

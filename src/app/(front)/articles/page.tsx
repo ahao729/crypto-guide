@@ -1,7 +1,9 @@
+import { Suspense } from "react"
 import { prisma } from "@/lib/prisma"
 import Link from "next/link"
 import Image from "next/image"
 import type { Metadata } from "next"
+import { ArticlesLoading } from "./ArticlesLoading"
 import { formatDate } from "@/lib/utils"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -33,11 +35,19 @@ export const metadata: Metadata = {
   },
 }
 
-export default async function ArticlesPage({
-  searchParams,
-}: {
+interface ArticlesPageProps {
   searchParams?: Promise<{ category?: string; q?: string; tag?: string }>
-}) {
+}
+
+export default function ArticlesPage({ searchParams }: ArticlesPageProps) {
+  return (
+    <Suspense fallback={<ArticlesLoading />}>
+      <ArticlesContent searchParams={searchParams} />
+    </Suspense>
+  )
+}
+
+async function ArticlesContent({ searchParams }: ArticlesPageProps) {
   const resolvedSearchParams = searchParams ? await searchParams : {}
   const activeCategorySlug = resolvedSearchParams?.category
   const searchQuery = resolvedSearchParams?.q?.trim()

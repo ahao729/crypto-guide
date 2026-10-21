@@ -9,7 +9,7 @@ import { Clock, ArrowRight } from "lucide-react"
 export const revalidate = 600 // 10 minutes
 
 export const metadata: Metadata = {
-  title: `专业的加密货币交易所评测与推荐 | ${siteConfig.shortName}`,
+  title: "专业的加密货币交易所评测与推荐",
   description: siteConfig.description,
   keywords: ["加密货币交易所", "数字货币平台", "比特币交易", "交易所推荐", "币圈指南", "交易所评测", "加密货币投资", "OKX", "币安"],
   openGraph: {

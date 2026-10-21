@@ -36,7 +36,7 @@ export async function generateMetadata({ params }: ResourcePageProps): Promise<M
   if (!resource) return { title: "资源未找到" }
 
   return {
-    title: `${resource.title} | ${siteConfig.shortName}`,
+    title: resource.title,
     description: resource.description?.slice(0, 160) || `${resource.title} - 加密货币学习资源`,
     openGraph: {
       title: resource.title,

@@ -267,6 +267,15 @@ export default async function ExchangeDetailPage({ params }: ExchangeDetailPageP
                 </p>
               )}
 
+              {(slug === "binance" || slug === "okx") && (
+                <Link
+                  href="/articles/binance-okx-new-user-campaigns-2026"
+                  className="text-xs text-gold underline decoration-gold/40 underline-offset-4 transition-colors hover:text-gold-dark"
+                >
+                  查看 10 月新用户活动整理
+                </Link>
+              )}
+
               {/* Invite code benefit — only for Binance & OKX */}
               {(slug === "binance" || slug === "okx") && (
                 <div className="w-full border-t border-amber-200/50 pt-3 dark:border-amber-800/20">

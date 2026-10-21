@@ -7,11 +7,11 @@ import { prisma } from "@/lib/prisma"
 
 export const metadata: Metadata = {
   title: `加入社群 - ${siteConfig.name}`,
-  description: `加入${siteConfig.name}官方社群，与万千加密货币投资者一起交流交易所评测、撸空投、链上机会和投资心得。`,
+  description: `加入${siteConfig.name}官方社群，与关注加密货币的读者一起交流交易所评测、撸空投、链上机会和投资心得。`,
   keywords: ["币圈社群", "加密货币交流群", "交易所讨论群", "撸空投社群", "币圈交流群", "Telegram群", "Discord社区"],
   openGraph: {
     title: `加入社群 - ${siteConfig.name}`,
-    description: `加入${siteConfig.name}官方社群，与万千加密货币投资者一起交流交易所评测、撸空投、链上机会和投资心得。`,
+    description: `加入${siteConfig.name}官方社群，与关注加密货币的读者一起交流交易所评测、撸空投、链上机会和投资心得。`,
     url: `${siteConfig.url}/about`,
     siteName: siteConfig.name,
     locale: siteConfig.locale,
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: `加入社群 - ${siteConfig.name}`,
-    description: `加入${siteConfig.name}官方社群，与万千加密货币投资者一起交流交易所评测、撸空投、链上机会和投资心得。`,
+    description: `加入${siteConfig.name}官方社群，与关注加密货币的读者一起交流交易所评测、撸空投、链上机会和投资心得。`,
   },
   alternates: {
     canonical: `${siteConfig.url}/about`,
@@ -70,25 +70,25 @@ interface Platform {
 
 const defaultPlatforms: Platform[] = [
   {
-    name: "Telegram 群",
-    description: "最活跃的主阵地，实时讨论交易所评测、撸空投和链上机会",
-    members: "3,000+ 群友",
-    href: "https://t.me/your_group_link",
+    name: "Telegram",
+    description: "官方频道，发布站点更新与精选内容。",
+    members: "官方频道",
+    href: "https://t.me/biquanzhinan",
     color: "bg-sky-500/10 text-sky-500",
   },
   {
-    name: "Discord 社区",
-    description: "按主题分频道的深度交流空间，适合长文讨论和资源沉淀",
-    members: "1,500+ 成员",
-    href: "https://discord.gg/your_invite",
-    color: "bg-indigo-500/10 text-indigo-500",
+    name: "X（Twitter）",
+    description: "短评、行业动态与站点更新。",
+    members: "官方账号",
+    href: "https://x.com/biquanzhinan",
+    color: "bg-foreground/5 text-foreground",
   },
   {
-    name: "微信群",
-    description: "面向中文用户的便捷交流群，每日精选内容推送",
-    members: "已开 5 群",
-    href: "https://t.me/your_wechat_bot",
-    color: "bg-emerald-500/10 text-emerald-500",
+    name: "Substack",
+    description: "较长内容的 newsletter 归档。",
+    members: "Newsletter",
+    href: "https://biquanzhinan.substack.com",
+    color: "bg-orange-500/10 text-orange-500",
   },
 ]
 
@@ -96,7 +96,7 @@ const aboutJsonLd = {
   "@context": "https://schema.org",
   "@type": "AboutPage",
   name: `加入社群 - ${siteConfig.name}`,
-  description: `加入${siteConfig.name}官方社群，与万千加密货币投资者一起交流交易所评测、撸空投、链上机会和投资心得。`,
+  description: `加入${siteConfig.name}官方社群，与关注加密货币的读者一起交流交易所评测、撸空投、链上机会和投资心得。`,
   url: `${siteConfig.url}/about`,
   mainEntityOfPage: {
     "@type": "WebPage",
@@ -129,10 +129,9 @@ async function getSettingsMap(): Promise<Record<string, string>> {
 export default async function AboutPage() {
   const settingsMap = await getSettingsMap()
 
-  // Community stats
-  const communityMembers = settingsMap.community_members || "5,000+"
+  // Community stats (no invented member counts)
   const communityPlatformsCount = settingsMap.community_platforms_count || "3"
-  const communityActiveLabel = settingsMap.community_active_label || "每日"
+  const communityActiveLabel = settingsMap.community_active_label || "持续"
   const communityCostLabel = settingsMap.community_cost_label || "免费"
 
   // Platforms
@@ -172,7 +171,7 @@ export default async function AboutPage() {
               <span className="text-gradient-gold ml-2">币圈社群</span>
             </h1>
             <p className="mt-4 text-lg text-muted-foreground">
-              与万千加密货币投资者一起交流、分享、成长
+              与关注加密货币的读者一起交流、分享、成长
             </p>
             <div className="mt-8 flex flex-wrap justify-center gap-4">
               {firstPlatform && (
@@ -198,18 +197,14 @@ export default async function AboutPage() {
 
       {/* Community Stats */}
       <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-          <div className="rounded-xl border border-border/60 bg-card p-6 text-center">
-            <div className="text-3xl font-bold text-gold">{communityMembers}</div>
-            <div className="mt-1 text-sm text-muted-foreground">社群成员</div>
-          </div>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
           <div className="rounded-xl border border-border/60 bg-card p-6 text-center">
             <div className="text-3xl font-bold text-gold">{communityPlatformsCount}</div>
             <div className="mt-1 text-sm text-muted-foreground">交流平台</div>
           </div>
           <div className="rounded-xl border border-border/60 bg-card p-6 text-center">
             <div className="text-3xl font-bold text-gold">{communityActiveLabel}</div>
-            <div className="mt-1 text-sm text-muted-foreground">活跃讨论</div>
+            <div className="mt-1 text-sm text-muted-foreground">内容更新</div>
           </div>
           <div className="rounded-xl border border-border/60 bg-card p-6 text-center">
             <div className="text-3xl font-bold text-gold">{communityCostLabel}</div>

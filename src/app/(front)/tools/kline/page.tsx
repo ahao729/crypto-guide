@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { RefreshCw, AlertCircle, TrendingUp, BarChart3 } from "lucide-react"
 import { KlineChart, KlineChartSkeleton, type EnrichedKlinePoint } from "@/components/charts/KlineChart"
+import { TradingViewCTA } from "@/components/front/TradingViewCTA"
 import type { KlineItem } from "@/lib/market-api"
 
 // ── Constants ──
@@ -346,6 +347,8 @@ export default function KlinePage() {
           )}
         </CardContent>
       </Card>
+
+      <TradingViewCTA />
 
       {/* ── Indicators Legend ── */}
       <Card>

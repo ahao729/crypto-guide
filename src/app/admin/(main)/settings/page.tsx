@@ -25,19 +25,12 @@ const DEFAULT_SETTINGS: SiteSetting[] = [
   { key: "favicon_url", value: "", label: "Favicon URL", type: "image", section: "basic" },
   { key: "footer_text", value: "", label: "页脚文本", type: "textarea", section: "basic" },
   { key: "contact_email", value: "", label: "联系邮箱", type: "text", section: "basic" },
-  { key: "beian", value: "", label: "备案号", type: "text", section: "basic" },
   { key: "google_analytics_id", value: "", label: "Google Analytics ID", type: "text", section: "basic" },
 
-  // 首页统计
-  { key: "stat_exchanges", value: "15", label: "交易所数量 (显示如 15+)", type: "text", section: "stats" },
-  { key: "stat_articles", value: "50", label: "文章数量 (显示如 50+)", type: "text", section: "stats" },
-  { key: "stat_users", value: "10000", label: "用户数量 (显示如 10,000+)", type: "text", section: "stats" },
-
-  // 社群信息
-  { key: "community_members", value: "5000", label: "社群成员数 (显示如 5,000+)", type: "text", section: "community" },
+  // 社群信息（首页统计已改为数据库实时计数，不再手填）
   { key: "community_platforms_count", value: "3", label: "交流平台数", type: "text", section: "community" },
-  { key: "community_active_label", value: "每日", label: "活跃度标签", type: "text", section: "community" },
-  { key: "community_free_label", value: "免费", label: "费用标签", type: "text", section: "community" },
+  { key: "community_active_label", value: "持续", label: "活跃度标签", type: "text", section: "community" },
+  { key: "community_cost_label", value: "免费", label: "费用标签", type: "text", section: "community" },
 
   // 交流平台 (JSON)
   { key: "community_platforms", value: "", label: "平台列表 (JSON)", type: "json", section: "platforms" },
@@ -45,7 +38,6 @@ const DEFAULT_SETTINGS: SiteSetting[] = [
 
 const SECTION_TITLES: Record<string, string> = {
   basic: "基本设置",
-  stats: "首页统计",
   community: "社群信息",
   platforms: "交流平台",
 }
@@ -146,10 +138,10 @@ export default function AdminSettingsPage() {
                         onChange={(e) => updateSetting(setting.key, e.target.value)}
                         placeholder={JSON.stringify([
                           {
-                            name: "Telegram 群",
-                            description: "最活跃的币圈交流群...",
-                            members: "3,000+ 群友",
-                            href: "https://t.me/your_group",
+                            name: "Telegram",
+                            description: "官方频道，发布站点更新与精选内容。",
+                            members: "官方频道",
+                            href: "https://t.me/biquanzhinan",
                             color: "bg-sky-500/10 text-sky-500",
                           },
                         ], null, 2)}

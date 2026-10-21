@@ -84,12 +84,15 @@ export function Footer() {
           <p className="text-xs text-muted-foreground">
             &copy; {currentYear} {siteConfig.name}. All rights reserved.
           </p>
-          <div className="flex gap-4 text-xs text-muted-foreground">
-            <Link href="/about#privacy" className="hover:text-gold">
+          <div className="flex flex-wrap justify-center gap-x-4 gap-y-2 text-xs text-muted-foreground">
+            <Link href="/privacy" className="hover:text-gold">
               隐私政策
             </Link>
-            <Link href="/about#terms" className="hover:text-gold">
+            <Link href="/terms" className="hover:text-gold">
               服务条款
+            </Link>
+            <Link href="/disclosure" className="hover:text-gold">
+              联盟披露/风险提示
             </Link>
             <a href={`mailto:${siteConfig.contactEmail}`} className="hover:text-gold">
               联系我们

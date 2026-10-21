@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { siteConfig } from "@/lib/constants"
+import { siteConfig, xProfileUrl } from "@/lib/constants"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { MessageCircle, Users, Shield, Sparkles, Link, Gift, ExternalLink } from "lucide-react"
@@ -80,17 +80,26 @@ const defaultPlatforms: Platform[] = [
     name: "X（Twitter）",
     description: "短评、行业动态与站点更新。",
     members: "官方账号",
-    href: "https://x.com/biquanzhinan",
+    href: xProfileUrl,
     color: "bg-foreground/5 text-foreground",
   },
-  {
-    name: "Substack",
-    description: "较长内容的 newsletter 归档。",
-    members: "Newsletter",
-    href: "https://biquanzhinan.substack.com",
-    color: "bg-orange-500/10 text-orange-500",
-  },
 ]
+
+// Substack 暂时下线；X 链接以代码常量为准，避免后台
+// site_settings.community_platforms 里的旧 JSON 把用户带回废弃账号。
+function normalizePlatforms(items: Platform[]): Platform[] {
+  return items
+    .filter((platform) => {
+      const name = String(platform.name ?? "").toLowerCase()
+      const href = String(platform.href ?? "").toLowerCase()
+      return !name.includes("substack") && !href.includes("substack.com")
+    })
+    .map((platform) =>
+      /^(x|twitter)/i.test(platform.name)
+        ? { ...platform, href: xProfileUrl }
+        : platform
+    )
+}
 
 const aboutJsonLd = {
   "@context": "https://schema.org",
@@ -130,22 +139,25 @@ export default async function AboutPage() {
   const settingsMap = await getSettingsMap()
 
   // Community stats (no invented member counts)
-  const communityPlatformsCount = settingsMap.community_platforms_count || "3"
   const communityActiveLabel = settingsMap.community_active_label || "持续"
   const communityCostLabel = settingsMap.community_cost_label || "免费"
 
   // Platforms
-  let platforms: Platform[] = defaultPlatforms
+  let platforms: Platform[] = normalizePlatforms(defaultPlatforms)
   try {
     if (settingsMap.community_platforms) {
       const parsed = JSON.parse(settingsMap.community_platforms) as Platform[]
       if (Array.isArray(parsed) && parsed.length > 0) {
-        platforms = parsed
+        platforms = normalizePlatforms(parsed)
       }
     }
   } catch {
     // ignore parse errors, use defaults
   }
+
+  // Derive the count from what is actually rendered, so removing a platform
+  // cannot leave a stale "3 交流平台" behind.
+  const communityPlatformsCount = String(platforms.length)
 
   const firstPlatform = platforms[0]
   const secondPlatform = platforms[1]

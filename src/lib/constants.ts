@@ -76,9 +76,11 @@ export const footerLinks: FooterLinkGroup[] = [
   },
 ]
 
+export const xHandle = "@CYQSZ777"
+export const xProfileUrl = "https://x.com/CYQSZ777"
+
 export const socialLinks = [
-  { label: "X", href: "https://x.com/biquanzhinan", icon: "x" },
-  { label: "Substack", href: "https://biquanzhinan.substack.com", icon: "substack" },
+  { label: "X", href: xProfileUrl, icon: "x" },
   { label: "Telegram", href: "https://t.me/biquanzhinan", icon: "telegram" },
 ]
 

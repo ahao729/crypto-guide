@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import { siteConfig } from "@/lib/constants"
+import { TradingViewCTA } from "@/components/front/TradingViewCTA"
 import { ToolsPageClient } from "./client"
 
 export const metadata: Metadata = {
@@ -101,6 +102,11 @@ export default function ToolsPage() {
       </section>
 
       <ToolsPageClient />
+
+      {/* ──────────── Partner: TradingView ──────────── */}
+      <section className="mx-auto max-w-7xl px-4 pb-12 sm:px-6 lg:px-8">
+        <TradingViewCTA />
+      </section>
 
       {/* ──────────── Suggestion CTA ──────────── */}
       <section className="border-t border-border/40 bg-gradient-to-b from-background via-gold/[0.02] to-background">

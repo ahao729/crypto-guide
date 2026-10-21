@@ -7,6 +7,7 @@ import { formatDate } from "@/lib/utils"
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
 import { siteConfig } from "@/lib/constants"
+import { RISK_DISCLAIMER } from "@/lib/affiliates"
 import { ArrowLeft, Clock, User, Calendar } from "lucide-react"
 import { processArticleHtml, estimateReadingTime } from "@/lib/article-utils"
 import ArticleContent from "@/components/front/ArticleContent"
@@ -302,6 +303,20 @@ export default async function ArticleDetailPage({ params }: ArticlePageProps) {
 
                   {/* Previous / Next Article Navigation */}
                   <ArticleNavigation prev={prevArticle} next={nextArticle} />
+
+                  <div className="mt-8 rounded-xl border border-amber-500/20 bg-amber-500/5 p-4 text-xs leading-relaxed text-muted-foreground">
+                    <p>
+                      <span className="font-medium text-foreground">风险提示：</span>
+                      {RISK_DISCLAIMER}
+                    </p>
+                    <p className="mt-1">
+                      部分外部链接可能为联盟链接，详见{" "}
+                      <Link href="/disclosure" className="underline hover:text-gold">
+                        联盟披露
+                      </Link>
+                      。
+                    </p>
+                  </div>
                 </article>
               </div>
             </div>

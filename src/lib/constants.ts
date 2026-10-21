@@ -83,9 +83,9 @@ export const socialLinks = [
 ]
 
 export const siteStatistics = {
-  exchanges: 15,
-  articles: 50,
-  users: 10000,
+  exchanges: 12,
+  articles: 23,
+  resources: 12,
 }
 
 export const exchangeCategories = [

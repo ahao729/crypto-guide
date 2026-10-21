@@ -259,7 +259,7 @@ export default async function ExchangeDetailPage({ params }: ExchangeDetailPageP
                     {exchange.inviteCode}
                   </code>
                   <br />
-                  填写后可享受专属手续费折扣
+                  填写后按交易所规则享受对应权益，具体以官方页面为准
                 </p>
               ) : (
                 <p className="text-center text-xs text-muted-foreground">
@@ -267,7 +267,7 @@ export default async function ExchangeDetailPage({ params }: ExchangeDetailPageP
                 </p>
               )}
 
-              {/* DUXIN Invite Code Benefit — only for Binance & OKX */}
+              {/* Invite code benefit — only for Binance & OKX */}
               {(slug === "binance" || slug === "okx") && (
                 <div className="w-full border-t border-amber-200/50 pt-3 dark:border-amber-800/20">
                   <p className="text-center text-xs leading-relaxed text-amber-600 dark:text-amber-400">
@@ -276,9 +276,9 @@ export default async function ExchangeDetailPage({ params }: ExchangeDetailPageP
                     </span>
                     通过本链接注册并使用邀请码{" "}
                     <code className="rounded bg-amber-100 px-1.5 py-0.5 font-mono text-sm font-bold text-amber-800 dark:bg-amber-900/50 dark:text-amber-300">
-                      DUXIN
+                      {exchange.inviteCode}
                     </code>
-                    ，可享受终身手续费折扣 + 专属返佣权益，交易越多省得越多！
+                    ，具体活动权益以交易所页面为准。
                   </p>
                 </div>
               )}
@@ -523,7 +523,7 @@ export default async function ExchangeDetailPage({ params }: ExchangeDetailPageP
                     {exchange.inviteCode}
                   </code>
                   <br />
-                  填写后可享受专属手续费折扣
+                  填写后按交易所规则享受对应权益，具体以官方页面为准
                 </p>
               ) : (
                 <p className="mt-4 text-center text-xs text-muted-foreground">
@@ -531,7 +531,7 @@ export default async function ExchangeDetailPage({ params }: ExchangeDetailPageP
                 </p>
               )}
 
-              {/* DUXIN Invite Code Benefit — only for Binance & OKX */}
+              {/* Invite code benefit — only for Binance & OKX */}
               {(slug === "binance" || slug === "okx") && (
                 <div className="mt-4 w-full border-t border-amber-200/50 pt-3 dark:border-amber-800/20">
                   <p className="text-center text-xs leading-relaxed text-amber-600 dark:text-amber-400">
@@ -540,9 +540,9 @@ export default async function ExchangeDetailPage({ params }: ExchangeDetailPageP
                     </span>
                     通过本链接注册并使用邀请码{" "}
                     <code className="rounded bg-amber-100 px-1.5 py-0.5 font-mono text-sm font-bold text-amber-800 dark:bg-amber-900/50 dark:text-amber-300">
-                      DUXIN
+                      {exchange.inviteCode}
                     </code>
-                    ，可享受终身手续费折扣 + 专属返佣权益，交易越多省得越多！
+                    ，具体活动权益以交易所页面为准。
                   </p>
                 </div>
               )}

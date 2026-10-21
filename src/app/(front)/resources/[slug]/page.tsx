@@ -84,14 +84,39 @@ export default async function ResourceDetailPage({ params }: ResourcePageProps) 
   const Icon = cfg.icon
   const tags = getTags(resource.tags)
 
-  // 递增浏览量
-  await prisma.resource.update({
-    where: { id: resource.id },
-    data: { downloadCount: { increment: 1 } },
-  })
+  const resourceJsonLd = {
+    "@context": "https://schema.org",
+    "@type":
+      resource.type === "file"
+        ? "DigitalDocument"
+        : resource.type === "external"
+          ? "WebPage"
+          : "LearningResource",
+    name: resource.title,
+    description: resource.description || undefined,
+    url: `${siteConfig.url}/resources/${resource.slug}`,
+    ...(resource.fileUrl
+      ? {
+          contentUrl: `${siteConfig.url}${resource.fileUrl}`,
+          encodingFormat:
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        }
+      : {}),
+    dateModified: resource.updatedAt.toISOString(),
+    isAccessibleForFree: true,
+    provider: {
+      "@type": "Organization",
+      name: siteConfig.name,
+      url: siteConfig.url,
+    },
+  }
 
   return (
     <div className="min-h-screen">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(resourceJsonLd) }}
+      />
       {/* 返回导航 */}
       <div className="mx-auto max-w-4xl px-4 pt-8 sm:px-6 lg:px-8">
         <Link
@@ -130,8 +155,18 @@ export default async function ResourceDetailPage({ params }: ResourcePageProps) 
             </div>
             <div className="mt-3 flex items-center gap-4 text-sm text-muted-foreground">
               <span className="flex items-center gap-1">
-                <Download className="h-3.5 w-3.5" />
-                {resource.downloadCount.toLocaleString()} 次查看
+                {resource.type === "file" ? (
+                  <Download className="h-3.5 w-3.5" />
+                ) : resource.type === "external" ? (
+                  <ExternalLink className="h-3.5 w-3.5" />
+                ) : (
+                  <BookOpen className="h-3.5 w-3.5" />
+                )}
+                {resource.type === "file"
+                  ? `${resource.downloadCount.toLocaleString()} 次下载`
+                  : resource.type === "external"
+                    ? "外部资源"
+                    : "在线指南"}
               </span>
               {resource.fileSize && <span>文件大小：{resource.fileSize}</span>}
               <span>更新于 {formatDate(resource.updatedAt)}</span>
@@ -149,6 +184,16 @@ export default async function ResourceDetailPage({ params }: ResourcePageProps) 
         </section>
       )}
 
+      {/* 操作按钮 */}
+      <ResourceActions
+        resourceId={resource.id}
+        resourceSlug={resource.slug}
+        type={resource.type}
+        externalUrl={resource.externalUrl}
+        fileUrl={resource.fileUrl}
+        fileSize={resource.fileSize}
+      />
+
       {/* 资源内容 */}
       {resource.content && (
         <section className="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
@@ -159,15 +204,6 @@ export default async function ResourceDetailPage({ params }: ResourcePageProps) 
         </section>
       )}
 
-      {/* 操作按钮 */}
-      <ResourceActions
-        resourceId={resource.id}
-        resourceSlug={resource.slug}
-        type={resource.type}
-        externalUrl={resource.externalUrl}
-        fileUrl={resource.fileUrl}
-        fileSize={resource.fileSize}
-      />
     </div>
   )
 }

@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useMemo } from "react"
+import Link from "next/link"
 import {
   Search,
   Download,
@@ -83,7 +84,7 @@ const categoryConfig: Record<
     color: "text-purple-500",
   },
   link: {
-    label: "优秀资源",
+    label: "精选资源",
     icon: Link2,
     color: "text-orange-500",
   },
@@ -118,7 +119,10 @@ export function ResourcesClient({
     "default"
   )
 
-  const categoryKeys = Object.keys(categoryGroups)
+  const categoryKeys = Object.keys(categoryGroups).sort((a, b) => {
+    const order = ["newbie", "template", "tool", "link"]
+    return order.indexOf(a) - order.indexOf(b)
+  })
 
   const allResources = useMemo(() => {
     const flat: Resource[] = []
@@ -198,7 +202,7 @@ export function ResourcesClient({
               <span className="text-gradient-gold ml-2">下载</span>
             </h1>
             <p className="mt-4 text-lg text-muted-foreground">
-              新手教程、模板表格、实用工具、精选资源——免费下载助您快速入门加密世界
+              新手教程、Excel 模板、链上工具与精选外部资源。教程可在线读，模板可直接下载，全部免费。
             </p>
 
             {/* Stats */}
@@ -209,8 +213,12 @@ export function ResourcesClient({
               </div>
               <div className="h-8 w-px bg-border/60" />
               <div className="flex flex-col items-center">
-                <span className="text-2xl font-bold text-gold">{totalDownloads.toLocaleString()}</span>
-                <span className="text-muted-foreground">累计下载</span>
+                <span className="text-2xl font-bold text-gold">
+                  {totalDownloads > 0 ? totalDownloads.toLocaleString() : "免费"}
+                </span>
+                <span className="text-muted-foreground">
+                  {totalDownloads > 0 ? "累计下载" : "全部免费"}
+                </span>
               </div>
               <div className="h-8 w-px bg-border/60" />
               <div className="flex flex-col items-center">
@@ -218,6 +226,37 @@ export function ResourcesClient({
                 <span className="text-muted-foreground">资源分类</span>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── What's inside ── */}
+      <section className="mx-auto max-w-7xl px-4 pt-10 sm:px-6 lg:px-8">
+        <div className="grid gap-4 sm:grid-cols-3">
+          <div className="rounded-xl border border-border/60 bg-card p-5">
+            <BookOpen className="h-5 w-5 text-blue-500" />
+            <h2 className="mt-3 text-sm font-semibold">在线指南</h2>
+            <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
+              从入门到链上分析，按顺序阅读，不需要下载。
+            </p>
+          </div>
+          <div className="rounded-xl border border-border/60 bg-card p-5">
+            <FileText className="h-5 w-5 text-emerald-500" />
+            <h2 className="mt-3 text-sm font-semibold">Excel 模板</h2>
+            <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
+              交易记录、仓位管理、DCA 定投，公式已写好，下载即用。
+            </p>
+          </div>
+          <div className="rounded-xl border border-border/60 bg-card p-5">
+            <ExternalLink className="h-5 w-5 text-orange-500" />
+            <h2 className="mt-3 text-sm font-semibold">外部工具</h2>
+            <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
+              行情、图表与交易所导航；部分链接含联盟参数，详见{" "}
+              <Link href="/disclosure" className="underline hover:text-gold">
+                联盟披露
+              </Link>
+              。
+            </p>
           </div>
         </div>
       </section>
@@ -429,10 +468,21 @@ function ResourceCard({
       <CardFooter className="border-t border-border/40 bg-muted/20 px-4 py-3">
         <div className="flex w-full items-center justify-between">
           <div className="flex items-center gap-3 text-xs text-muted-foreground">
-            <span className="flex items-center gap-1">
-              <Download className="h-3 w-3" />
-              {resource.downloadCount.toLocaleString()}
-            </span>
+            {resource.type === "file" ? (
+              <span className="flex items-center gap-1">
+                <Download className="h-3 w-3" />
+                {resource.downloadCount.toLocaleString()}
+              </span>
+            ) : (
+              <span className="flex items-center gap-1">
+                {resource.type === "external" ? (
+                  <ExternalLink className="h-3 w-3" />
+                ) : (
+                  <Eye className="h-3 w-3" />
+                )}
+                {resource.type === "external" ? "外部资源" : "在线指南"}
+              </span>
+            )}
             {resource.fileSize && (
               <span className="flex items-center gap-1">
                 <FileText className="h-3 w-3" />
@@ -522,8 +572,22 @@ function ResourceListItem({
 
       <div className="flex items-center gap-4 px-4">
         <span className="hidden items-center gap-1 text-xs text-muted-foreground sm:flex">
-          <Download className="h-3 w-3" />
-          {resource.downloadCount.toLocaleString()}
+          {resource.type === "file" ? (
+            <>
+              <Download className="h-3 w-3" />
+              {resource.downloadCount.toLocaleString()}
+            </>
+          ) : resource.type === "external" ? (
+            <>
+              <ExternalLink className="h-3 w-3" />
+              外部资源
+            </>
+          ) : (
+            <>
+              <Eye className="h-3 w-3" />
+              在线指南
+            </>
+          )}
         </span>
         {resource.fileSize && (
           <span className="hidden text-xs text-muted-foreground sm:block">

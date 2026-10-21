@@ -18,7 +18,14 @@ export async function POST(
       return NextResponse.json({ error: "资源不存在" }, { status: 404 })
     }
 
-    // Update download count
+    // Only real file downloads count. Page views and external visits do not.
+    if (existing.type !== "file") {
+      return NextResponse.json({
+        success: true,
+        downloads: existing.downloadCount,
+      })
+    }
+
     const resource = await prisma.resource.update({
       where: { id: existing.id },
       data: {

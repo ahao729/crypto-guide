@@ -6,12 +6,12 @@ import { ResourcesClient } from "./ResourcesClient"
 export const revalidate = 900 // 15 minutes
 
 export const metadata: Metadata = {
-  title: `免费学习资源下载 | ${siteConfig.shortName}`,
-  description: "提供加密货币新手入门教程、投资记录模板、实用工具和精选学习资源，免费下载助您快速入门加密世界。",
-  keywords: ["加密货币资源", "区块链教程", "免费下载", "新手入门", "投资模板", "学习资料", "加密货币工具"],
+  title: `免费资源库：加密货币教程、Excel 模板与工具 | ${siteConfig.shortName}`,
+  description: "免费阅读加密货币入门、交易所与链上分析教程，下载交易记录、仓位管理、DCA 定投 Excel 模板，另有行情与图表工具。",
+  keywords: ["加密货币资源", "区块链教程", "免费下载", "Excel 模板", "交易记录模板", "仓位管理", "DCA 定投", "加密货币工具"],
   openGraph: {
-    title: `免费学习资源下载 | ${siteConfig.shortName}`,
-    description: "提供加密货币新手入门教程、投资记录模板、实用工具和精选学习资源，免费下载助您快速入门加密世界。",
+    title: `免费资源库：加密货币教程、Excel 模板与工具 | ${siteConfig.shortName}`,
+    description: "免费阅读加密货币入门、交易所与链上分析教程，下载交易记录、仓位管理、DCA 定投 Excel 模板，另有行情与图表工具。",
     url: `${siteConfig.url}/resources`,
     siteName: siteConfig.name,
     locale: siteConfig.locale,
@@ -19,8 +19,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: `免费学习资源下载 | ${siteConfig.shortName}`,
-    description: "提供加密货币新手入门教程、投资记录模板、实用工具和精选学习资源，免费下载助您快速入门加密世界。",
+    title: `免费资源库：加密货币教程、Excel 模板与工具 | ${siteConfig.shortName}`,
+    description: "免费阅读加密货币入门、交易所与链上分析教程，下载交易记录、仓位管理、DCA 定投 Excel 模板，另有行情与图表工具。",
   },
   alternates: {
     canonical: `${siteConfig.url}/resources`,
@@ -45,11 +45,36 @@ export default async function ResourcesPage() {
   const totalDownloads = resources.reduce((sum, r) => sum + r.downloadCount, 0)
   const totalCount = resources.length
 
+  const resourcesJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: `免费资源库 - ${siteConfig.name}`,
+    description:
+      "加密货币教程、Excel 模板与实用工具，免费阅读和下载。",
+    url: `${siteConfig.url}/resources`,
+    mainEntity: {
+      "@type": "ItemList",
+      numberOfItems: totalCount,
+      itemListElement: resources.map((resource, index) => ({
+        "@type": "ListItem",
+        position: index + 1,
+        name: resource.title,
+        url: `${siteConfig.url}/resources/${resource.slug}`,
+      })),
+    },
+  }
+
   return (
-    <ResourcesClient
-      categoryGroups={categoryGroups}
-      totalDownloads={totalDownloads}
-      totalCount={totalCount}
-    />
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(resourcesJsonLd) }}
+      />
+      <ResourcesClient
+        categoryGroups={categoryGroups}
+        totalDownloads={totalDownloads}
+        totalCount={totalCount}
+      />
+    </>
   )
 }

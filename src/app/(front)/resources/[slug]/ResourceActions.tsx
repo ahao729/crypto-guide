@@ -24,28 +24,25 @@ export function ResourceActions({
   const [downloadComplete, setDownloadComplete] = useState(false)
 
   const handleDownload = useCallback(async () => {
+    if (type !== "file" || !fileUrl) return
+
     setLoading(true)
     try {
-      // Track the download (by id for accuracy)
+      // Count only real file downloads, not page views or external visits.
       await fetch(`/api/resources/${resourceId}/download`, { method: "POST" })
 
-      // If file resource, trigger actual download
-      if (type === "file" && fileUrl) {
-        const link = document.createElement("a")
-        link.href = fileUrl
-        link.download = ""
-        document.body.appendChild(link)
-        link.click()
-        document.body.removeChild(link)
-      }
+      const link = document.createElement("a")
+      link.href = fileUrl
+      link.download = ""
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
 
       setDownloadComplete(true)
       setTimeout(() => setDownloadComplete(false), 3000)
     } catch (error) {
       console.error("Download failed:", error)
-      if (type === "file" && fileUrl) {
-        window.open(fileUrl, "_blank")
-      }
+      window.open(fileUrl, "_blank")
     } finally {
       setLoading(false)
     }
@@ -62,7 +59,6 @@ export function ResourceActions({
             href={externalUrl}
             target="_blank"
             rel="noopener noreferrer"
-            onClick={handleDownload}
             className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-gold to-gold-dark px-6 py-3 text-sm font-medium text-white shadow-md shadow-gold/20 transition-all hover:shadow-lg hover:shadow-gold/30 hover:scale-105 active:scale-95"
           >
             <ExternalLink className="h-4 w-4" />

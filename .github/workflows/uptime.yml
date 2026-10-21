@@ -39,7 +39,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           REPO: ${{ github.repository }}
         run: |
-          gh label create monitoring --color B60205 --description "Production monitoring" --force >/dev/null 2>&1 || true
+          gh label create monitoring --repo "$REPO" --color B60205 --description "Production monitoring" --force >/dev/null 2>&1 || true
           BODY=$(printf 'Health check failed at %s\n\n```\n%s\n```\n' "$(date -u +%FT%TZ)" "$(cat /tmp/health.json 2>/dev/null || echo 'no response body')")
           ISSUE=$(gh issue list --repo "$REPO" --state open --label monitoring --search 'Production health check failing in:title' --json number --jq '.[0].number // empty')
           if [ -n "$ISSUE" ]; then

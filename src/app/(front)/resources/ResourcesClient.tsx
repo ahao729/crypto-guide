@@ -471,7 +471,9 @@ function ResourceCard({
             {resource.type === "file" ? (
               <span className="flex items-center gap-1">
                 <Download className="h-3 w-3" />
-                {resource.downloadCount.toLocaleString()}
+                {resource.downloadCount > 0
+                  ? `${resource.downloadCount.toLocaleString()} 次下载`
+                  : "新上线"}
               </span>
             ) : (
               <span className="flex items-center gap-1">
@@ -575,7 +577,9 @@ function ResourceListItem({
           {resource.type === "file" ? (
             <>
               <Download className="h-3 w-3" />
-              {resource.downloadCount.toLocaleString()}
+              {resource.downloadCount > 0
+                ? `${resource.downloadCount.toLocaleString()} 次下载`
+                : "新上线"}
             </>
           ) : resource.type === "external" ? (
             <>

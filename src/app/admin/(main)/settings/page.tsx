@@ -27,8 +27,7 @@ const DEFAULT_SETTINGS: SiteSetting[] = [
   { key: "contact_email", value: "", label: "联系邮箱", type: "text", section: "basic" },
   { key: "google_analytics_id", value: "", label: "Google Analytics ID", type: "text", section: "basic" },
 
-  // 社群信息（首页统计已改为数据库实时计数，不再手填）
-  { key: "community_platforms_count", value: "3", label: "交流平台数", type: "text", section: "community" },
+  // 社群信息（交流平台数由关于页根据平台列表自动计算，不再手填）
   { key: "community_active_label", value: "持续", label: "活跃度标签", type: "text", section: "community" },
   { key: "community_cost_label", value: "免费", label: "费用标签", type: "text", section: "community" },
 

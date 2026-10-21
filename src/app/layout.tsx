@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { siteConfig } from "@/lib/constants";
+import { siteConfig, xHandle, xProfileUrl } from "@/lib/constants";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Providers } from "./providers";
@@ -43,7 +43,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    site: siteConfig.name,
+    site: xHandle,
     images: [siteConfig.ogImage],
   },
   robots: {
@@ -62,9 +62,7 @@ const organizationJsonLd = {
   url: siteConfig.url,
   logo: `${siteConfig.url}/logo.png`,
   description: siteConfig.description,
-  sameAs: [
-    "https://twitter.com/" + siteConfig.name.toLowerCase().replace(/\s+/g, ""),
-  ],
+  sameAs: [xProfileUrl],
 };
 
 export default function RootLayout({

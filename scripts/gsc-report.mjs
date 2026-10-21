@@ -13,6 +13,7 @@ import path from "node:path"
 import crypto from "node:crypto"
 
 const SITE = process.env.GSC_SITE || "sc-domain:bqzn.top"
+const DAYS = Math.max(1, Number(process.env.GSC_DAYS || 28))
 const OUT_DIR = process.env.GSC_OUT_DIR || "reports"
 const KEY_JSON =
   process.env.GSC_SERVICE_ACCOUNT_JSON ||
@@ -102,9 +103,9 @@ async function main() {
     )
   }
 
-  // GSC data has a 2-3 day lag; use a complete 28-day window.
+  // GSC data has a 2-3 day lag; use a complete window.
   const endDate = isoDate(daysAgo(3))
-  const startDate = isoDate(daysAgo(30))
+  const startDate = isoDate(daysAgo(3 + DAYS - 1))
   const sitePath = encodeURIComponent(SITE)
 
   async function query(dimensions, rowLimit = 25) {
@@ -128,11 +129,12 @@ async function main() {
     return body.rows || []
   }
 
-  const [totals, byQuery, byPage, byDate] = await Promise.all([
+  const [totals, byQuery, byPage, byDate, sitemapsRes] = await Promise.all([
     query([], 1),
     query(["query"], 20),
     query(["page"], 20),
-    query(["date"], 31),
+    query(["date"], DAYS + 2),
+    gscFetch(token, `/webmasters/v3/sites/${sitePath}/sitemaps`),
   ])
 
   const total = totals[0] || { clicks: 0, impressions: 0, ctr: 0, position: 0 }
@@ -165,6 +167,18 @@ async function main() {
       clicks: row.clicks,
       impressions: row.impressions,
     })),
+    sitemaps: sitemapsRes.response.ok
+      ? (sitemapsRes.body.sitemap || []).map((item) => ({
+          path: item.path,
+          lastSubmitted: item.lastSubmitted,
+          lastDownloaded: item.lastDownloaded,
+          isPending: item.isPending,
+          isSitemapsIndex: item.isSitemapsIndex,
+          errors: item.errors,
+          warnings: item.warnings,
+          contents: item.contents,
+        }))
+      : [],
   }
 
   fs.mkdirSync(OUT_DIR, { recursive: true })
@@ -175,7 +189,7 @@ async function main() {
   const lines = [
     `# GSC report — ${SITE}`,
     "",
-    `Period: ${startDate} → ${endDate}`,
+    `Period: ${startDate} → ${endDate} (${DAYS} days)`,
     "",
     `- Clicks: **${total.clicks}**`,
     `- Impressions: **${total.impressions}**`,
@@ -197,6 +211,19 @@ async function main() {
     ...report.topPages.slice(0, 10).map(
       (row) => `| ${row.page} | ${row.clicks} | ${row.impressions} | ${pct(row.ctr)} | ${row.position.toFixed(1)} |`
     ),
+    "",
+    "## Sitemaps",
+    "",
+    report.sitemaps.length === 0
+      ? "No sitemap visible to this service account yet."
+      : [
+          "| Sitemap | Submitted | Downloaded | Pending | Errors | Warnings |",
+          "|---|---|---|---|---:|---:|",
+          ...report.sitemaps.map(
+            (item) =>
+              `| ${item.path} | ${item.lastSubmitted || "-"} | ${item.lastDownloaded || "-"} | ${item.isPending ? "yes" : "no"} | ${item.errors || 0} | ${item.warnings || 0} |`
+          ),
+        ].join("\n"),
     "",
   ]
   const summary = lines.join("\n")

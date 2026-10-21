@@ -76,8 +76,8 @@ export const footerLinks: FooterLinkGroup[] = [
   },
 ]
 
-export const xHandle = "@CYQSZ777"
-export const xProfileUrl = "https://x.com/CYQSZ777"
+export const xHandle = "@biquanzhinan"
+export const xProfileUrl = "https://x.com/biquanzhinan"
 
 export const socialLinks = [
   { label: "X", href: xProfileUrl, icon: "x" },

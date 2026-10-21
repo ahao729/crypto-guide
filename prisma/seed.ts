@@ -166,8 +166,8 @@ OKX（欧易）是全球领先的加密货币交易平台，成立于2017年，�
 - **现货交易**：Maker 0.08% / Taker 0.10%
 - **合约交易**：Maker 0.02% / Taker 0.05%`,
       rating: 9.5,
-      referralUrl: "https://www.promooboost.com/join/DUXIN",
-      inviteCode: "DUXIN",
+      referralUrl: "https://www.mitnpkwxvfr.com/join/ACDDQ6TW",
+      inviteCode: "ACDDQ6TW",
       feeRate: "现货 0.08% / 合约 Maker 0.02% Taker 0.05%",
       spotFee: "Maker 0.08% / Taker 0.10%",
       futuresFee: "Maker 0.02% / Taker 0.05%",

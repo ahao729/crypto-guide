@@ -131,8 +131,8 @@ async function main() {
 - **现货交易**：Maker 0.10% / Taker 0.10%（使用BNB支付享75折）
 - **合约交易**：Maker 0.02% / Taker 0.04%（使用BNB支付享75折）`,
       rating: 9.8,
-      referralUrl: "https://www.bsmkweb.cc/register?ref=CYQSZ",
-      inviteCode: "CYQSZ",
+      referralUrl: "https://www.bsmkweb.cc/register?ref=BQZN1",
+      inviteCode: "BQZN1",
       feeRate: "现货 0.1% / 合约 Maker 0.02% Taker 0.04%",
       spotFee: "Maker 0.10% / Taker 0.10%",
       futuresFee: "Maker 0.02% / Taker 0.04%",

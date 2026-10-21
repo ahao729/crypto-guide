@@ -6,7 +6,7 @@ import { ResourcesClient } from "./ResourcesClient"
 export const revalidate = 900 // 15 minutes
 
 export const metadata: Metadata = {
-  title: `免费资源库：加密货币教程、Excel 模板与工具 | ${siteConfig.shortName}`,
+  title: "免费资源库：加密货币教程、Excel 模板与工具",
   description: "免费阅读加密货币入门、交易所与链上分析教程，下载交易记录、仓位管理、DCA 定投 Excel 模板，另有行情与图表工具。",
   keywords: ["加密货币资源", "区块链教程", "免费下载", "Excel 模板", "交易记录模板", "仓位管理", "DCA 定投", "加密货币工具"],
   openGraph: {

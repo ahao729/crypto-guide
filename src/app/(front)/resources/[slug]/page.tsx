@@ -163,7 +163,9 @@ export default async function ResourceDetailPage({ params }: ResourcePageProps) 
                   <BookOpen className="h-3.5 w-3.5" />
                 )}
                 {resource.type === "file"
-                  ? `${resource.downloadCount.toLocaleString()} 次下载`
+                  ? resource.downloadCount > 0
+                    ? `${resource.downloadCount.toLocaleString()} 次下载`
+                    : "免费下载"
                   : resource.type === "external"
                     ? "外部资源"
                     : "在线指南"}

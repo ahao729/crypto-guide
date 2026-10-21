@@ -35,6 +35,30 @@ const articleVisualStyles = `
     font-size: 0.92rem;
     line-height: 1.6;
   }
+
+  .article-content a[href^="/go/"] {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0.4rem 0.4rem 0.4rem 0;
+    padding: 0.55rem 1rem;
+    border-radius: var(--radius-lg);
+    background: linear-gradient(135deg, var(--gold), color-mix(in oklch, var(--gold) 70%, #7a4b00));
+    color: #fff;
+    font-weight: 600;
+    font-size: 0.9rem;
+    line-height: 1.2;
+    text-decoration: none;
+    box-shadow: 0 6px 16px color-mix(in oklch, var(--gold) 24%, transparent);
+    transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+  }
+
+  .article-content a[href^="/go/"]:hover {
+    color: #fff;
+    opacity: 0.94;
+    transform: translateY(-1px);
+    box-shadow: 0 9px 20px color-mix(in oklch, var(--gold) 30%, transparent);
+  }
 `
 
 export default function ArticleContent({ html }: ArticleContentProps) {

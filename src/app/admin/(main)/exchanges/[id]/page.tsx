@@ -149,7 +149,7 @@ export default function EditExchangePage() {
             </div>
             <div className="space-y-2">
               <Label>邀请码</Label>
-              <Input value={form.inviteCode} onChange={(e) => setForm({ ...form, inviteCode: e.target.value })} placeholder="如：GRO_28502_DXDL0" />
+              <Input value={form.inviteCode} onChange={(e) => setForm({ ...form, inviteCode: e.target.value })} placeholder="如：CYQSZ" />
             </div>
             <div className="space-y-2">
               <Label>费率说明</Label>

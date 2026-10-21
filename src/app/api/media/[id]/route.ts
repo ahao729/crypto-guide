@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma"
 import { auth } from "@/lib/auth"
 import { unlink } from "fs/promises"
 import path from "path"
+import { deleteObject, keyFromPublicUrl } from "@/lib/storage"
 
 // PATCH /api/media/[id] - Update media metadata (filename, alt, sortOrder)
 export async function PATCH(
@@ -71,12 +72,22 @@ export async function DELETE(
       return NextResponse.json({ error: "素材不存在" }, { status: 404 })
     }
 
-    // Delete file from disk
-    const filePath = path.join(process.cwd(), "public", media.url)
-    try {
-      await unlink(filePath)
-    } catch {
-      // File may already be deleted, continue
+    // Delete the object from S3/R2 when the URL belongs to our public bucket;
+    // otherwise fall back to the legacy local `public/uploads` file.
+    const objectKey = keyFromPublicUrl(media.url)
+    if (objectKey) {
+      try {
+        await deleteObject(objectKey)
+      } catch (error) {
+        console.error("Error deleting media object:", error)
+      }
+    } else {
+      const filePath = path.join(process.cwd(), "public", media.url)
+      try {
+        await unlink(filePath)
+      } catch {
+        // File may already be deleted, continue
+      }
     }
 
     // Delete record from database

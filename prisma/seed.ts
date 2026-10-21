@@ -201,8 +201,8 @@ Bybit成立于2018年，是全球领先的加密货币衍生品交易平台。By
 - **现货交易**：Maker 0.10% / Taker 0.10%
 - **合约交易**：Maker 0.01% / Taker 0.06%`,
       rating: 9.3,
-      referralUrl: "https://partner.bybit.com/b/161340",
-      inviteCode: "161340",
+      referralUrl: "https://partner.bybit.com/b/BQZN1",
+      inviteCode: "BQZN1",
       feeRate: "现货 0.1% / 合约 Maker 0.01% Taker 0.06%",
       spotFee: "Maker 0.10% / Taker 0.10%",
       futuresFee: "Maker 0.01% / Taker 0.06%",

@@ -123,7 +123,7 @@ export default function NewExchangePage() {
             </div>
             <div className="space-y-2">
               <Label htmlFor="inviteCode">邀请码</Label>
-              <Input id="inviteCode" value={form.inviteCode} onChange={(e) => setForm({ ...form, inviteCode: e.target.value })} placeholder="如：GRO_28502_DXDL0" />
+              <Input id="inviteCode" value={form.inviteCode} onChange={(e) => setForm({ ...form, inviteCode: e.target.value })} placeholder="如：CYQSZ" />
             </div>
             <div className="space-y-2">
               <Label htmlFor="feeRate">费率说明</Label>

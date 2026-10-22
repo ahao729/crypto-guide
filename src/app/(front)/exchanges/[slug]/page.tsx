@@ -204,7 +204,7 @@ export default async function ExchangeDetailPage({ params }: ExchangeDetailPageP
                 <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-2xl bg-muted shadow-md">
                   {exchange.logo ? (
                     <Image
-                      src={exchange.logo}
+                      src={exchange.logo} unoptimized
                       alt={exchange.name}
                       fill
                       sizes="80px"
@@ -504,7 +504,7 @@ export default async function ExchangeDetailPage({ params }: ExchangeDetailPageP
                     <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-lg bg-muted">
                       {similar.logo ? (
                         <Image
-                          src={similar.logo}
+                          src={similar.logo} unoptimized
                           alt={similar.name}
                           fill
                           sizes="48px"

@@ -328,7 +328,7 @@ function ExchangeCard({
           <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-lg bg-muted">
             {exchange.logo ? (
               <Image
-                src={exchange.logo}
+                src={exchange.logo} unoptimized
                 alt={exchange.name}
                 fill
                 sizes="48px"

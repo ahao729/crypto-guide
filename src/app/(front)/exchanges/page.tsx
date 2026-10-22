@@ -394,7 +394,7 @@ function ExchangeCard({
           <div className="relative flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-muted">
             {exchange.logo ? (
               <Image
-                src={exchange.logo}
+                src={exchange.logo} unoptimized
                 alt={exchange.name}
                 width={56}
                 height={56}

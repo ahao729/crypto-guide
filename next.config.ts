@@ -34,6 +34,15 @@ const nextConfig: NextConfig = {
         hostname: "cdn.bqzn.top",
       },
       {
+        // Own domain: article covers may be pasted as absolute bqzn.top URLs
+        protocol: "https",
+        hostname: "bqzn.top",
+      },
+      {
+        protocol: "https",
+        hostname: "www.bqzn.top",
+      },
+      {
         // R2 default public development domain
         protocol: "https",
         hostname: "**.r2.dev",

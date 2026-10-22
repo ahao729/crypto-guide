@@ -16,9 +16,9 @@ function SocialIcon({ icon }: { icon: string }) {
         fill="none"
         aria-hidden="true"
       >
-        <path fill="#FF6719" d="M5 4h14v2.25H5V4Z" />
-        <path fill="#FF6719" d="M5 8.35h14v2.25H5V8.35Z" />
-        <path fill="#FF6719" d="M5 12.7h14v8.3l-7-4.05L5 21v-8.3Z" />
+        <path fill="currentColor" d="M5 4h14v2.25H5V4Z" />
+        <path fill="currentColor" d="M5 8.35h14v2.25H5V8.35Z" />
+        <path fill="currentColor" d="M5 12.7h14v8.3l-7-4.05L5 21v-8.3Z" />
       </svg>
     )
   }

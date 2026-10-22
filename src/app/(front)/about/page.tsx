@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { siteConfig, xProfileUrl } from "@/lib/constants"
+import { siteConfig, substackUrl, xProfileUrl } from "@/lib/constants"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { MessageCircle, Users, Shield, Sparkles, Link, Gift, ExternalLink } from "lucide-react"
@@ -68,6 +68,14 @@ interface Platform {
   color: string
 }
 
+const substackPlatform: Platform = {
+  name: "Substack",
+  description: "较长内容的 newsletter 归档。",
+  members: "Newsletter",
+  href: substackUrl,
+  color: "bg-orange-500/10 text-orange-500",
+}
+
 const defaultPlatforms: Platform[] = [
   {
     name: "Telegram",
@@ -83,22 +91,30 @@ const defaultPlatforms: Platform[] = [
     href: xProfileUrl,
     color: "bg-foreground/5 text-foreground",
   },
+  substackPlatform,
 ]
 
-// Substack 暂时下线；X 链接以代码常量为准，避免后台
-// site_settings.community_platforms 里的旧 JSON 把用户带回废弃账号。
+const isSubstackPlatform = (platform: Platform) =>
+  /substack/i.test(platform.name) || /substack\.com/i.test(String(platform.href ?? ""))
+
+// X / Substack 链接以代码常量为准，避免后台
+// site_settings.community_platforms 里的旧 JSON 指向废弃账号。
+// Substack 即使不在后台 JSON 中也补一张卡，保证入口存在。
 function normalizePlatforms(items: Platform[]): Platform[] {
-  return items
-    .filter((platform) => {
-      const name = String(platform.name ?? "").toLowerCase()
-      const href = String(platform.href ?? "").toLowerCase()
-      return !name.includes("substack") && !href.includes("substack.com")
-    })
-    .map((platform) =>
-      /^(x|twitter)/i.test(platform.name)
-        ? { ...platform, href: xProfileUrl }
-        : platform
-    )
+  const normalized = items.map((platform) => {
+    if (/^(x|twitter)/i.test(platform.name)) {
+      return { ...platform, href: xProfileUrl }
+    }
+    if (isSubstackPlatform(platform)) {
+      return { ...platform, href: substackUrl }
+    }
+    return platform
+  })
+
+  if (!normalized.some(isSubstackPlatform)) {
+    normalized.push({ ...substackPlatform })
+  }
+  return normalized
 }
 
 const aboutJsonLd = {

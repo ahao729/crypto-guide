@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 import Link from "next/link"
-import { Shield, Lock, Cookie, Eye, Database, AlertTriangle, FileText, MessageSquare } from "lucide-react"
+import { Shield, Lock, Cookie, Eye, Database, AlertTriangle, FileText, Mail } from "lucide-react"
 import { Separator } from "@/components/ui/separator"
 import { siteConfig } from "@/lib/constants"
 
@@ -18,7 +18,7 @@ const sections = [
     icon: Shield,
     title: "信息收集",
     content:
-      "本站不要求注册账号，不收集访客邮箱，也不发送营销邮件或通讯。访问本站时，服务器日志和匿名分析工具可能记录 IP 地址、浏览器/设备类型、来源页面、访问时间和访问页面；点击出站链接时，我们会记录目标、时间和来源页面，用于统计与防滥用。",
+      "本站不要求注册账号，不主动收集访客邮箱，也不发送营销邮件或通讯。如果你通过邮件联系我们，我们会收到你的邮箱地址和邮件内容，仅用于回复你的问题。访问本站时，服务器日志和匿名分析工具可能记录 IP 地址、浏览器/设备类型、来源页面、访问时间和访问页面；点击出站链接时，我们会记录目标、时间和来源页面，用于统计与防滥用。",
   },
   {
     icon: Cookie,
@@ -30,13 +30,13 @@ const sections = [
     icon: Eye,
     title: "信息使用",
     content:
-      "收集的技术信息仅用于：分析内容效果、排查错误和死链、识别异常流量、改进站点结构。我们不会用它向你发送邮件、推送营销信息，或建立个人画像。",
+      "收集的技术信息仅用于：分析内容效果、排查错误和死链、识别异常流量、改进站点结构。邮件只用于回复你的来信；我们不会用它向你发送营销邮件、推送营销信息，或建立个人画像。",
   },
   {
     icon: Database,
     title: "日志与点击数据",
     content:
-      "服务器日志和出站点击记录会按运营需要保留一段合理时间。你可以通过反馈页面请求查询或删除与你相关的日志记录；我们会在核实后处理。本站不设官方邮箱，反馈统一走 Telegram 或 X。",
+      "服务器日志和出站点击记录会按运营需要保留一段合理时间。你可以通过反馈页面或邮件请求查询或删除与你相关的日志记录；我们会在核实后处理。",
   },
   {
     icon: Lock,
@@ -133,18 +133,25 @@ export default function PrivacyPage() {
       {/* Contact CTA */}
       <section className="border-t border-border/40 bg-gradient-to-b from-background via-gold/[0.02] to-background">
         <div className="mx-auto max-w-3xl px-4 py-16 text-center sm:px-6 lg:px-8">
-          <MessageSquare className="mx-auto h-10 w-10 text-gold/60" />
+          <Mail className="mx-auto h-10 w-10 text-gold/60" />
           <h2 className="mt-4 text-2xl font-bold">有任何隐私相关问题？</h2>
           <p className="mt-2 text-muted-foreground">
-            请通过反馈页面联系我们；本站不设官方邮箱，也不通过邮件沟通。
+            可以发邮件到{" "}
+            <a
+              href={`mailto:${siteConfig.contactEmail}`}
+              className="text-gold underline decoration-gold/40 underline-offset-4"
+            >
+              {siteConfig.contactEmail}
+            </a>
+            ，或通过反馈页面联系我们。
           </p>
-          <Link
-            href="/contact"
+          <a
+            href={`mailto:${siteConfig.contactEmail}`}
             className="mt-6 inline-flex items-center rounded-lg bg-gradient-gold px-6 py-3 text-sm font-medium text-white shadow-md shadow-gold/20 transition-all hover:shadow-lg hover:shadow-gold/30"
           >
-            反馈与纠错
-            <MessageSquare className="ml-2 h-4 w-4" />
-          </Link>
+            发邮件
+            <Mail className="ml-2 h-4 w-4" />
+          </a>
         </div>
       </section>
     </div>

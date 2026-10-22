@@ -62,6 +62,7 @@ const organizationJsonLd = {
   url: siteConfig.url,
   logo: `${siteConfig.url}/logo.png`,
   description: siteConfig.description,
+  email: siteConfig.contactEmail,
   sameAs: [xProfileUrl],
 };
 

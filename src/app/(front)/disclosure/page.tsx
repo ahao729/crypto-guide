@@ -72,11 +72,18 @@ export default function DisclosurePage() {
       </div>
 
       <div className="mt-12 rounded-xl border border-border/60 bg-muted/30 p-5 text-sm leading-relaxed text-muted-foreground">
-        如果你认为某处披露不清晰，或发现链接/数据错误，请到{" "}
+        如果你认为某处披露不清晰，或发现链接/数据错误，请发邮件到{" "}
+        <a
+          href={`mailto:${siteConfig.contactEmail}`}
+          className="underline hover:text-gold"
+        >
+          {siteConfig.contactEmail}
+        </a>
+        ，或到{" "}
         <Link href="/contact" className="underline hover:text-gold">
           反馈与纠错
         </Link>{" "}
-        页面留言。本站不设官方邮箱，也不通过邮件沟通。也可以先阅读{" "}
+        页面留言。也可以先阅读{" "}
         <Link href="/about" className="underline hover:text-gold">
           关于我们
         </Link>{" "}

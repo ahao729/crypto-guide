@@ -94,9 +94,12 @@ export function Footer() {
             <Link href="/disclosure" className="hover:text-gold">
               联盟披露/风险提示
             </Link>
-            <Link href="/contact" className="hover:text-gold">
+            <a
+              href={`mailto:${siteConfig.contactEmail}`}
+              className="hover:text-gold"
+            >
               联系我们
-            </Link>
+            </a>
           </div>
         </div>
       </div>

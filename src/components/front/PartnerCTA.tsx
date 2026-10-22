@@ -16,7 +16,7 @@ interface PartnerCTAProps {
   placement?: "top" | "inline" | "bottom"
 }
 
-type CtaKind = "wallet" | "contract" | "dex" | "copy" | "exchange"
+type CtaKind = "wallet" | "contract" | "dex" | "copy" | "stocks" | "exchange"
 
 function pickKind(title: string, categorySlug?: string | null) {
   // Tags are intentionally excluded from the main decision: a generic tag such
@@ -31,6 +31,11 @@ function pickKind(title: string, categorySlug?: string | null) {
   // Copy-trading pages should point at the copy-trading partner.
   if (/跟单|copy.?trading/.test(core)) {
     return "copy" as const
+  }
+
+  // US-stock / tokenized-stock pages should point at Binance.
+  if (/美股|股票|stock|etf|bstocks/.test(core)) {
+    return "stocks" as const
   }
 
   // Fee-comparison pages should default to exchanges, not trading bots.
@@ -68,6 +73,10 @@ const copy: Record<CtaKind, { heading: string; sub: string }> = {
   copy: {
     heading: "跟单之前，先选对平台",
     sub: "先看交易员的历史回撤和跟单费率，不要只看收益榜；跟单也会亏钱。",
+  },
+  stocks: {
+    heading: "美股之前，先把账户和入金准备好",
+    sub: "美股/ETF 有交易时段、汇率和地区限制；先小额试单，再考虑加仓。",
   },
   exchange: {
     heading: "开始之前，先选好交易所",
@@ -175,6 +184,23 @@ function OneKeyCard({ placement }: { placement: string }) {
   )
 }
 
+function StocksNoteCard() {
+  return (
+    <div className="rounded-xl border border-border/60 bg-background/70 p-4">
+      <p className="text-[11px] font-medium text-gold">美股风险提示</p>
+      <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+        美股/ETF 受交易时段、汇率和地区限制影响；bStocks 还有发行与折溢价风险。
+      </p>
+      <Link
+        href="/stocks"
+        className="mt-3 inline-flex items-center text-xs font-medium text-gold"
+      >
+        查看美股入门 <ArrowUpRight className="ml-1 h-3.5 w-3.5" />
+      </Link>
+    </div>
+  )
+}
+
 export function PartnerCTA({
   title,
   categorySlug,
@@ -204,6 +230,11 @@ export function PartnerCTA({
       <>
         <SecondaryExchangeCard slug="aster" placement={placement} />
         <OneKeyCard placement={placement} />
+      </>
+    ) : kind === "stocks" ? (
+      <>
+        <ExchangeCard slug="binance" placement={placement} />
+        <StocksNoteCard />
       </>
     ) : (
       <>

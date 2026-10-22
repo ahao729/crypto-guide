@@ -19,7 +19,7 @@ export const revalidate = 600 // 10 minutes
 export const metadata: Metadata = {
   title: "专业的加密货币交易所评测与推荐",
   description: siteConfig.description,
-  keywords: ["加密货币交易所", "数字货币平台", "比特币交易", "交易所推荐", "币圈指南", "交易所评测", "加密货币投资", "OKX", "币安"],
+  keywords: ["加密货币交易所", "数字货币平台", "比特币交易", "交易所推荐", "币圈指南", "交易所评测", "加密货币投资", "美股入门", "币安美股", "bStocks", "美股ETF", "OKX", "币安"],
   openGraph: {
     title: `专业的加密货币交易所评测与推荐 | ${siteConfig.shortName}`,
     description: siteConfig.description,
@@ -285,6 +285,63 @@ export default async function Home() {
               <p className="mt-1 text-sm text-muted-foreground">免费学习资源</p>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* US Stocks Section */}
+      <section className="section-padding border-t border-border/40 bg-muted/20">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+            <div className="max-w-2xl">
+              <p className="text-xs font-medium tracking-[0.18em] text-gold">美股 · ETF · bStocks</p>
+              <h2 className="mt-2 text-3xl font-bold tracking-tight">美股与 ETF 入门</h2>
+              <p className="mt-3 text-muted-foreground">
+                币安已向部分非美国市场开放美股/ETF。先看开户与入金，再分清代币化证券和直接持股。
+              </p>
+            </div>
+            <Link
+              href="/stocks"
+              className="inline-flex h-10 shrink-0 items-center justify-center rounded-xl border border-border bg-background px-5 text-sm font-semibold transition-colors hover:bg-muted"
+            >
+              进入美股专区 <ArrowRight className="ml-2 h-4 w-4" />
+            </Link>
+          </div>
+          <div className="mt-8 grid gap-4 md:grid-cols-3">
+            {[
+              {
+                href: "/articles/binance-us-stocks-guide",
+                label: "开户与入金",
+                title: "币安美股怎么买？2026 完整流程",
+              },
+              {
+                href: "/articles/bstocks-vs-us-stocks",
+                label: "产品机制",
+                title: "bStocks 和直接买美股有什么区别",
+              },
+              {
+                href: "/articles/us-stock-etf-beginners",
+                label: "ETF 入门",
+                title: "SPY、VOO、QQQ 怎么选",
+              },
+            ].map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="group rounded-xl border border-border/50 bg-card p-5 shadow-sm transition-all hover:border-gold/30 hover:shadow-md"
+              >
+                <span className="text-xs font-medium text-gold">{item.label}</span>
+                <h3 className="mt-2 text-base font-semibold leading-snug transition-colors group-hover:text-gold">
+                  {item.title}
+                </h3>
+                <span className="mt-3 inline-flex items-center text-xs text-muted-foreground">
+                  阅读全文 <ArrowRight className="ml-1 h-3 w-3" />
+                </span>
+              </Link>
+            ))}
+          </div>
+          <p className="mt-4 text-xs text-muted-foreground">
+            美股/ETF 功能按地区开放，美国用户通常不可用；本文含联盟链接。
+          </p>
         </div>
       </section>
 

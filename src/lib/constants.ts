@@ -20,7 +20,7 @@ export const siteConfig: SiteConfig = {
   name: "币圈指南",
   shortName: "币圈指南",
   description:
-    "专业的数字货币交易所评测与推荐平台，提供最新交易所拉新活动、注册教程、手续费对比和深度评测，助您选择最合适的加密货币交易平台。",
+    "专业的数字货币交易所评测与推荐平台，提供交易所注册教程、手续费对比、美股/ETF 与 bStocks 入门和深度评测，助您选择更合适的交易平台。",
   url: "https://bqzn.top",
   ogImage: "/og.png",
   author: "币圈指南团队",
@@ -30,6 +30,7 @@ export const siteConfig: SiteConfig = {
     { label: "首页", href: "/" },
     { label: "交易所", href: "/exchanges" },
     { label: "文章", href: "/articles" },
+    { label: "美股", href: "/stocks" },
     { label: "工具", href: "/tools" },
     { label: "常见问题", href: "/faq" },
     { label: "资源下载", href: "/resources" },
@@ -49,6 +50,7 @@ export const footerLinks: FooterLinkGroup[] = [
       { label: "首页", href: "/" },
       { label: "交易所", href: "/exchanges" },
       { label: "文章", href: "/articles" },
+      { label: "美股", href: "/stocks" },
       { label: "工具", href: "/tools" },
       { label: "常见问题", href: "/faq" },
       { label: "资源下载", href: "/resources" },
@@ -73,6 +75,7 @@ export const footerLinks: FooterLinkGroup[] = [
       { label: "交易策略", href: "/articles?category=strategy" },
       { label: "行业资讯", href: "/articles?category=news" },
       { label: "工具推荐", href: "/articles?category=tools" },
+      { label: "美股入门", href: "/stocks" },
     ],
   },
 ]

@@ -32,6 +32,7 @@ const articles = [
     excerpt:
       "币安已向部分非美国地区开放美股和 ETF。本文拆解开户条件、入金、直接股票与 bStocks 的区别、交易时间和常见坑。",
     file: "content/stocks/binance-us-stocks-guide.md",
+    coverImage: "/images/articles/stocks/binance-us-stocks.png",
     tags: ["美股", "币安", "ETF"],
   },
   {
@@ -40,6 +41,7 @@ const articles = [
     excerpt:
       "bStocks 是币安的代币化证券：1:1 支持、24/7 交易。本文对比直接股票、bStocks 和加密资产，拆解发行、托管、折溢价和税务风险。",
     file: "content/stocks/bstocks-vs-us-stocks.md",
+    coverImage: "/images/articles/stocks/bstocks-vs-us-stocks.png",
     tags: ["美股", "bStocks", "币安"],
   },
   {
@@ -48,6 +50,7 @@ const articles = [
     excerpt:
       "第一只美股 ETF 怎么选：标普 500 与纳斯达克 100 的差异、SPY/VOO/QQQ 的费率和流动性，以及在币安交易的注意事项。",
     file: "content/stocks/us-stock-etf-beginners.md",
+    coverImage: "/images/articles/stocks/us-stock-etf-beginners.png",
     tags: ["美股", "ETF", "新手"],
   },
 ]
@@ -88,6 +91,7 @@ async function main() {
         title: item.title,
         excerpt: item.excerpt,
         content,
+        coverImage: item.coverImage,
         author: "币圈指南团队",
         published: true,
         categoryId: category.id,
@@ -108,6 +112,7 @@ async function main() {
         title: item.title,
         excerpt: item.excerpt,
         content,
+        coverImage: item.coverImage,
         author: "币圈指南团队",
         published: true,
         publishedAt: new Date("2026-10-23T00:00:00+08:00"),

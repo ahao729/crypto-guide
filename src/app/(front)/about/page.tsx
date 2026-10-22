@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { siteConfig, xProfileUrl } from "@/lib/constants"
+import { siteConfig, substackUrl, xProfileUrl } from "@/lib/constants"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { MessageCircle, Users, Shield, Sparkles, Link, Gift, ExternalLink } from "lucide-react"
@@ -68,6 +68,14 @@ interface Platform {
   color: string
 }
 
+const substackPlatform: Platform = {
+  name: "Substack",
+  description: "较长内容的 newsletter 归档。",
+  members: "Newsletter",
+  href: substackUrl,
+  color: "bg-foreground/5 text-foreground",
+}
+
 const defaultPlatforms: Platform[] = [
   {
     name: "Telegram",
@@ -86,7 +94,7 @@ const defaultPlatforms: Platform[] = [
 ]
 
 function normalizePlatforms(items: Platform[]): Platform[] {
-  return items
+  const normalized = items
     .filter(
       (platform) =>
         !/substack|newsletter/i.test(`${platform.name} ${platform.href}`),
@@ -96,6 +104,10 @@ function normalizePlatforms(items: Platform[]): Platform[] {
         ? { ...platform, href: xProfileUrl }
         : platform,
     )
+
+  // Always expose the canonical Substack profile once.
+  normalized.push({ ...substackPlatform })
+  return normalized
 }
 
 const aboutJsonLd = {

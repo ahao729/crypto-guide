@@ -24,6 +24,10 @@ const PARTNERS = {
     referralUrl: "https://www.asterdex.com/zh-CN/referral/1evT2I",
     inviteCode: "1evT2I",
   },
+  bitget: {
+    referralUrl: "https://share.glassgs.com/u/K2017LFC?clacCode=X7QCEV4X",
+    inviteCode: "X7QCEV4X",
+  },
 }
 
 async function main() {

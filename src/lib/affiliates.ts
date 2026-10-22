@@ -27,7 +27,7 @@ export const RISK_DISCLAIMER =
  * third party.
  */
 export const CORE_EXCHANGE_SLUGS = ["binance", "okx", "bybit"] as const
-export const SECONDARY_EXCHANGE_SLUGS = ["gate-io", "aster"] as const
+export const SECONDARY_EXCHANGE_SLUGS = ["gate-io", "aster", "bitget"] as const
 export const PARTNER_EXCHANGE_SLUGS = [
   ...CORE_EXCHANGE_SLUGS,
   ...SECONDARY_EXCHANGE_SLUGS,
@@ -76,6 +76,12 @@ export const SECONDARY_EXCHANGE_META: Record<
     tagline: "链上永续与现货，连接钱包使用",
     cta: "访问 Aster",
     code: "1evT2I",
+  },
+  bitget: {
+    name: "Bitget",
+    tagline: "跟单与策略交易，适合复制交易",
+    cta: "注册 Bitget",
+    code: "X7QCEV4X",
   },
 }
 

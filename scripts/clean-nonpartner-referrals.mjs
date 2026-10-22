@@ -21,7 +21,7 @@ config({ path: ".env.local", quiet: true })
 
 const prisma = new PrismaClient()
 const APPLY = process.argv.includes("--apply")
-const PARTNERS = new Set(["binance", "okx", "bybit", "gate-io", "aster"])
+const PARTNERS = new Set(["binance", "okx", "bybit", "gate-io", "aster", "bitget"])
 
 const OFFICIAL_URLS = {
   bitget: "https://www.bitget.com/",

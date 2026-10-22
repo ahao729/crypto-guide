@@ -12,8 +12,8 @@ export const revalidate = 1800 // 30 minutes
 
 export const metadata: Metadata = {
   title: `加密货币交易所对比评测 | ${siteConfig.shortName}`,
-  description: "全面对比主流加密货币交易所的手续费、安全性、交易深度和用户评价，找到最适合您的交易平台。",
-  keywords: ["加密货币交易所", "交易所对比", "数字货币平台", "比特币交易所", "交易所评测", "手续费对比", "币安", "欧易", "Coinbase"],
+  description: "全面对比中心化（CEX）与去中心化（DEX）交易所的手续费、安全性、交易深度和用户体验，找到最适合您的交易平台。",
+  keywords: ["加密货币交易所", "交易所对比", "去中心化交易所", "DEX", "Hyperliquid", "Aster", "数字货币平台", "比特币交易所", "交易所评测", "手续费对比", "币安", "欧易", "Coinbase"],
   openGraph: {
     title: `加密货币交易所对比评测 | ${siteConfig.shortName}`,
     description: "全面对比主流加密货币交易所的手续费、安全性、交易深度和用户评价。",
@@ -32,17 +32,29 @@ export const metadata: Metadata = {
   },
 }
 
-export default async function ExchangesPage() {
+interface ExchangesPageProps {
+  searchParams: Promise<{ category?: string }>
+}
+
+export default async function ExchangesPage({ searchParams }: ExchangesPageProps) {
+  const { category } = await searchParams
+  const activeCategory = category && category !== "all" ? category : "all"
+
   const exchanges = await prisma.exchange.findMany({
-    where: { status: "active" },
+    where: {
+      status: "active",
+      ...(activeCategory !== "all" ? { category: { slug: activeCategory } } : {}),
+    },
     orderBy: [{ sortOrder: "asc" }, { clickCount: "desc" }],
     include: { category: true },
   })
 
-  // Group by featured/popular
-  const featured = exchanges.filter((e) => e.isFeatured)
-  const popular = exchanges.filter((e) => e.isPopular && !e.isFeatured)
-  const rest = exchanges.filter((e) => !e.isFeatured && !e.isPopular)
+  // DEX and CEX are grouped separately so "推荐/热门" stay CEX-only.
+  const dexExchanges = exchanges.filter((e) => e.category?.slug === "dex")
+  const cexExchanges = exchanges.filter((e) => e.category?.slug !== "dex")
+  const featured = cexExchanges.filter((e) => e.isFeatured)
+  const popular = cexExchanges.filter((e) => e.isPopular && !e.isFeatured)
+  const rest = cexExchanges.filter((e) => !e.isFeatured && !e.isPopular)
 
   const stats = [
     { label: "收录交易所", value: exchanges.length, icon: Coins },
@@ -112,7 +124,7 @@ export default async function ExchangesPage() {
               <span className="text-gradient-gold ml-2">对比</span>
             </h1>
             <p className="mt-4 text-lg text-muted-foreground">
-              全面对比主流数字货币交易所的手续费、安全性、支持币种和用户体验，找到最适合您的交易平台
+              全面对比中心化与去中心化交易所的手续费、安全性、支持币种和用户体验，找到最适合您的交易平台
             </p>
           </div>
 
@@ -137,15 +149,23 @@ export default async function ExchangesPage() {
         <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
           <div className="flex flex-wrap items-center gap-2">
             <span className="mr-2 text-sm font-medium text-muted-foreground">分类：</span>
-            {exchangeCategories.map((cat) => (
-              <Link
-                key={cat.value}
-                href={cat.value === "all" ? "/exchanges" : `/exchanges?category=${cat.value}`}
-                className="rounded-full border border-border/60 px-3 py-1 text-xs font-medium text-muted-foreground transition-colors hover:border-gold/40 hover:text-gold"
-              >
-                {cat.label}
-              </Link>
-            ))}
+            {exchangeCategories.map((cat) => {
+              const isActive = cat.value === activeCategory
+              return (
+                <Link
+                  key={cat.value}
+                  href={cat.value === "all" ? "/exchanges" : `/exchanges?category=${cat.value}`}
+                  aria-current={isActive ? "page" : undefined}
+                  className={`rounded-full border px-3 py-1 text-xs font-medium transition-colors ${
+                    isActive
+                      ? "border-gold/60 bg-gold/10 text-gold"
+                      : "border-border/60 text-muted-foreground hover:border-gold/40 hover:text-gold"
+                  }`}
+                >
+                  {cat.label}
+                </Link>
+              )
+            })}
           </div>
         </div>
       </section>
@@ -184,6 +204,30 @@ export default async function ExchangesPage() {
                 </div>
                 <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                   {popular.map((exchange) => (
+                    <ExchangeCard key={exchange.id} exchange={exchange} />
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* DEX */}
+            {dexExchanges.length > 0 && (
+              <div>
+                <div className="mb-3 flex items-center gap-2">
+                  <Zap className="h-5 w-5 text-gold" />
+                  <h2 className="text-xl font-semibold">去中心化交易所（DEX）</h2>
+                </div>
+                <p className="mb-6 text-sm text-muted-foreground">
+                  链上交易、自持私钥；费率与可用网络以官方页面为准。
+                  <Link
+                    href="/articles/hyperliquid-vs-aster-dex-guide"
+                    className="ml-1 text-gold underline decoration-gold/40 underline-offset-4 transition-colors hover:text-gold-dark"
+                  >
+                    查看 Hyperliquid 与 Aster 对比
+                  </Link>
+                </p>
+                <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                  {dexExchanges.map((exchange) => (
                     <ExchangeCard key={exchange.id} exchange={exchange} />
                   ))}
                 </div>
@@ -238,11 +282,12 @@ function ExchangeCard({
     referralUrl: string | null
     features: string | null
     inviteCode: string | null
-    category?: { name: string } | null
+    category?: { name: string; slug: string } | null
   }
   featured?: boolean
 }) {
   const featureList = exchange.features?.split(",").filter(Boolean).slice(0, 3) ?? []
+  const isDex = exchange.category?.slug === "dex"
 
   return (
     <div
@@ -290,7 +335,13 @@ function ExchangeCard({
                 </Badge>
               )}
             </div>
-            <StarRating rating={exchange.rating} className="mt-1" />
+            {exchange.rating > 0 ? (
+              <StarRating rating={exchange.rating} className="mt-1" />
+            ) : (
+              <span className="mt-1 inline-block text-xs text-muted-foreground">
+                暂未评分
+              </span>
+            )}
             {exchange.description && (
               <p className="mt-1.5 line-clamp-2 text-sm text-muted-foreground">
                 {exchange.description}
@@ -306,7 +357,7 @@ function ExchangeCard({
             <p className="mt-0.5 font-semibold">{exchange.spotFee ?? "--"}</p>
           </div>
           <div className="text-center">
-            <span className="text-xs text-muted-foreground">合约费率</span>
+            <span className="text-xs text-muted-foreground">{isDex ? "永续费率" : "合约费率"}</span>
             <p className="mt-0.5 font-semibold">{exchange.futuresFee ?? "--"}</p>
           </div>
         </div>
@@ -352,6 +403,12 @@ function ExchangeCard({
               </div>
             )}
           </div>
+        ) : isDex ? (
+          <div className="mt-3 rounded-lg border border-border/40 bg-muted/20 px-3 py-2 text-center">
+            <p className="text-xs text-muted-foreground">
+              连接钱包前请核对官网域名；DEX 不代保管资产
+            </p>
+          </div>
         ) : (
           <div className="mt-3 rounded-lg border border-border/40 bg-muted/20 px-3 py-2 text-center">
             <p className="text-xs text-muted-foreground">
@@ -364,7 +421,7 @@ function ExchangeCard({
         <div className="mt-4 flex items-center gap-2">
           <Button size="sm" variant="default" className="flex-1 bg-gradient-gold text-white shadow-sm" asChild>
             <Link href={`/go/${exchange.id}`} target="_blank">
-              官网注册
+              {isDex ? "访问官网" : "官网注册"}
               <ArrowUpRight className="ml-1 h-3.5 w-3.5" />
             </Link>
           </Button>

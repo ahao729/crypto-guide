@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+  <rect width="200" height="200" rx="40" fill="#071B17"/>
+  <circle cx="100" cy="78" r="30" stroke="#4FE3C1" stroke-width="8"/>
+  <path d="M82 92 L100 58 L118 92" stroke="#4FE3C1" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="100" cy="78" r="6" fill="#4FE3C1"/>
+  <text x="100" y="146" text-anchor="middle" font-family="Arial, sans-serif" font-weight="bold" font-size="26" fill="#E6FFFA">Hyperliquid</text>
+  <text x="100" y="170" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#7C8B88">hyperliquid.xyz</text>
+</svg>

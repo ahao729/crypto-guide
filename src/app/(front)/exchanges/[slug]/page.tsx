@@ -91,6 +91,7 @@ export default async function ExchangeDetailPage({ params }: ExchangeDetailPageP
 
   const featureList = exchange.features?.split(",").filter(Boolean) ?? []
   const coinList = exchange.supportedCoins?.split(",").filter(Boolean) ?? []
+  const isDex = exchange.category?.slug === "dex"
 
   // Convert markdown content to HTML
   let contentHtml: string | null = null
@@ -228,7 +229,13 @@ export default async function ExchangeDetailPage({ params }: ExchangeDetailPageP
                       </Badge>
                     )}
                   </div>
-                  <StarRating rating={exchange.rating} className="mt-2" size={20} />
+                  {exchange.rating > 0 ? (
+                    <StarRating rating={exchange.rating} className="mt-2" size={20} />
+                  ) : (
+                    <span className="mt-2 inline-block text-sm text-muted-foreground">
+                      暂未评分
+                    </span>
+                  )}
                   {exchange.description && (
                     <p className="mt-3 max-w-2xl text-lg text-muted-foreground">
                       {exchange.description}
@@ -247,7 +254,7 @@ export default async function ExchangeDetailPage({ params }: ExchangeDetailPageP
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 rounded-xl bg-gradient-gold px-10 py-4 text-lg font-semibold text-white shadow-lg shadow-gold/20 transition-all hover:shadow-xl hover:shadow-gold/30"
                 >
-                  立即前往 {exchange.name}
+                  {isDex ? "访问官网" : `立即前往 ${exchange.name}`}
                   <ExternalLink className="h-5 w-5" />
                 </Link>
               ) : null}
@@ -261,10 +268,23 @@ export default async function ExchangeDetailPage({ params }: ExchangeDetailPageP
                   <br />
                   填写后按交易所规则享受对应权益，具体以官方页面为准
                 </p>
+              ) : isDex ? (
+                <p className="text-center text-xs leading-relaxed text-muted-foreground">
+                  连接钱包前请核对官网域名；DEX 不代保管资产，先小额测试
+                </p>
               ) : (
                 <p className="text-center text-xs text-muted-foreground">
                   通过本链接注册可能获得专属优惠
                 </p>
+              )}
+
+              {isDex && (
+                <Link
+                  href="/articles/hyperliquid-vs-aster-dex-guide"
+                  className="text-xs text-gold underline decoration-gold/40 underline-offset-4 transition-colors hover:text-gold-dark"
+                >
+                  查看 DEX 对比与风险清单
+                </Link>
               )}
 
               {(slug === "binance" || slug === "okx") && (
@@ -376,7 +396,7 @@ export default async function ExchangeDetailPage({ params }: ExchangeDetailPageP
                 )}
                 {exchange.futuresFee && (
                   <div className="flex items-center justify-between p-4">
-                    <span className="text-sm text-muted-foreground">合约交易</span>
+                    <span className="text-sm text-muted-foreground">{isDex ? "永续交易" : "合约交易"}</span>
                     <span className="font-semibold">{exchange.futuresFee}</span>
                   </div>
                 )}
@@ -399,7 +419,7 @@ export default async function ExchangeDetailPage({ params }: ExchangeDetailPageP
                 <div className="border-b border-border/40 p-4">
                   <h3 className="flex items-center gap-2 font-semibold">
                     <Shield className="h-4 w-4 text-gold" />
-                    监管信息
+                    {isDex ? "监管与风险" : "监管信息"}
                   </h3>
                 </div>
                 <div className="p-4">
@@ -426,10 +446,14 @@ export default async function ExchangeDetailPage({ params }: ExchangeDetailPageP
               <div className="divide-y divide-border/40">
                 <div className="flex items-center justify-between p-4">
                   <span className="flex items-center gap-1.5 text-sm text-muted-foreground">
-                    <StarRating rating={exchange.rating} size={12} />
+                    {exchange.rating > 0 && (
+                      <StarRating rating={exchange.rating} size={12} showValue={false} />
+                    )}
                     综合评分
                   </span>
-                  <span className="font-semibold">{exchange.rating.toFixed(1)}</span>
+                  <span className="font-semibold">
+                    {exchange.rating > 0 ? exchange.rating.toFixed(1) : "暂未评分"}
+                  </span>
                 </div>
                 <div className="flex items-center justify-between p-4">
                   <span className="flex items-center gap-1.5 text-sm text-muted-foreground">
@@ -491,7 +515,9 @@ export default async function ExchangeDetailPage({ params }: ExchangeDetailPageP
                       <h3 className="truncate font-semibold transition-colors group-hover:text-gold">
                         {similar.name}
                       </h3>
-                      <StarRating rating={similar.rating} className="mt-1" />
+                      {similar.rating > 0 && (
+                        <StarRating rating={similar.rating} className="mt-1" />
+                      )}
                       {similar.description && (
                         <p className="mt-1 line-clamp-2 text-sm text-muted-foreground">
                           {similar.description}
@@ -509,9 +535,13 @@ export default async function ExchangeDetailPage({ params }: ExchangeDetailPageP
       {/* Bottom CTA */}
       <section className="border-t border-border/40 bg-gradient-to-b from-background via-gold/[0.02] to-background">
         <div className="mx-auto max-w-7xl px-4 py-16 text-center sm:px-6 lg:px-8">
-          <h2 className="text-2xl font-bold">准备好开始交易了？</h2>
+          <h2 className="text-2xl font-bold">
+            {isDex ? "准备开始在链上交易？" : "准备好开始交易了？"}
+          </h2>
           <p className="mt-2 text-muted-foreground">
-            通过我们的链接注册，享受专属优惠和低手续费
+            {isDex
+              ? "先核对官网域名与网络，小额测试后再加大资金；DEX 不代保管资产。"
+              : "通过我们的链接注册，享受专属优惠和低手续费"}
           </p>
           {exchange.referralUrl ? (
             <>
@@ -521,7 +551,7 @@ export default async function ExchangeDetailPage({ params }: ExchangeDetailPageP
                 rel="noopener noreferrer"
                 className="mt-6 inline-flex items-center gap-2 rounded-xl bg-gradient-gold px-8 py-4 font-semibold text-white shadow-md shadow-gold/20 transition-all hover:shadow-lg hover:shadow-gold/30"
               >
-                立即前往 {exchange.name}
+                {isDex ? "访问官网" : `立即前往 ${exchange.name}`}
                 <ArrowUpRight className="h-5 w-5" />
               </Link>
 
@@ -533,6 +563,10 @@ export default async function ExchangeDetailPage({ params }: ExchangeDetailPageP
                   </code>
                   <br />
                   填写后按交易所规则享受对应权益，具体以官方页面为准
+                </p>
+              ) : isDex ? (
+                <p className="mt-4 text-center text-xs text-muted-foreground">
+                  连接钱包前请核对官网域名；DEX 不代保管资产，先小额测试
                 </p>
               ) : (
                 <p className="mt-4 text-center text-xs text-muted-foreground">

@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+  <rect width="200" height="200" rx="40" fill="#0B0B0F"/>
+  <path d="M100 42 L132 122 H112 L100 92 L88 122 H68 Z" fill="#F5C542"/>
+  <path d="M100 42 L112 74 L100 92 L88 74 Z" fill="#FFF3C4"/>
+  <text x="100" y="150" text-anchor="middle" font-family="Arial, sans-serif" font-weight="bold" font-size="36" fill="#F5C542">Aster</text>
+  <text x="100" y="172" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#8A8A8A">asterdex.com</text>
+</svg>

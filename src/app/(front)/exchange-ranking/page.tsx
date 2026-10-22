@@ -70,10 +70,14 @@ function getRankBadge(rank: number) {
 }
 
 export default async function ExchangeRankingPage() {
-  const exchanges = await prisma.exchange.findMany({
+  const activeExchanges = await prisma.exchange.findMany({
     where: { status: "active" },
     include: { category: true },
   })
+
+  // The score formula is CEX-oriented (rating, referrals, sort order); DEX
+  // entries have no rating yet and are listed on /exchanges instead.
+  const exchanges = activeExchanges.filter((ex) => ex.category?.slug !== "dex")
 
   // Calculate scores and sort
   const ranked = exchanges

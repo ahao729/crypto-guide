@@ -17,7 +17,7 @@ interface PartnerCTAProps {
   placement?: "top" | "bottom"
 }
 
-type CtaKind = "wallet" | "contract" | "dex" | "exchange"
+type CtaKind = "wallet" | "contract" | "dex" | "copy" | "exchange"
 
 function pickKind(title: string, categorySlug?: string | null, tags?: string[]) {
   const haystack = `${title} ${categorySlug ?? ""} ${(tags ?? []).join(" ")}`.toLowerCase()
@@ -25,6 +25,11 @@ function pickKind(title: string, categorySlug?: string | null, tags?: string[]) 
   // DEX first: a title can contain "永续" without being a CEX contract page.
   if (/dex|去中心化|链上|hyperliquid|aster/.test(haystack)) {
     return "dex" as const
+  }
+
+  // Copy-trading pages should point at the copy-trading partner.
+  if (/跟单|copy.?trading/.test(haystack)) {
+    return "copy" as const
   }
 
   // Onboarding pages should default to exchanges, even if one of their tags
@@ -53,6 +58,10 @@ const copy: Record<CtaKind, { heading: string; sub: string }> = {
   dex: {
     heading: "链上交易，先准备好钱包",
     sub: "DEX 不代保管资产；连接钱包前核对域名，先用小额测试。",
+  },
+  copy: {
+    heading: "跟单之前，先选对平台",
+    sub: "先看交易员的历史回撤和跟单费率，不要只看收益榜；跟单也会亏钱。",
   },
   exchange: {
     heading: "开始之前，先选好交易所",
@@ -163,6 +172,11 @@ export function PartnerCTA({
       <>
         <OneKeyCard />
         <ExchangeCard slug="binance" />
+      </>
+    ) : kind === "copy" ? (
+      <>
+        <SecondaryExchangeCard slug="bitget" />
+        <ExchangeCard slug="bybit" />
       </>
     ) : kind === "contract" ? (
       <>

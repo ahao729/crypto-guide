@@ -237,7 +237,9 @@ Bitget成立于2018年，是全球领先的跟单交易平台。Bitget率先推�
 - **合约交易**：Maker 0.02% / Taker 0.06%
 - **跟单交易**：跟单者不额外收费`,
       rating: 9.1,
-      referralUrl: "https://www.bitget.com/",
+      referralUrl:
+        "https://share.glassgs.com/u/K2017LFC?clacCode=X7QCEV4X",
+      inviteCode: "X7QCEV4X",
       feeRate: "现货 0.1% / 合约 Maker 0.02% Taker 0.06%",
       spotFee: "Maker 0.10% / Taker 0.10%",
       futuresFee: "Maker 0.02% / Taker 0.06%",

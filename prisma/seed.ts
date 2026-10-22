@@ -112,7 +112,7 @@ async function main() {
     {
       name: "币安 Binance",
       slug: "binance",
-      logo: "/images/exchanges/binance.svg",
+      logo: "/images/exchanges/binance.png",
       description: "全球最大的加密货币交易所，提供现货、合约、期权等多种交易产品，深度优秀，流动性极佳。",
       content: `## 币安 Binance 简介
 
@@ -148,7 +148,7 @@ async function main() {
     {
       name: "欧易 OKX",
       slug: "okx",
-      logo: "/images/exchanges/okx.svg",
+      logo: "/images/exchanges/okx.png",
       description: "全球领先的加密货币交易平台，提供现货、合约、期权等多元服务，Web3钱包生态强大。",
       content: `## 欧易 OKX 简介
 
@@ -183,7 +183,7 @@ OKX（欧易）是全球领先的加密货币交易平台，成立于2017年，�
     {
       name: "Bybit",
       slug: "bybit",
-      logo: "/images/exchanges/bybit.svg",
+      logo: "/images/exchanges/bybit.png",
       description: "专业的加密货币衍生品交易平台，合约交易体验极佳，产品创新力强。",
       content: `## Bybit 简介
 
@@ -218,7 +218,7 @@ Bybit成立于2018年，是全球领先的加密货币衍生品交易平台。By
     {
       name: "Bitget",
       slug: "bitget",
-      logo: "/images/exchanges/bitget.svg",
+      logo: "/images/exchanges/bitget.png",
       description: "领先的跟单交易平台，一键复制顶级交易员策略，适合新手和专业交易者。",
       content: `## Bitget 简介
 
@@ -253,7 +253,7 @@ Bitget成立于2018年，是全球领先的跟单交易平台。Bitget率先推�
     {
       name: "Gate.io",
       slug: "gate-io",
-      logo: "/images/exchanges/gateio.svg",
+      logo: "/images/exchanges/gate.png",
       description: "老牌加密货币交易所，上线币种数量最多，适合寻找小币种机会的交易者。",
       content: `## Gate.io 简介
 
@@ -291,7 +291,7 @@ Gate.io（芝麻开门）成立于2013年，是全球老牌加密货币交易所
     {
       name: "KuCoin",
       slug: "kucoin",
-      logo: "/images/exchanges/kucoin.svg",
+      logo: "/images/exchanges/kucoin.png",
       description: "全球知名的山寨币交易平台，币种丰富，社区活跃，被誉为\"人民的交易所\"。",
       content: `## KuCoin 简介
 
@@ -359,7 +359,7 @@ MEXC（抹茶）成立于2018年，是全球领先的数字资产交易平台。
     {
       name: "HTX",
       slug: "htx",
-      logo: "/images/exchanges/htx.svg",
+      logo: "/images/exchanges/htx.png",
       description: "火币品牌升级，老牌交易所，安全稳健，合规程度高。",
       content: `## HTX 简介
 

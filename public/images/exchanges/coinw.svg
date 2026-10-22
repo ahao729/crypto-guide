@@ -1,5 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
-  <rect width="200" height="200" rx="40" fill="#1E2329"/>
-  <text x="100" y="120" text-anchor="middle" font-family="Arial, sans-serif" font-weight="bold" font-size="36" fill="#0B45EC">CoinW</text>
-  <text x="100" y="145" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="#888">coinw.com</text>
-</svg>
+<?xml version='1.0' encoding='utf-8'?>
+<ns0:svg xmlns:ns0="http://www.w3.org/2000/svg" version="1.0" id="katman_1" x="0px" y="0px" viewBox="80 225 135 155" style="enable-background:new 0 0 841.89 595.28;" xml:space="preserve">
+<ns0:style type="text/css">
+	.st0{fill:#5227FF;}
+</ns0:style>
+<ns0:g>
+	<ns0:path class="st0" d="M195.86,241.37h-61.99v40.11H94.05l0,34.99c0,26.83,21.59,48.59,48.22,48.59h53.53l0.05-40.12h-53.58   c-4.64,0-8.41-3.79-8.41-8.47l0-34.99h61.94L195.86,241.37z" />
+	</ns0:g>
+</ns0:svg>

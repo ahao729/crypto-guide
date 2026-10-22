@@ -16,6 +16,12 @@ const nextConfig: NextConfig = {
         destination: "/exchanges/gate-io",
         statusCode: 301,
       },
+      {
+        // Duplicate halving article retired; keep the old URL working.
+        source: "/articles/bitcoin-halving-2026-analysis",
+        destination: "/articles/bitcoin-halving-2026",
+        statusCode: 301,
+      },
     ];
   },
 

@@ -1,17 +1,20 @@
 import { prisma } from "@/lib/prisma"
 import Link from "next/link"
+import { redirect } from "next/navigation"
 import Image from "next/image"
 import type { Metadata } from "next"
 import { StarRating } from "@/components/front/StarRating"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { exchangeCategories, siteConfig } from "@/lib/constants"
+import { isExchangePartner } from "@/lib/affiliates"
+import { ExchangeCtaLink } from "@/components/front/ExchangeCtaLink"
+import { toFiveStarRating } from "@/lib/utils"
 import {
   ArrowUpRight,
   Trophy,
   TrendingUp,
   Shield,
-  Zap,
   Coins,
   Award,
   Medal,
@@ -21,8 +24,8 @@ import {
 export const revalidate = 1800 // 30 minutes
 
 export const metadata: Metadata = {
-  title: `交易所排名 | ${siteConfig.shortName}`,
-  description: "加密货币交易所综合排名，基于手续费、安全性、用户评分和交易深度等多维度评测，帮您找到最佳交易平台。",
+  title: "2026 交易所排名与推荐",
+  description: "加密货币交易所综合排名，基于手续费、安全性、编辑评分和交易深度等多维度评测，帮您找到最佳交易平台。",
   keywords: ["交易所排名", "加密货币交易所排行", "币安排名", "欧易排名", "交易所对比", "数字货币平台排行"],
   openGraph: {
     title: `交易所排名 | ${siteConfig.shortName}`,
@@ -42,24 +45,11 @@ export const metadata: Metadata = {
   },
 }
 
-function calculateScore(exchange: {
-  rating: number
-  clickCount: number
-  isFeatured: boolean
-  isPopular: boolean
-  sortOrder: number
-}) {
-  // Composite score: rating (0-5) * 20 = max 100
-  // + clickCount bonus (capped at 20)
-  // + featured bonus 15
-  // + popular bonus 10
-  // + sortOrder bonus (lower is better, max 10)
-  const ratingScore = exchange.rating * 20
-  const clickBonus = Math.min(exchange.clickCount / 10, 20)
-  const featuredBonus = exchange.isFeatured ? 15 : 0
-  const popularBonus = exchange.isPopular ? 10 : 0
-  const orderBonus = Math.max(0, 10 - exchange.sortOrder)
-  return Number((ratingScore + clickBonus + featuredBonus + popularBonus + orderBonus).toFixed(1))
+function calculateScore(exchange: { rating: number }) {
+  // Editorial score only. Click counts, "featured" flags and sort order are
+  // placement signals, not quality signals; mixing them in made almost every
+  // exchange hit 100 and produced a ranking that looked arbitrary.
+  return Math.min(100, Number((toFiveStarRating(exchange.rating) * 20).toFixed(1)))
 }
 
 function getRankBadge(rank: number) {
@@ -69,7 +59,23 @@ function getRankBadge(rank: number) {
   return null
 }
 
-export default async function ExchangeRankingPage() {
+interface ExchangeRankingPageProps {
+  searchParams?: Promise<{ category?: string }>
+}
+
+export default async function ExchangeRankingPage({
+  searchParams,
+}: ExchangeRankingPageProps) {
+  const { category } = searchParams ? await searchParams : {}
+  const activeCategory =
+    category && category !== "all" ? category : "all"
+
+  // DEX entries are not scored here; send that filter to the comparison page
+  // instead of silently showing the same CEX list.
+  if (activeCategory === "dex") {
+    redirect("/exchanges?category=dex")
+  }
+
   const activeExchanges = await prisma.exchange.findMany({
     where: { status: "active" },
     include: { category: true },
@@ -77,7 +83,11 @@ export default async function ExchangeRankingPage() {
 
   // The score formula is CEX-oriented (rating, referrals, sort order); DEX
   // entries have no rating yet and are listed on /exchanges instead.
-  const exchanges = activeExchanges.filter((ex) => ex.category?.slug !== "dex")
+  const exchanges = activeExchanges.filter(
+    (ex) =>
+      ex.category?.slug !== "dex" &&
+      (activeCategory === "all" || ex.category?.slug === activeCategory),
+  )
 
   // Calculate scores and sort
   const ranked = exchanges
@@ -90,8 +100,12 @@ export default async function ExchangeRankingPage() {
 
   const stats = [
     { label: "收录交易所", value: ranked.length, icon: Coins },
-    { label: "综合评分基准", value: "100", icon: Trophy },
-    { label: "数据可靠", value: "100%", icon: Shield },
+    { label: "编辑评分基准", value: "100", icon: Trophy },
+    {
+      label: "合作推荐",
+      value: ranked.filter((exchange) => isExchangePartner(exchange.slug)).length,
+      icon: Shield,
+    },
   ]
 
   const top3 = ranked.slice(0, 3)
@@ -156,7 +170,7 @@ export default async function ExchangeRankingPage() {
               </h1>
             </div>
             <p className="mt-4 text-lg text-muted-foreground">
-              基于用户评分、交易深度、手续费率、安全性等多维度综合评分，为您呈现最客观的交易所排名
+              基于编辑评分、交易深度、手续费率、安全性等多维度综合评分；本页含联盟链接，合作方会标注
             </p>
           </div>
 
@@ -181,15 +195,29 @@ export default async function ExchangeRankingPage() {
         <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
           <div className="flex flex-wrap items-center gap-2">
             <span className="mr-2 text-sm font-medium text-muted-foreground">分类筛选：</span>
-            {categories.map((cat) => (
-              <Link
-                key={cat.value}
-                href={cat.value === "all" ? "/exchange-ranking" : `/exchange-ranking?category=${cat.value}`}
-                className="rounded-full border border-border/60 px-3 py-1 text-xs font-medium text-muted-foreground transition-colors hover:border-gold/40 hover:text-gold"
-              >
-                {cat.label}
-              </Link>
-            ))}
+            {categories.map((cat) => {
+              const isActive = cat.value === activeCategory
+              const href =
+                cat.value === "dex"
+                  ? "/exchanges?category=dex"
+                  : cat.value === "all"
+                    ? "/exchange-ranking"
+                    : `/exchange-ranking?category=${cat.value}`
+              return (
+                <Link
+                  key={cat.value}
+                  href={href}
+                  aria-current={isActive ? "page" : undefined}
+                  className={`rounded-full border px-3 py-1 text-xs font-medium transition-colors ${
+                    isActive
+                      ? "border-gold/60 bg-gold/10 text-gold"
+                      : "border-border/60 text-muted-foreground hover:border-gold/40 hover:text-gold"
+                  }`}
+                >
+                  {cat.label}
+                </Link>
+              )
+            })}
           </div>
         </div>
       </section>
@@ -231,10 +259,6 @@ export default async function ExchangeRankingPage() {
                         </div>
 
                         {/* Score Circle */}
-                        <div className="absolute left-3 top-3 flex h-10 w-10 items-center justify-center rounded-full bg-gold/10 text-sm font-bold text-gold-dark">
-                          {exchange.rank}
-                        </div>
-
                         <div className="p-6 pt-14">
                           {/* Header */}
                           <div className="flex items-start gap-4">
@@ -259,6 +283,11 @@ export default async function ExchangeRankingPage() {
                                 {exchange.category && (
                                   <Badge variant="secondary" className="shrink-0 text-[10px]">
                                     {exchange.category.name}
+                                  </Badge>
+                                )}
+                                {isExchangePartner(exchange.slug) && (
+                                  <Badge className="shrink-0 border-gold/20 bg-gold/10 text-[10px] text-gold-dark">
+                                    合作
                                   </Badge>
                                 )}
                               </div>
@@ -300,7 +329,7 @@ export default async function ExchangeRankingPage() {
                           {/* Features */}
                           {exchange.features && (
                             <div className="mt-3 flex flex-wrap gap-1.5">
-                              {exchange.features.split(",").filter(Boolean).slice(0, 3).map((f) => (
+                              {exchange.features.split(/[,;；，]/).filter(Boolean).slice(0, 3).map((f) => (
                                 <span
                                   key={f}
                                   className="rounded-md bg-gold/5 px-2 py-0.5 text-[11px] text-gold-dark"
@@ -313,12 +342,13 @@ export default async function ExchangeRankingPage() {
 
                           {/* Actions */}
                           <div className="mt-4 flex items-center gap-2">
-                            <Button size="sm" variant="default" className="flex-1 bg-gradient-gold text-white shadow-sm" asChild>
-                              <Link href={`/go/${exchange.id}`} target="_blank">
-                                官网注册
-                                <ArrowUpRight className="ml-1 h-3.5 w-3.5" />
-                              </Link>
-                            </Button>
+                            <ExchangeCtaLink
+                              exchange={exchange}
+                              className="inline-flex h-9 flex-1 items-center justify-center gap-1.5 rounded-lg bg-gradient-gold px-3 text-sm font-medium text-white shadow-sm transition-all hover:brightness-110"
+                            >
+                              {isExchangePartner(exchange.slug) ? "官网注册" : "访问官网"}
+                              <ArrowUpRight className="h-3.5 w-3.5" />
+                            </ExchangeCtaLink>
                             <Button size="sm" variant="outline" className="flex-1" asChild>
                               <Link href={`/exchanges/${exchange.slug}`}>查看详情</Link>
                             </Button>
@@ -376,6 +406,11 @@ export default async function ExchangeRankingPage() {
                               {exchange.category.name}
                             </Badge>
                           )}
+                          {isExchangePartner(exchange.slug) && (
+                            <Badge className="border-gold/20 bg-gold/10 text-[10px] text-gold-dark">
+                              合作
+                            </Badge>
+                          )}
                         </div>
                         <div className="mt-1 flex items-center gap-3 text-xs text-muted-foreground">
                           <StarRating rating={exchange.rating} size={10} />
@@ -400,11 +435,12 @@ export default async function ExchangeRankingPage() {
 
                       {/* Actions */}
                       <div className="flex shrink-0 items-center gap-2">
-                        <Button size="sm" variant="default" className="bg-gradient-gold text-white shadow-sm" asChild>
-                          <Link href={`/go/${exchange.id}`} target="_blank">
-                            注册
-                          </Link>
-                        </Button>
+                        <ExchangeCtaLink
+                          exchange={exchange}
+                          className="inline-flex h-8 items-center justify-center rounded-lg bg-gradient-gold px-3 text-sm font-medium text-white shadow-sm transition-all hover:brightness-110"
+                        >
+                          {isExchangePartner(exchange.slug) ? "注册" : "官网"}
+                        </ExchangeCtaLink>
                         <Button size="sm" variant="ghost" className="hidden sm:inline-flex" asChild>
                           <Link href={`/exchanges/${exchange.slug}`}>
                             详情 <ChevronRight className="ml-0.5 h-3.5 w-3.5" />

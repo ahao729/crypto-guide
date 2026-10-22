@@ -7,8 +7,11 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "seed": "tsx prisma/seed.ts",
+    "seed": "tsx prisma/seed.ts && node scripts/fix-outdated-articles.mjs --apply",
     "rotate-admin": "tsx scripts/rotate-admin-password.ts",
+    "clean:affiliates": "node scripts/clean-nonpartner-referrals.mjs",
+    "fix:articles": "node scripts/fix-outdated-articles.mjs",
+    "partners:apply": "node scripts/update-partner-links.mjs",
     "db:migrate": "prisma migrate deploy",
     "db:migrate:status": "prisma migrate status",
     "db:migrate:dev": "prisma migrate dev",
@@ -16,7 +19,7 @@
     "vercel-build": "prisma generate && next build"
   },
   "prisma": {
-    "seed": "tsx prisma/seed.ts"
+    "seed": "tsx prisma/seed.ts && node scripts/fix-outdated-articles.mjs --apply"
   },
   "dependencies": {
     "@prisma/client": "^6.19.3",

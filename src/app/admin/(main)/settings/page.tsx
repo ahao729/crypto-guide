@@ -24,7 +24,6 @@ const DEFAULT_SETTINGS: SiteSetting[] = [
   { key: "logo_url", value: "", label: "Logo URL", type: "image", section: "basic" },
   { key: "favicon_url", value: "", label: "Favicon URL", type: "image", section: "basic" },
   { key: "footer_text", value: "", label: "页脚文本", type: "textarea", section: "basic" },
-  { key: "contact_email", value: "", label: "联系邮箱", type: "text", section: "basic" },
   { key: "google_analytics_id", value: "", label: "Google Analytics ID", type: "text", section: "basic" },
 
   // 社群信息（交流平台数由关于页根据平台列表自动计算，不再手填）

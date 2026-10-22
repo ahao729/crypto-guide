@@ -5,9 +5,10 @@ import Image from "next/image"
 import type { Metadata } from "next"
 import { StarRating } from "@/components/front/StarRating"
 import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
 import { siteConfig } from "@/lib/constants"
-import { ArrowLeft, Coins, FileText, TrendingUp, Zap, ArrowUpRight } from "lucide-react"
+import { isExchangePartner } from "@/lib/affiliates"
+import { ExchangeCtaLink } from "@/components/front/ExchangeCtaLink"
+import { ArrowLeft, Coins, FileText, TrendingUp, ArrowUpRight } from "lucide-react"
 
 export const revalidate = 1800 // 30 minutes
 
@@ -28,7 +29,7 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
     return { title: "分类未找到" }
   }
 
-  const title = `${category.name} - ${siteConfig.name}`
+  const title = category.name
   const description = category.description || `浏览 ${category.name} 分类下的加密货币交易所和文章内容`
 
   return {
@@ -307,10 +308,12 @@ function ExchangeCard({
     referralUrl: string | null
     features: string | null
     inviteCode: string | null
+    category?: { name: string; slug: string } | null
   }
   featured?: boolean
 }) {
-  const featureList = exchange.features?.split(",").filter(Boolean).slice(0, 3) ?? []
+  const featureList = exchange.features?.split(/[,;；，]/).filter(Boolean).slice(0, 3) ?? []
+  const isDex = exchange.category?.slug === "dex"
 
   return (
     <div
@@ -340,7 +343,7 @@ function ExchangeCard({
           <div className="min-w-0 flex-1">
             <div className="flex items-center gap-2">
               <h3 className="truncate font-semibold">{exchange.name}</h3>
-              {exchange.inviteCode && (
+              {isExchangePartner(exchange.slug) && exchange.inviteCode && !isDex && (
                 <Badge className="shrink-0 border-amber-300 bg-amber-50 text-[10px] text-amber-700 dark:border-amber-700 dark:bg-amber-950/30 dark:text-amber-400">
                   邀请码
                 </Badge>
@@ -390,62 +393,40 @@ function ExchangeCard({
           </div>
         )}
 
-        {/* Invite Code Reminder */}
-        {exchange.inviteCode ? (
+        {/* Invite Code Reminder — partners only */}
+        {isExchangePartner(exchange.slug) && exchange.inviteCode && !isDex ? (
           <div className="mt-3 rounded-lg border border-amber-200/60 bg-amber-50/50 px-3 py-2 text-center dark:border-amber-800/30 dark:bg-amber-950/10">
             <p className="text-xs leading-relaxed text-amber-700 dark:text-amber-400">
-              <span className="font-semibold">注册时请使用邀请码：</span>
-              <code className="mx-1 rounded bg-amber-100 px-1.5 py-0.5 font-mono text-amber-800 dark:bg-amber-900/50 dark:text-amber-300">
+              点击下方按钮注册，邀请码{" "}
+              <code className="rounded bg-amber-100 px-1.5 py-0.5 font-mono font-bold text-amber-800 dark:bg-amber-900/50 dark:text-amber-300">
                 {exchange.inviteCode}
-              </code>
-              <br />
-              填写后按交易所规则享受对应权益，具体以官方页面为准
+              </code>{" "}
+              会自动填入。
             </p>
-            {/* Invite code benefit — only for Binance & OKX */}
-            {(exchange.slug === "binance" || exchange.slug === "okx") && (
-              <div className="mt-2 border-t border-amber-200/50 pt-2 dark:border-amber-800/20">
-                <p className="text-xs leading-relaxed text-amber-600 dark:text-amber-400">
-                  <span className="font-semibold text-amber-700 dark:text-amber-300">
-                    专属福利：
-                  </span>
-                  通过本链接注册并使用邀请码{" "}
-                  <code className="rounded bg-amber-100 px-1.5 py-0.5 font-mono text-sm font-bold text-amber-800 dark:bg-amber-900/50 dark:text-amber-300">
-                    {exchange.inviteCode}
-                  </code>
-                  ，具体活动权益以交易所页面为准。
-                </p>
-              </div>
-            )}
+          </div>
+        ) : isDex ? (
+          <div className="mt-3 rounded-lg border border-border/40 bg-muted/20 px-3 py-2 text-center">
+            <p className="text-xs text-muted-foreground">
+              连接钱包前请核对官网域名；DEX 不代保管资产
+            </p>
           </div>
         ) : (
           <div className="mt-3 rounded-lg border border-border/40 bg-muted/20 px-3 py-2 text-center">
             <p className="text-xs text-muted-foreground">
-              通过本链接注册可能获得专属优惠
+              官方入口（非联盟链接），不产生返佣
             </p>
           </div>
         )}
       </Link>
 
-      {/* CTA */}
       <div className="border-t border-border/40 p-3">
-        {exchange.referralUrl ? (
-          <Link
-            href={`/go/${exchange.id}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex w-full items-center justify-center gap-1.5 rounded-lg bg-gradient-gold py-2 text-sm font-medium text-white shadow-sm shadow-gold/20 transition-all hover:shadow-md hover:shadow-gold/30"
-          >
-            前往官网
-            <ArrowUpRight className="h-3.5 w-3.5" />
-          </Link>
-        ) : (
-          <Link
-            href={`/exchanges/${exchange.slug}`}
-            className="inline-flex w-full items-center justify-center gap-1.5 rounded-lg border border-border/60 py-2 text-sm font-medium transition-colors hover:bg-muted"
-          >
-            查看详情
-          </Link>
-        )}
+        <ExchangeCtaLink
+          exchange={exchange}
+          className="inline-flex w-full items-center justify-center gap-1.5 rounded-lg bg-gradient-gold py-2 text-sm font-medium text-white shadow-sm shadow-gold/20 transition-all hover:shadow-md hover:shadow-gold/30"
+        >
+          {isExchangePartner(exchange.slug) && !isDex ? "官网注册" : "访问官网"}
+          <ArrowUpRight className="h-3.5 w-3.5" />
+        </ExchangeCtaLink>
       </div>
     </div>
   )

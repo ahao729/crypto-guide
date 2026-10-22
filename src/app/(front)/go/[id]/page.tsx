@@ -1,7 +1,12 @@
 import { prisma } from "@/lib/prisma"
 import { redirect } from "next/navigation"
 import { headers } from "next/headers"
+import { after } from "next/server"
 import type { Metadata } from "next"
+import {
+  getExchangeOfficialUrl,
+  isExchangePartner,
+} from "@/lib/affiliates"
 
 export const dynamic = "force-dynamic"
 
@@ -20,37 +25,60 @@ export default async function GoPage({ params }: GoPageProps) {
   const { id } = await params
   const headersList = await headers()
 
-  // Find exchange by ID
-  const exchange = await prisma.exchange.findUnique({
-    where: { id },
+  // Accept both the database id and the slug. Slugs make the outbound link
+  // readable (/go/binance) and let us swap ids without breaking old links.
+  const exchange = await prisma.exchange.findFirst({
+    where: {
+      OR: [{ id }, { slug: id }],
+    },
   })
 
-  if (!exchange || !exchange.referralUrl) {
-    // Redirect to exchanges page if not found
+  if (!exchange) {
     redirect("/exchanges")
   }
 
-  // Record the click
-  try {
-    await prisma.clickLog.create({
-      data: {
-        targetId: exchange.id,
-        targetType: "exchange",
-        ip: headersList.get("x-forwarded-for") || headersList.get("x-real-ip") || null,
-        userAgent: headersList.get("user-agent") || null,
-        referer: headersList.get("referer") || null,
-      },
-    })
-
-    // Increment click count
-    await prisma.exchange.update({
-      where: { id: exchange.id },
-      data: { clickCount: { increment: 1 } },
-    })
-  } catch {
-    // Silently fail - don't block the redirect
+  // Safety net: catalog exchanges must never receive an affiliate redirect,
+  // even if a stale/placeholder referral URL is still stored in the database.
+  if (!isExchangePartner(exchange.slug)) {
+    redirect(getExchangeOfficialUrl(exchange.slug) ?? "/exchanges")
   }
 
-  // Redirect to the referral URL
-  redirect(exchange.referralUrl)
+  if (!exchange.referralUrl) {
+    redirect(getExchangeOfficialUrl(exchange.slug) ?? "/exchanges")
+  }
+
+  const ip =
+    headersList.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+    headersList.get("x-real-ip") ||
+    null
+  const userAgent = headersList.get("user-agent") || null
+  const referer = headersList.get("referer") || null
+  const referralUrl = exchange.referralUrl
+  const exchangeId = exchange.id
+
+  // Record the click after the redirect has been sent. Waiting for these
+  // writes before redirecting added 1-2s of latency to every affiliate click.
+  after(async () => {
+    try {
+      await prisma.$transaction([
+        prisma.clickLog.create({
+          data: {
+            targetId: exchangeId,
+            targetType: "exchange",
+            ip,
+            userAgent,
+            referer,
+          },
+        }),
+        prisma.exchange.update({
+          where: { id: exchangeId },
+          data: { clickCount: { increment: 1 } },
+        }),
+      ])
+    } catch (error) {
+      console.error("Failed to record affiliate click:", error)
+    }
+  })
+
+  redirect(referralUrl)
 }

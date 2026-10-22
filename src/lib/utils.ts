@@ -29,6 +29,15 @@ export function truncate(str: string, length: number) {
   return str.slice(0, length) + "..."
 }
 
+/**
+ * Exchange ratings are stored on a 10-point scale (e.g. 9.8), while the UI
+ * renders 5 stars. Normalise at the display layer so we never show "9.8 / 5"
+ * or emit invalid schema.org ratings.
+ */
+export function toFiveStarRating(rating: number) {
+  return rating > 5 ? rating / 2 : rating
+}
+
 export function generateSlug(str: string): string {
   return str
     .toLowerCase()

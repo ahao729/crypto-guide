@@ -15,6 +15,7 @@ import ReadingProgress from "@/components/front/ReadingProgress"
 import TableOfContents from "@/components/front/TableOfContents"
 import ShareSection from "@/components/front/ShareSection"
 import ArticleNavigation from "@/components/front/ArticleNavigation"
+import { PartnerCTA } from "@/components/front/PartnerCTA"
 
 export const revalidate = 1800 // 30 minutes
 
@@ -134,6 +135,11 @@ export default async function ArticleDetailPage({ params }: ArticlePageProps) {
   ])
 
   const readingTime = article.content ? estimateReadingTime(processedContent) : 1
+  const showUpdated =
+    article.publishedAt &&
+    article.updatedAt &&
+    article.updatedAt.getTime() - article.publishedAt.getTime() >
+      24 * 60 * 60 * 1000
 
   return (
     <>
@@ -239,6 +245,12 @@ export default async function ArticleDetailPage({ params }: ArticlePageProps) {
                     {formatDate(article.publishedAt)}
                   </span>
                 )}
+                {showUpdated && article.updatedAt && (
+                  <span className="flex items-center gap-1.5">
+                    <Calendar className="h-4 w-4" />
+                    更新于 {formatDate(article.updatedAt)}
+                  </span>
+                )}
                 <span className="flex items-center gap-1.5">
                   <Clock className="h-4 w-4" />
                   阅读约 {readingTime} 分钟
@@ -273,6 +285,12 @@ export default async function ArticleDetailPage({ params }: ArticlePageProps) {
 
               {/* Article Content - optimal reading width */}
               <div className="min-w-0 flex-1 max-w-4xl">
+                <PartnerCTA
+                  title={article.title}
+                  categorySlug={article.category?.slug}
+                  tags={article.tags.map(({ tag }) => tag.name)}
+                  placement="top"
+                />
                 <article>
                   {article.content ? (
                     <ArticleContent html={processedContent} />
@@ -303,6 +321,13 @@ export default async function ArticleDetailPage({ params }: ArticlePageProps) {
 
                   {/* Previous / Next Article Navigation */}
                   <ArticleNavigation prev={prevArticle} next={nextArticle} />
+
+                  <PartnerCTA
+                    title={article.title}
+                    categorySlug={article.category?.slug}
+                    tags={article.tags.map(({ tag }) => tag.name)}
+                    placement="bottom"
+                  />
 
                   <div className="mt-8 rounded-xl border border-amber-500/20 bg-amber-500/5 p-4 text-xs leading-relaxed text-muted-foreground">
                     <p>

@@ -76,6 +76,7 @@ export default function AdminClicksPage() {
             <SelectItem value="all">所有类型</SelectItem>
             <SelectItem value="exchange">交易所</SelectItem>
             <SelectItem value="article">文章</SelectItem>
+            <SelectItem value="partner">工具/钱包</SelectItem>
           </SelectContent>
         </Select>
         <Input
@@ -110,7 +111,13 @@ export default function AdminClicksPage() {
                   <tr key={log.id} className="border-t hover:bg-muted/30">
                     <td className="px-4 py-3">
                       <span className="rounded bg-muted px-2 py-0.5 text-xs font-medium">
-                        {log.targetType === "exchange" ? "交易所" : log.targetType === "article" ? "文章" : log.targetType}
+                        {log.targetType === "exchange"
+                          ? "交易所"
+                          : log.targetType === "article"
+                            ? "文章"
+                            : log.targetType === "partner"
+                              ? "工具/钱包"
+                              : log.targetType}
                       </span>
                     </td>
                     <td className="max-w-xs truncate px-4 py-3 font-medium">

@@ -47,6 +47,46 @@ function isHtmlContent(content: string): boolean {
   return /^<[\w-]+[\s>]/.test(trimmed) || /<(p|h[1-6]|ul|ol|li|table|blockquote|pre|figure|div|section|article)\b/i.test(trimmed)
 }
 
+
+/**
+ * The original seed content contained a template affiliate code (CROW5SEED)
+ * for exchanges we do not have a partnership with. Strip it at render time so
+ * live articles cannot send readers to a third party's referral link, even
+ * before the database row is updated.
+ */
+const STALE_AFFILIATE_TARGETS: Array<[RegExp, string]> = [
+  [/bitget\.com/i, "/exchanges/bitget"],
+  [/gate\.io/i, "/exchanges/gate-io"],
+  [/kucoin\.com/i, "/exchanges/kucoin"],
+  [/mexc\.com/i, "/exchanges/mexc"],
+  [/htx\.com/i, "/exchanges/htx"],
+  [/bingx\.com/i, "/exchanges/bingx"],
+  [/lbank\.com/i, "/exchanges/lbank"],
+  [/coinw\.com/i, "/exchanges/coinw"],
+  [/deepcoin\.com/i, "/exchanges/deepcoin"],
+]
+
+function neutralizeStaleAffiliateLinks(html: string): string {
+  const withSafeLinks = html.replace(
+    /(href=["'])(https?:\/\/[^"']*CROW5SEED[^"']*)(["'])/gi,
+    (_match, before: string, url: string, after: string) => {
+      const target = STALE_AFFILIATE_TARGETS.find(([pattern]) =>
+        pattern.test(url),
+      )?.[1]
+      return `${before}${target ?? "/exchanges"}${after}`
+    },
+  )
+
+  // The Bitget article's old copy promised a referral discount. Once the
+  // placeholder link is neutralised, the sentence would be misleading.
+  return withSafeLinks
+    .replace(/点击链接注册 Bitget 账户/g, "查看 Bitget 评测与注册入口")
+    .replace(
+      /（使用推荐链接可享手续费折扣）/g,
+      "（本站暂无该交易所联盟码，注册请核对官网）",
+    )
+}
+
 /**
  * Process article content (markdown or HTML → HTML):
  * - If content is already HTML, use it directly (skip markdown conversion)
@@ -54,7 +94,10 @@ function isHtmlContent(content: string): boolean {
  * - Add `id` attributes to h2/h3 elements for anchor linking
  * - Return processed HTML and an array of TOC entries
  */
-export async function processArticleHtml(content: string): Promise<{
+export async function processArticleHtml(
+  content: string,
+  options: { withAnchors?: boolean } = {},
+): Promise<{
   html: string
   headings: TocEntry[]
 }> {
@@ -68,6 +111,8 @@ export async function processArticleHtml(content: string): Promise<{
     const result = await remark().use(remarkGfm).use(remarkHtml).process(content)
     html = DOMPurify.sanitize(result.toString(), DOMPURIFY_CONFIG) as string
   }
+
+  html = neutralizeStaleAffiliateLinks(html)
 
   // 2. Extract headings and inject anchor IDs
   const headings: TocEntry[] = []
@@ -96,8 +141,12 @@ export async function processArticleHtml(content: string): Promise<{
 
       // Strip any existing id attribute from attrs to avoid duplicate id
       const cleanAttrs = attrs.replace(/\s+id\s*=\s*(?:"[^"]*"|'[^']*'|\S+)/gi, "")
-      // Build heading with anchor link
-      const anchor = `<a href="#${id}" class="heading-anchor" aria-hidden="true">#</a>`
+      // Build heading with anchor link (article pages only; exchange pages
+      // do not load the .article-content styles that hide it).
+      const anchor =
+        options.withAnchors === false
+          ? ""
+          : `<a href="#${id}" class="heading-anchor" aria-hidden="true">#</a>`
       return `<h${level}${cleanAttrs} id="${id}">${anchor}${content}</h${level}>`
     }
   )

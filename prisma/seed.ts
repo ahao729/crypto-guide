@@ -237,7 +237,7 @@ Bitget成立于2018年，是全球领先的跟单交易平台。Bitget率先推�
 - **合约交易**：Maker 0.02% / Taker 0.06%
 - **跟单交易**：跟单者不额外收费`,
       rating: 9.1,
-      referralUrl: "https://www.bitget.com/referral/CROW5SEED",
+      referralUrl: "https://www.bitget.com/",
       feeRate: "现货 0.1% / 合约 Maker 0.02% Taker 0.06%",
       spotFee: "Maker 0.10% / Taker 0.10%",
       futuresFee: "Maker 0.02% / Taker 0.06%",
@@ -273,7 +273,9 @@ Gate.io（芝麻开门）成立于2013年，是全球老牌加密货币交易所
 
 使用GT（Gate Token）支付可享折扣。`,
       rating: 8.8,
-      referralUrl: "https://www.gate.io/signup/CROW5SEED",
+      referralUrl:
+        "https://www.gatesites.cc/zh/signup/VANGBG8NUQ?ref_type=103",
+      inviteCode: "VANGBG8NUQ",
       feeRate: "现货 0.1% / 合约 Maker 0.02% Taker 0.05%",
       spotFee: "Maker 0.10% / Taker 0.10%",
       futuresFee: "Maker 0.02% / Taker 0.05%",
@@ -307,7 +309,7 @@ KuCoin（库币）成立于2017年，是全球知名的加密货币交易平台�
 - **现货交易**：Maker 0.08% / Taker 0.10%
 - **合约交易**：Maker 0.01% / Taker 0.06%`,
       rating: 8.6,
-      referralUrl: "https://www.kucoin.com/ucenter/signup?rcode=CROW5SEED",
+      referralUrl: "https://www.kucoin.com/",
       feeRate: "现货 0.08% / 合约 Maker 0.01% Taker 0.06%",
       spotFee: "Maker 0.08% / Taker 0.10%",
       futuresFee: "Maker 0.01% / Taker 0.06%",
@@ -341,7 +343,7 @@ MEXC（抹茶）成立于2018年，是全球领先的数字资产交易平台。
 - **现货交易**：Maker 0.00% / Taker 0.10%
 - **合约交易**：Maker 0.01% / Taker 0.03%`,
       rating: 8.3,
-      referralUrl: "https://www.mexc.com/register?inviteCode=CROW5SEED",
+      referralUrl: "https://www.mexc.com/",
       feeRate: "现货 0%/0.1% / 合约 Maker 0.01% Taker 0.03%",
       spotFee: "Maker 0.00% / Taker 0.10%",
       futuresFee: "Maker 0.01% / Taker 0.03%",
@@ -375,7 +377,7 @@ HTX（原火币Huobi）成立于2013年，是全球历史最悠久的加密货�
 - **现货交易**：Maker 0.10% / Taker 0.10%
 - **合约交易**：Maker 0.02% / Taker 0.04%`,
       rating: 8.0,
-      referralUrl: "https://www.htx.com/invite/zh-cn/1?invite_code=CROW5SEED",
+      referralUrl: "https://www.htx.com/",
       feeRate: "现货 0.1% / 合约 Maker 0.02% Taker 0.04%",
       spotFee: "Maker 0.10% / Taker 0.10%",
       futuresFee: "Maker 0.02% / Taker 0.04%",
@@ -409,7 +411,7 @@ BingX成立于2018年，是全球领先的社交化加密货币交易平台。Bi
 - **现货交易**：Maker 0.10% / Taker 0.10%
 - **合约交易**：Maker 0.02% / Taker 0.05%`,
       rating: 8.2,
-      referralUrl: "https://bingx.com/invite/CROW5SEED",
+      referralUrl: "https://bingx.com/",
       feeRate: "现货 0.1% / 合约 Maker 0.02% Taker 0.05%",
       spotFee: "Maker 0.10% / Taker 0.10%",
       futuresFee: "Maker 0.02% / Taker 0.05%",
@@ -443,7 +445,7 @@ LBank成立于2015年，是全球领先的数字资产交易平台。LBank在铭
 - **现货交易**：Maker 0.08% / Taker 0.10%
 - **合约交易**：Maker 0.01% / Taker 0.05%`,
       rating: 7.8,
-      referralUrl: "https://www.lbank.com/invite/CROW5SEED",
+      referralUrl: "https://www.lbank.com/",
       feeRate: "现货 0.08%/0.1% / 合约 Maker 0.01% Taker 0.05%",
       spotFee: "Maker 0.08% / Taker 0.10%",
       futuresFee: "Maker 0.01% / Taker 0.05%",
@@ -477,7 +479,7 @@ CoinW成立于2017年，是全球化的数字资产交易平台，为超过200�
 - **现货交易**：Maker 0.08% / Taker 0.10%
 - **合约交易**：Maker 0.02% / Taker 0.06%`,
       rating: 7.5,
-      referralUrl: "https://www.coinw.com/register?invite=CROW5SEED",
+      referralUrl: "https://www.coinw.com/",
       feeRate: "现货 0.08%/0.1% / 合约 Maker 0.02% Taker 0.06%",
       spotFee: "Maker 0.08% / Taker 0.10%",
       futuresFee: "Maker 0.02% / Taker 0.06%",
@@ -511,7 +513,7 @@ DeepCoin成立于2019年，是一家专注于加密货币衍生品交易的平�
 - **合约交易**：Maker 0.01% / Taker 0.05%
 - **现货交易**：暂不支持现货交易`,
       rating: 7.2,
-      referralUrl: "https://www.deepcoin.com/register?invite=CROW5SEED",
+      referralUrl: "https://www.deepcoin.com/",
       feeRate: "合约 Maker 0.01% Taker 0.05%（暂不支持现货）",
       spotFee: null,
       futuresFee: "Maker 0.01% / Taker 0.05%",
@@ -1452,7 +1454,7 @@ Bitget 是全球最大的跟单交易平台之一，拥有**超过 10 万名交�
 
 ### 第一步：注册并完成认证
 
-1. **[👉 点击链接注册 Bitget 账户](https://www.bitget.com/referral/CROW5SEED)**（使用推荐链接可享手续费折扣）
+1. **[👉 查看 Bitget 评测与注册入口](/exchanges/bitget)**（本站暂无该交易所联盟码，注册请核对官网）
 2. 前往"账户"→"身份认证"，完成 KYC 一级认证
 3. 建议同时完成二级认证（视频认证），提高提现额度
 
@@ -3356,7 +3358,8 @@ Yield Farming是通过为DeFi协议提供流动性来赚取收益的行为。
 > 💡 **核心建议**：历史不会简单重复，但规律值得参考。减半是比特币经济模型的核心机制，长期来看是**通缩和升值**的催化剂。短期波动不可避免，保持长期视角才是关键。`,
       coverImage: "/images/articles/bitcoin-halving-2026.svg",
       author: "币圈指南团队",
-      published: true,
+      // Retired: duplicate of bitcoin-halving-2026 and contained wrong dates.
+      published: false,
       publishedAt: new Date("2026-05-01"),
       categorySlug: "news",
       tagSlugs: ["bitcoin", "bitcoin-halving", "regulation"],

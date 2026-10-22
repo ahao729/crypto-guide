@@ -43,7 +43,7 @@ const sections = [
     title: "数据与时效",
     paragraphs: [
       "行情、费率和活动信息来自第三方接口或公开资料，可能存在延迟、遗漏或错误；请以交易所或产品官方页面为准。",
-      "我们会尽量更新内容，但不保证所有信息在任何时点都完整、准确。发现错误可通过下方邮箱联系更正。",
+      "我们会尽量更新内容，但不保证所有信息在任何时点都完整、准确。发现错误可通过下方反馈页面联系更正。",
     ],
   },
 ] as const
@@ -72,14 +72,11 @@ export default function DisclosurePage() {
       </div>
 
       <div className="mt-12 rounded-xl border border-border/60 bg-muted/30 p-5 text-sm leading-relaxed text-muted-foreground">
-        如果你认为某处披露不清晰，或发现链接/数据错误，请联系{" "}
-        <a
-          href={`mailto:${siteConfig.contactEmail}`}
-          className="underline hover:text-gold"
-        >
-          {siteConfig.contactEmail}
-        </a>
-        。也可以先阅读{" "}
+        如果你认为某处披露不清晰，或发现链接/数据错误，请到{" "}
+        <Link href="/contact" className="underline hover:text-gold">
+          反馈与纠错
+        </Link>{" "}
+        页面留言。本站不设官方邮箱，也不通过邮件沟通。也可以先阅读{" "}
         <Link href="/about" className="underline hover:text-gold">
           关于我们
         </Link>{" "}

@@ -4,7 +4,7 @@ import { siteConfig } from "@/lib/constants"
 import { ArrowRight, BarChart3, TrendingUp, TrendingDown, Shield, DollarSign, Sparkles, BookOpen, Library } from "lucide-react"
 
 export const metadata: Metadata = {
-  title: `加密货币期权交易入门指南 | ${siteConfig.shortName}`,
+  title: "加密货币期权交易入门指南",
   description:
     "了解加密货币期权的基础知识，包括看涨/看跌期权、行权价、权利金等核心概念，以及常用交易策略。使用我们的期权计算器模拟盈亏。",
   keywords: [
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
     "期权入门",
   ],
   openGraph: {
-    title: `加密货币期权交易入门指南 | ${siteConfig.shortName}`,
+    title: "加密货币期权交易入门指南",
     description: "了解加密货币期权的基础知识，包括看涨/看跌期权、行权价、权利金等核心概念，以及常用交易策略。",
     url: `${siteConfig.url}/options`,
     siteName: siteConfig.name,
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: `加密货币期权交易入门指南 | ${siteConfig.shortName}`,
+    title: "加密货币期权交易入门指南",
     description: "了解加密货币期权的基础知识，包括看涨/看跌期权、行权价、权利金等核心概念，以及常用交易策略。",
   },
   alternates: {

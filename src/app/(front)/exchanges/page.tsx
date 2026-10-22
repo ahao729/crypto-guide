@@ -6,12 +6,15 @@ import { StarRating } from "@/components/front/StarRating"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { exchangeCategories, siteConfig } from "@/lib/constants"
+import { isExchangePartner } from "@/lib/affiliates"
+import { toFiveStarRating } from "@/lib/utils"
+import { ExchangeCtaLink } from "@/components/front/ExchangeCtaLink"
 import { ArrowUpRight, TrendingUp, Shield, Zap, Coins } from "lucide-react"
 
 export const dynamic = "force-dynamic"
 
 export const metadata: Metadata = {
-  title: `加密货币交易所对比评测 | ${siteConfig.shortName}`,
+  title: "加密货币交易所对比评测",
   description: "全面对比中心化（CEX）与去中心化（DEX）交易所的手续费、安全性、交易深度和用户体验，找到最适合您的交易平台。",
   keywords: ["加密货币交易所", "交易所对比", "去中心化交易所", "DEX", "Hyperliquid", "Aster", "数字货币平台", "比特币交易所", "交易所评测", "手续费对比", "币安", "欧易", "Coinbase"],
   openGraph: {
@@ -56,10 +59,13 @@ export default async function ExchangesPage({ searchParams }: ExchangesPageProps
   const popular = cexExchanges.filter((e) => e.isPopular && !e.isFeatured)
   const rest = cexExchanges.filter((e) => !e.isFeatured && !e.isPopular)
 
+  const partnerCount = exchanges.filter((exchange) =>
+    isExchangePartner(exchange.slug),
+  ).length
   const stats = [
     { label: "收录交易所", value: exchanges.length, icon: Coins },
-    { label: "活期更新", value: "实时", icon: Zap },
-    { label: "数据可靠", value: "100%", icon: Shield },
+    { label: "合作推荐", value: partnerCount, icon: Zap },
+    { label: "官方入口", value: exchanges.length - partnerCount, icon: Shield },
   ]
 
   return (
@@ -126,6 +132,17 @@ export default async function ExchangesPage({ searchParams }: ExchangesPageProps
             <p className="mt-4 text-lg text-muted-foreground">
               全面对比中心化与去中心化交易所的手续费、安全性、支持币种和用户体验，找到最适合您的交易平台
             </p>
+            <p className="mt-3 text-xs text-muted-foreground">
+              本页含联盟链接：合作方标注「合作推荐」，其余交易所为官方入口，不产生返佣。
+            </p>
+            <p className="mt-2 text-sm">
+              <Link
+                href="/compare/binance-vs-okx"
+                className="font-medium text-gold underline decoration-gold/40 underline-offset-4 hover:text-gold-dark"
+              >
+                币安 vs OKX 怎么选？看完整对比 →
+              </Link>
+            </p>
           </div>
 
           {/* Stats */}
@@ -169,6 +186,74 @@ export default async function ExchangesPage({ searchParams }: ExchangesPageProps
           </div>
         </div>
       </section>
+
+      {/* Quick comparison table */}
+      {exchanges.length > 0 && (
+        <section id="compare" className="border-b border-border/40 bg-muted/10">
+          <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+            <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+              <div>
+                <h2 className="text-xl font-semibold">快速对比</h2>
+                <p className="mt-1 text-sm text-muted-foreground">
+                  先看费率、类型和评分，再点进详情看完整评测与注册步骤。
+                </p>
+              </div>
+              <span className="text-xs text-muted-foreground">
+                共 {exchanges.length} 家 · 合作方标「合作」
+              </span>
+            </div>
+
+            <div className="mt-4 overflow-x-auto rounded-xl border border-border/60 bg-card">
+              <table className="w-full min-w-[760px] text-left text-sm">
+                <thead className="bg-muted/40 text-xs text-muted-foreground">
+                  <tr>
+                    <th className="px-4 py-3 font-medium">交易所</th>
+                    <th className="px-4 py-3 font-medium">类型</th>
+                    <th className="px-4 py-3 font-medium">现货费率</th>
+                    <th className="px-4 py-3 font-medium">合约费率</th>
+                    <th className="px-4 py-3 font-medium">编辑评分</th>
+                    <th className="px-4 py-3 font-medium">详情</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-border/40">
+                  {exchanges.map((exchange) => (
+                    <tr key={exchange.id} className="transition-colors hover:bg-muted/20">
+                      <td className="px-4 py-3">
+                        <div className="flex items-center gap-2">
+                          <span className="font-medium">{exchange.name}</span>
+                          {isExchangePartner(exchange.slug) && (
+                            <span className="rounded-full bg-gold/10 px-2 py-0.5 text-[10px] font-medium text-gold-dark">
+                              合作
+                            </span>
+                          )}
+                        </div>
+                      </td>
+                      <td className="px-4 py-3 text-muted-foreground">
+                        {exchange.category?.name ?? "--"}
+                      </td>
+                      <td className="px-4 py-3">{exchange.spotFee ?? "--"}</td>
+                      <td className="px-4 py-3">{exchange.futuresFee ?? "--"}</td>
+                      <td className="px-4 py-3">
+                        {exchange.rating > 0
+                          ? `${toFiveStarRating(exchange.rating).toFixed(1)} / 5`
+                          : "--"}
+                      </td>
+                      <td className="px-4 py-3">
+                        <Link
+                          href={`/exchanges/${exchange.slug}`}
+                          className="font-medium text-gold hover:text-gold-dark"
+                        >
+                          查看评测
+                        </Link>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Exchange Listings */}
       <section className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
@@ -257,8 +342,8 @@ export default async function ExchangesPage({ searchParams }: ExchangesPageProps
         <div className="mx-auto max-w-7xl px-4 py-16 text-center sm:px-6 lg:px-8">
           <h2 className="text-2xl font-bold">没有找到想要的交易所？</h2>
           <p className="mt-2 text-muted-foreground">联系我们推荐您关注的交易平台，我们会尽快收录</p>
-          <Button className="mt-6 bg-gradient-gold text-white shadow-md shadow-gold/20 hover:shadow-lg hover:shadow-gold/30">
-            提交推荐
+          <Button className="mt-6 bg-gradient-gold text-white shadow-md shadow-gold/20 hover:shadow-lg hover:shadow-gold/30" asChild>
+            <Link href="/contact">提交推荐</Link>
           </Button>
         </div>
       </section>
@@ -286,7 +371,7 @@ function ExchangeCard({
   }
   featured?: boolean
 }) {
-  const featureList = exchange.features?.split(",").filter(Boolean).slice(0, 3) ?? []
+  const featureList = exchange.features?.split(/[,;；，]/).filter(Boolean).slice(0, 3) ?? []
   const isDex = exchange.category?.slug === "dex"
 
   return (
@@ -299,7 +384,7 @@ function ExchangeCard({
     >
       {featured && (
         <div className="absolute right-0 top-0 rounded-bl-lg bg-gold/10 px-3 py-1 text-xs font-medium text-gold-dark">
-          推荐
+          {isExchangePartner(exchange.slug) ? "合作推荐" : "编辑推荐"}
         </div>
       )}
 
@@ -329,7 +414,7 @@ function ExchangeCard({
                   {exchange.category.name}
                 </Badge>
               )}
-              {exchange.inviteCode && (
+              {isExchangePartner(exchange.slug) && exchange.inviteCode && !isDex && (
                 <Badge className="shrink-0 border-amber-300 bg-amber-50 text-[10px] text-amber-700 dark:border-amber-700 dark:bg-amber-950/30 dark:text-amber-400">
                   邀请码
                 </Badge>
@@ -376,32 +461,16 @@ function ExchangeCard({
           </div>
         )}
 
-        {/* Invite Code Reminder */}
-        {exchange.inviteCode ? (
+        {/* Invite Code Reminder — partners only */}
+        {isExchangePartner(exchange.slug) && exchange.inviteCode && !isDex ? (
           <div className="mt-3 rounded-lg border border-amber-200/60 bg-amber-50/50 px-3 py-2 text-center dark:border-amber-800/30 dark:bg-amber-950/10">
             <p className="text-xs leading-relaxed text-amber-700 dark:text-amber-400">
-              <span className="font-semibold">注册时请使用邀请码：</span>
-              <code className="mx-1 rounded bg-amber-100 px-1.5 py-0.5 font-mono text-amber-800 dark:bg-amber-900/50 dark:text-amber-300">
+              点击下方按钮注册，邀请码{" "}
+              <code className="rounded bg-amber-100 px-1.5 py-0.5 font-mono font-bold text-amber-800 dark:bg-amber-900/50 dark:text-amber-300">
                 {exchange.inviteCode}
-              </code>
-              <br />
-              填写后按交易所规则享受对应权益，具体以官方页面为准
+              </code>{" "}
+              会自动填入；若未填入请手动输入。
             </p>
-            {/* Invite code benefit — only for Binance & OKX */}
-            {(exchange.slug === "binance" || exchange.slug === "okx") && (
-              <div className="mt-2 border-t border-amber-200/50 pt-2 dark:border-amber-800/20">
-                <p className="text-xs leading-relaxed text-amber-600 dark:text-amber-400">
-                  <span className="font-semibold text-amber-700 dark:text-amber-300">
-                    专属福利：
-                  </span>
-                  通过本链接注册并使用邀请码{" "}
-                  <code className="rounded bg-amber-100 px-1.5 py-0.5 font-mono text-sm font-bold text-amber-800 dark:bg-amber-900/50 dark:text-amber-300">
-                    {exchange.inviteCode}
-                  </code>
-                  ，具体活动权益以交易所页面为准。
-                </p>
-              </div>
-            )}
           </div>
         ) : isDex ? (
           <div className="mt-3 rounded-lg border border-border/40 bg-muted/20 px-3 py-2 text-center">
@@ -412,19 +481,20 @@ function ExchangeCard({
         ) : (
           <div className="mt-3 rounded-lg border border-border/40 bg-muted/20 px-3 py-2 text-center">
             <p className="text-xs text-muted-foreground">
-              通过本链接注册可能获得专属优惠
+              官方入口（非联盟链接），不产生返佣
             </p>
           </div>
         )}
 
         {/* Actions */}
         <div className="mt-4 flex items-center gap-2">
-          <Button size="sm" variant="default" className="flex-1 bg-gradient-gold text-white shadow-sm" asChild>
-            <Link href={`/go/${exchange.id}`} target="_blank">
-              {isDex ? "访问官网" : "官网注册"}
-              <ArrowUpRight className="ml-1 h-3.5 w-3.5" />
-            </Link>
-          </Button>
+          <ExchangeCtaLink
+            exchange={exchange}
+            className="inline-flex h-9 flex-1 items-center justify-center gap-1.5 rounded-lg bg-gradient-gold px-4 text-sm font-medium text-white shadow-sm transition-all hover:brightness-110"
+          >
+            {isExchangePartner(exchange.slug) && !isDex ? "官网注册" : "访问官网"}
+            <ArrowUpRight className="h-3.5 w-3.5" />
+          </ExchangeCtaLink>
           <Button size="sm" variant="outline" className="shrink-0" asChild>
             <Link href={`/exchanges/${exchange.slug}`}>
               详情

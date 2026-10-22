@@ -1,10 +1,12 @@
 import type { Metadata } from "next"
+import Link from "next/link"
 import { siteConfig } from "@/lib/constants"
 import { TradingViewCTA } from "@/components/front/TradingViewCTA"
+import { OneKeyCTA } from "@/components/front/OneKeyCTA"
 import { ToolsPageClient } from "./client"
 
 export const metadata: Metadata = {
-  title: `实用工具 - ${siteConfig.name}`,
+  title: "实用工具",
   description:
     "合约收益计算器、定投计算器、币种汇率转换、K线图分析、手续费对比等加密货币实用工具，助力交易决策",
   keywords: [
@@ -18,7 +20,7 @@ export const metadata: Metadata = {
     "交易工具",
   ],
   openGraph: {
-    title: `实用工具 - ${siteConfig.name}`,
+    title: "实用工具",
     description:
       "合约收益计算器、定投计算器、币种汇率转换、K线图分析、手续费对比等加密货币实用工具",
     type: "website",
@@ -28,7 +30,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: `实用工具 - ${siteConfig.name}`,
+    title: "实用工具",
     description:
       "合约收益计算器、定投计算器、币种汇率转换、K线图分析、手续费对比等加密货币实用工具",
   },
@@ -104,8 +106,9 @@ export default function ToolsPage() {
       <ToolsPageClient />
 
       {/* ──────────── Partner: TradingView ──────────── */}
-      <section className="mx-auto max-w-7xl px-4 pb-12 sm:px-6 lg:px-8">
+      <section className="mx-auto max-w-7xl space-y-4 px-4 pb-12 sm:px-6 lg:px-8">
         <TradingViewCTA />
+        <OneKeyCTA />
       </section>
 
       {/* ──────────── Suggestion CTA ──────────── */}
@@ -115,12 +118,12 @@ export default function ToolsPage() {
           <p className="mt-2 text-muted-foreground">
             告诉我们您需要的工具，我们会尽快为您开发
           </p>
-          <a
-            href="mailto:suggest@crypto-guide.com"
+          <Link
+            href="/contact"
             className="mt-6 inline-flex items-center justify-center rounded-lg bg-gradient-gold px-6 py-2.5 text-sm font-medium text-white shadow-md shadow-gold/20 transition-opacity hover:opacity-90"
           >
             提交建议
-          </a>
+          </Link>
         </div>
       </section>
     </div>

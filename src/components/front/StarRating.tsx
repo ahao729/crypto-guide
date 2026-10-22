@@ -1,4 +1,4 @@
-import { cn } from "@/lib/utils"
+import { cn, toFiveStarRating } from "@/lib/utils"
 import { Star } from "lucide-react"
 
 interface StarRatingProps {
@@ -16,15 +16,19 @@ export function StarRating({
   className,
   showValue = true,
 }: StarRatingProps) {
-  const fullStars = Math.floor(rating)
-  const hasHalfStar = rating - fullStars >= 0.25 && rating - fullStars < 0.75
-  const adjustedFull = rating - fullStars >= 0.75 ? fullStars + 1 : fullStars
+  const normalized = toFiveStarRating(rating)
+  const fullStars = Math.floor(normalized)
+  const hasHalfStar =
+    normalized - fullStars >= 0.25 && normalized - fullStars < 0.75
+  const adjustedFull =
+    normalized - fullStars >= 0.75 ? fullStars + 1 : fullStars
 
   return (
     <div className={cn("flex items-center gap-1.5", className)}>
       <div className="flex items-center">
         {Array.from({ length: maxRating }).map((_, i) => {
           const isFilled = i < adjustedFull
+          const isHalf = hasHalfStar && i === fullStars
           return (
             <Star
               key={i}
@@ -33,7 +37,9 @@ export function StarRating({
                 "transition-colors",
                 isFilled
                   ? "fill-gold text-gold"
-                  : "fill-muted-foreground/20 text-muted-foreground/20"
+                  : isHalf
+                    ? "fill-gold/40 text-gold"
+                    : "fill-muted-foreground/20 text-muted-foreground/20"
               )}
             />
           )
@@ -41,7 +47,7 @@ export function StarRating({
       </div>
       {showValue && (
         <span className="text-xs font-medium text-muted-foreground">
-          {rating.toFixed(1)}
+          {normalized.toFixed(1)}
         </span>
       )}
     </div>

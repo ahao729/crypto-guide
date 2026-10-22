@@ -12,6 +12,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${baseUrl}/articles`, changeFrequency: 'daily', priority: 0.9 },
     { url: `${baseUrl}/exchanges`, changeFrequency: 'weekly', priority: 0.9 },
     { url: `${baseUrl}/exchange-ranking`, changeFrequency: 'weekly', priority: 0.8 },
+    { url: `${baseUrl}/stocks`, changeFrequency: 'weekly', priority: 0.9 },
     { url: `${baseUrl}/compare/binance-vs-okx`, changeFrequency: 'monthly', priority: 0.8 },
     { url: `${baseUrl}/tools`, changeFrequency: 'weekly', priority: 0.8 },
     { url: `${baseUrl}/faq`, changeFrequency: 'monthly', priority: 0.6 },

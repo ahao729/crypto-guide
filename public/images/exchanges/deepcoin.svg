@@ -1,5 +1,2 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
-  <rect width="200" height="200" rx="40" fill="#0B1522"/>
-  <text x="100" y="115" text-anchor="middle" font-family="Arial, sans-serif" font-weight="bold" font-size="28" fill="#4A9FF5">DeepCoin</text>
-  <text x="100" y="145" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="#888">deepcoin.com</text>
-</svg>
+<?xml version='1.0' encoding='utf-8'?>
+<ns0:svg xmlns:ns0="http://www.w3.org/2000/svg" clip-rule="evenodd" fill-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="2" viewBox="70 165 165 235"><ns0:g fill-rule="nonzero" transform="matrix(.529412 0 0 .529412 58.7059 50.1765)"><ns0:path d="m150.9 319.4h72.9v72.9h-72.9z" fill="#191818" /><ns0:path d="m150.9 246.6h72.9c0 39.5-31.5 71.8-71 72.9h-1.9z" fill="#fdbd03" /><ns0:path d="m150.9 173.7c39.5 0 71.8 31.5 72.9 71v1.9h-72.9z" fill="#fd5503" /><ns0:path d="m78 246.6h72.9v72.8h-72.9z" fill="#9c005a" /><ns0:path d="m78 173.7h72.9v72.9h-72.9z" fill="#fe0257" /></ns0:g></ns0:svg>

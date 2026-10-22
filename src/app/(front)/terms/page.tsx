@@ -13,10 +13,10 @@ import { Separator } from "@/components/ui/separator"
 import { siteConfig } from "@/lib/constants"
 
 export const metadata: Metadata = {
-  title: "服务条款 - CryptoGuide",
+  title: "服务条款",
   description: "使用 CryptoGuide 网站和服务前请仔细阅读本服务条款。使用本网站即表示您同意这些条款。",
   openGraph: {
-    title: "服务条款 - CryptoGuide",
+    title: "服务条款",
     description: "使用 CryptoGuide 网站和服务前请仔细阅读本服务条款。",
   },
 }

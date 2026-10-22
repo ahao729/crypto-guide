@@ -5,11 +5,13 @@ import Image from "next/image"
 import type { Metadata } from "next"
 import { StarRating } from "@/components/front/StarRating"
 import { InviteCodeCard } from "@/components/front/InviteCodeCard"
+import { ExchangeCtaLink } from "@/components/front/ExchangeCtaLink"
 import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { siteConfig } from "@/lib/constants"
+import { getExchangeOfficialUrl, isExchangePartner } from "@/lib/affiliates"
 import { processArticleHtml } from "@/lib/article-utils"
+import { formatDate, toFiveStarRating } from "@/lib/utils"
 import {
   ArrowLeft,
   ArrowUpRight,
@@ -22,8 +24,8 @@ import {
   CheckCircle2,
   AlertTriangle,
   TrendingUp,
-  Clock,
   Award,
+  Clock,
 } from "lucide-react"
 
 export const revalidate = 3600 // 1 hour
@@ -45,7 +47,7 @@ export async function generateMetadata({ params }: ExchangeDetailPageProps): Pro
     return { title: "交易所未找到" }
   }
 
-  const title = `${exchange.name} - 交易所详情`
+  const title = `${exchange.name} 评测与注册教程`
   const description = exchange.description
     ? exchange.description.slice(0, 160)
     : `${exchange.name} 加密货币交易所详细介绍，包括交易费率、支持币种、安全性和用户评价。`
@@ -89,14 +91,16 @@ export default async function ExchangeDetailPage({ params }: ExchangeDetailPageP
     notFound()
   }
 
-  const featureList = exchange.features?.split(",").filter(Boolean) ?? []
+  const featureList = exchange.features?.split(/[,;；，]/).filter(Boolean) ?? []
   const coinList = exchange.supportedCoins?.split(",").filter(Boolean) ?? []
   const isDex = exchange.category?.slug === "dex"
 
   // Convert markdown content to HTML
   let contentHtml: string | null = null
   if (exchange.content) {
-    const processed = await processArticleHtml(exchange.content)
+    const processed = await processArticleHtml(exchange.content, {
+      withAnchors: false,
+    })
     contentHtml = processed.html
   }
 
@@ -113,34 +117,33 @@ export default async function ExchangeDetailPage({ params }: ExchangeDetailPageP
       })
     : []
 
+  // Editorial page, not a product listing. The old Product/AggregateRating
+  // markup used a 10-point score with bestRating=5 and ratingCount=1, which is
+  // invalid and looks self-serving. Keep the schema honest and simple.
   const jsonLd = {
     "@context": "https://schema.org",
-    "@type": "Product",
-    name: exchange.name,
-    description: exchange.description?.slice(0, 200) ?? `${exchange.name} 加密货币交易所`,
+    "@type": "WebPage",
+    name: `${exchange.name} 评测与注册教程`,
+    description:
+      exchange.description?.slice(0, 200) ??
+      `${exchange.name} 加密货币交易所评测与注册教程`,
     url: `${siteConfig.url}/exchanges/${slug}`,
-    image: exchange.logo ?? undefined,
-    brand: {
-      "@type": "Brand",
+    inLanguage: siteConfig.locale,
+    about: {
+      "@type": "Organization",
       name: exchange.name,
+      url:
+        getExchangeOfficialUrl(exchange.slug) ??
+        `${siteConfig.url}/exchanges/${slug}`,
     },
-    offers: {
-      "@type": "AggregateOffer",
-      priceCurrency: "USD",
-      offerCount: 1,
-      ...(exchange.feeRate ? { description: `费率: ${exchange.feeRate}` } : {}),
+    isPartOf: {
+      "@id": `${siteConfig.url}/exchanges`,
     },
-    ...(exchange.rating
-      ? {
-          aggregateRating: {
-            "@type": "AggregateRating",
-            ratingValue: exchange.rating.toFixed(1),
-            bestRating: "5",
-            worstRating: "0",
-            ratingCount: 1,
-          },
-        }
-      : {}),
+    publisher: {
+      "@type": "Organization",
+      name: siteConfig.name,
+      url: siteConfig.url,
+    },
   }
 
   return (
@@ -222,10 +225,10 @@ export default async function ExchangeDetailPage({ params }: ExchangeDetailPageP
                     {exchange.category && (
                       <Badge variant="secondary">{exchange.category.name}</Badge>
                     )}
-                    {exchange.rating >= 4 && (
+                    {isExchangePartner(exchange.slug) && (
                       <Badge className="bg-gold/10 text-gold border-gold/20">
                         <Award className="mr-1 h-3 w-3" />
-                        推荐
+                        合作推荐
                       </Badge>
                     )}
                   </div>
@@ -247,34 +250,36 @@ export default async function ExchangeDetailPage({ params }: ExchangeDetailPageP
 
             {/* Right: CTA */}
             <div className="flex shrink-0 flex-col items-center gap-4">
-              {exchange.referralUrl ? (
-                <Link
-                  href={`/go/${exchange.id}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 rounded-xl bg-gradient-gold px-10 py-4 text-lg font-semibold text-white shadow-lg shadow-gold/20 transition-all hover:shadow-xl hover:shadow-gold/30"
-                >
-                  {isDex ? "访问官网" : `立即前往 ${exchange.name}`}
-                  <ExternalLink className="h-5 w-5" />
-                </Link>
-              ) : null}
+              <ExchangeCtaLink
+                exchange={exchange}
+                className={
+                  isExchangePartner(exchange.slug)
+                    ? "inline-flex items-center gap-2 rounded-xl bg-gradient-gold px-10 py-4 text-lg font-semibold text-white shadow-lg shadow-gold/20 transition-all hover:shadow-xl hover:shadow-gold/30"
+                    : "inline-flex items-center gap-2 rounded-xl border border-border/60 bg-background px-10 py-4 text-lg font-semibold text-foreground transition-colors hover:bg-muted"
+                }
+              >
+                {isExchangePartner(exchange.slug) && !isDex
+                  ? `注册 ${exchange.name}`
+                  : "访问官网"}
+                <ExternalLink className="h-5 w-5" />
+              </ExchangeCtaLink>
 
-              {exchange.inviteCode ? (
+              {isExchangePartner(exchange.slug) && exchange.inviteCode && !isDex ? (
                 <p className="text-center text-xs leading-relaxed text-amber-600 dark:text-amber-400">
-                  <span className="font-semibold">注册时请使用邀请码：</span>
+                  <span className="font-semibold">注册时邀请码自动填入：</span>
                   <code className="rounded bg-amber-100 px-1.5 py-0.5 font-mono text-amber-800 dark:bg-amber-900/50 dark:text-amber-300">
                     {exchange.inviteCode}
                   </code>
                   <br />
-                  填写后按交易所规则享受对应权益，具体以官方页面为准
+                  若未自动填入，请手动输入；权益以官方页面为准
                 </p>
               ) : isDex ? (
                 <p className="text-center text-xs leading-relaxed text-muted-foreground">
                   连接钱包前请核对官网域名；DEX 不代保管资产，先小额测试
                 </p>
               ) : (
-                <p className="text-center text-xs text-muted-foreground">
-                  通过本链接注册可能获得专属优惠
+                <p className="text-center text-xs leading-relaxed text-muted-foreground">
+                  官方入口（非联盟链接），不产生返佣
                 </p>
               )}
 
@@ -296,21 +301,15 @@ export default async function ExchangeDetailPage({ params }: ExchangeDetailPageP
                 </Link>
               )}
 
-              {/* Invite code benefit — only for Binance & OKX */}
               {(slug === "binance" || slug === "okx") && (
-                <div className="w-full border-t border-amber-200/50 pt-3 dark:border-amber-800/20">
-                  <p className="text-center text-xs leading-relaxed text-amber-600 dark:text-amber-400">
-                    <span className="font-semibold text-amber-700 dark:text-amber-300">
-                      专属福利：
-                    </span>
-                    通过本链接注册并使用邀请码{" "}
-                    <code className="rounded bg-amber-100 px-1.5 py-0.5 font-mono text-sm font-bold text-amber-800 dark:bg-amber-900/50 dark:text-amber-300">
-                      {exchange.inviteCode}
-                    </code>
-                    ，具体活动权益以交易所页面为准。
-                  </p>
-                </div>
+                <Link
+                  href="/compare/binance-vs-okx"
+                  className="text-xs text-gold underline decoration-gold/40 underline-offset-4 transition-colors hover:text-gold-dark"
+                >
+                  币安 vs OKX 怎么选？
+                </Link>
               )}
+
             </div>
           </div>
         </div>
@@ -409,7 +408,7 @@ export default async function ExchangeDetailPage({ params }: ExchangeDetailPageP
               </div>
             </div>
 
-            {exchange.inviteCode && (
+            {isExchangePartner(exchange.slug) && exchange.inviteCode && !isDex && (
               <InviteCodeCard inviteCode={exchange.inviteCode} />
             )}
 
@@ -449,18 +448,22 @@ export default async function ExchangeDetailPage({ params }: ExchangeDetailPageP
                     {exchange.rating > 0 && (
                       <StarRating rating={exchange.rating} size={12} showValue={false} />
                     )}
-                    综合评分
+                    编辑评分
                   </span>
                   <span className="font-semibold">
-                    {exchange.rating > 0 ? exchange.rating.toFixed(1) : "暂未评分"}
+                    {exchange.rating > 0
+                      ? `${toFiveStarRating(exchange.rating).toFixed(1)} / 5`
+                      : "暂未评分"}
                   </span>
                 </div>
                 <div className="flex items-center justify-between p-4">
                   <span className="flex items-center gap-1.5 text-sm text-muted-foreground">
                     <Clock className="h-4 w-4" />
-                    点击次数
+                    最后更新
                   </span>
-                  <span className="font-semibold">{exchange.clickCount.toLocaleString()}</span>
+                  <span className="font-semibold">
+                    {formatDate(exchange.updatedAt)}
+                  </span>
                 </div>
                 <div className="flex items-center justify-between p-4">
                   <span className="flex items-center gap-1.5 text-sm text-muted-foreground">
@@ -536,67 +539,51 @@ export default async function ExchangeDetailPage({ params }: ExchangeDetailPageP
       <section className="border-t border-border/40 bg-gradient-to-b from-background via-gold/[0.02] to-background">
         <div className="mx-auto max-w-7xl px-4 py-16 text-center sm:px-6 lg:px-8">
           <h2 className="text-2xl font-bold">
-            {isDex ? "准备开始在链上交易？" : "准备好开始交易了？"}
+            {isExchangePartner(exchange.slug)
+              ? isDex
+                ? "准备开始在链上交易？"
+                : `准备好注册 ${exchange.name} 了吗？`
+              : `查看 ${exchange.name} 官方信息`}
           </h2>
           <p className="mt-2 text-muted-foreground">
-            {isDex
-              ? "先核对官网域名与网络，小额测试后再加大资金；DEX 不代保管资产。"
-              : "通过我们的链接注册，享受专属优惠和低手续费"}
+            {isExchangePartner(exchange.slug)
+              ? isDex
+                ? "先核对官网域名与网络，小额测试后再加大资金；DEX 不代保管资产。"
+                : "通过本站链接注册，邀请码会自动填入；具体权益以官方页面为准。"
+              : "本站暂无该交易所的联盟合作，以下为官方入口，不产生返佣。"}
           </p>
-          {exchange.referralUrl ? (
-            <>
-              <Link
-                href={`/go/${exchange.id}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-6 inline-flex items-center gap-2 rounded-xl bg-gradient-gold px-8 py-4 font-semibold text-white shadow-md shadow-gold/20 transition-all hover:shadow-lg hover:shadow-gold/30"
-              >
-                {isDex ? "访问官网" : `立即前往 ${exchange.name}`}
-                <ArrowUpRight className="h-5 w-5" />
-              </Link>
 
-              {exchange.inviteCode ? (
-                <p className="mt-4 text-center text-xs leading-relaxed text-amber-600 dark:text-amber-400">
-                  <span className="font-semibold">注册时请使用邀请码：</span>
-                  <code className="rounded bg-amber-100 px-1.5 py-0.5 font-mono text-amber-800 dark:bg-amber-900/50 dark:text-amber-300">
-                    {exchange.inviteCode}
-                  </code>
-                  <br />
-                  填写后按交易所规则享受对应权益，具体以官方页面为准
-                </p>
-              ) : isDex ? (
-                <p className="mt-4 text-center text-xs text-muted-foreground">
-                  连接钱包前请核对官网域名；DEX 不代保管资产，先小额测试
-                </p>
-              ) : (
-                <p className="mt-4 text-center text-xs text-muted-foreground">
-                  通过本链接注册可能获得专属优惠
-                </p>
-              )}
+          <ExchangeCtaLink
+            exchange={exchange}
+            className={
+              isExchangePartner(exchange.slug)
+                ? "mt-6 inline-flex items-center gap-2 rounded-xl bg-gradient-gold px-8 py-4 font-semibold text-white shadow-md shadow-gold/20 transition-all hover:shadow-lg hover:shadow-gold/30"
+                : "mt-6 inline-flex items-center gap-2 rounded-xl border border-border/60 bg-background px-8 py-4 font-semibold text-foreground transition-colors hover:bg-muted"
+            }
+          >
+            {isExchangePartner(exchange.slug) && !isDex
+              ? `注册 ${exchange.name}`
+              : "访问官网"}
+            <ArrowUpRight className="h-5 w-5" />
+          </ExchangeCtaLink>
 
-              {/* Invite code benefit — only for Binance & OKX */}
-              {(slug === "binance" || slug === "okx") && (
-                <div className="mt-4 w-full border-t border-amber-200/50 pt-3 dark:border-amber-800/20">
-                  <p className="text-center text-xs leading-relaxed text-amber-600 dark:text-amber-400">
-                    <span className="font-semibold text-amber-700 dark:text-amber-300">
-                      专属福利：
-                    </span>
-                    通过本链接注册并使用邀请码{" "}
-                    <code className="rounded bg-amber-100 px-1.5 py-0.5 font-mono text-sm font-bold text-amber-800 dark:bg-amber-900/50 dark:text-amber-300">
-                      {exchange.inviteCode}
-                    </code>
-                    ，具体活动权益以交易所页面为准。
-                  </p>
-                </div>
-              )}
-            </>
+          {isExchangePartner(exchange.slug) && exchange.inviteCode && !isDex ? (
+            <p className="mt-4 text-center text-xs leading-relaxed text-amber-600 dark:text-amber-400">
+              <span className="font-semibold">注册时邀请码自动填入：</span>
+              <code className="rounded bg-amber-100 px-1.5 py-0.5 font-mono text-amber-800 dark:bg-amber-900/50 dark:text-amber-300">
+                {exchange.inviteCode}
+              </code>
+              <br />
+              若未自动填入，请手动输入；权益以官方页面为准
+            </p>
+          ) : isDex ? (
+            <p className="mt-4 text-center text-xs text-muted-foreground">
+              连接钱包前请核对官网域名；DEX 不代保管资产，先小额测试
+            </p>
           ) : (
-            <Link
-              href="/exchanges"
-              className="mt-6 inline-flex items-center gap-2 rounded-xl border border-border/60 px-8 py-4 font-semibold transition-colors hover:bg-muted"
-            >
-              浏览更多交易所
-            </Link>
+            <p className="mt-4 text-center text-xs text-muted-foreground">
+              官方入口（非联盟链接），不产生返佣
+            </p>
           )}
         </div>
       </section>

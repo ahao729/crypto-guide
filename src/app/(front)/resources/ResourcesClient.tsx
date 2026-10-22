@@ -10,7 +10,6 @@ import {
   BookOpen,
   Wrench,
   Link2,
-  Star,
   Eye,
   Filter,
   Grid3X3,
@@ -389,12 +388,12 @@ export function ResourcesClient({
           <p className="mt-2 text-muted-foreground">
             如果您发现了优质的加密货币学习资源，欢迎分享给我们
           </p>
-          <a
-            href="mailto:hello@bqzn.top"
+          <Link
+            href="/contact"
             className="mt-6 inline-flex items-center justify-center rounded-lg bg-gradient-gold px-6 py-2.5 text-sm font-medium text-white shadow-md shadow-gold/20 transition-opacity hover:opacity-90"
           >
             推荐资源
-          </a>
+          </Link>
         </div>
       </section>
     </div>

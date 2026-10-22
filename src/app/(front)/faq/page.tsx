@@ -7,11 +7,11 @@ import { FAQClient } from "./FAQClient"
 export const revalidate = 3600 // 1 hour
 
 export const metadata: Metadata = {
-  title: `常见问题解答 | ${siteConfig.shortName}`,
+  title: "常见问题解答",
   description: "关于加密货币交易所注册、充值、交易、提现的常见问题解答，帮助您快速解决使用中遇到的问题。",
   keywords: ["加密货币常见问题", "交易所FAQ", "数字货币问答", "区块链问题解答", "交易所注册教程", "加密货币入门问题", "交易平台选择"],
   openGraph: {
-    title: `常见问题解答 | ${siteConfig.shortName}`,
+    title: "常见问题解答",
     description: "关于加密货币交易所注册、充值、交易、提现的常见问题解答。",
     url: `${siteConfig.url}/faq`,
     siteName: siteConfig.name,
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: `常见问题解答 | ${siteConfig.shortName}`,
+    title: "常见问题解答",
     description: "关于加密货币交易所注册、充值、交易、提现的常见问题解答。",
   },
   alternates: {

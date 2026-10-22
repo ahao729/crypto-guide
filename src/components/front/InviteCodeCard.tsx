@@ -51,9 +51,10 @@ export function InviteCodeCard({ inviteCode }: { inviteCode: string }) {
           <div className="flex items-start gap-2">
             <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-amber-600 dark:text-amber-400" />
             <div className="text-xs leading-relaxed text-amber-800 dark:text-amber-200">
-              <strong className="font-semibold">重要提醒：</strong>
-              注册时请务必填写上方邀请码 <strong className="font-semibold">{inviteCode}</strong>，
-              否则无法享受专属手续费折扣和福利优惠。
+              <strong className="font-semibold">提醒：</strong>
+              邀请码 <strong className="font-semibold">{inviteCode}</strong>{" "}
+              会随本站链接自动填入；若注册页未显示，请手动输入。
+              具体权益以交易所官方页面为准。
             </div>
           </div>
         </div>

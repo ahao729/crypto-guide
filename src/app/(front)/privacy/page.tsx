@@ -1,13 +1,14 @@
 import type { Metadata } from "next"
-import { Shield, Lock, Cookie, Eye, Database, Mail, AlertTriangle, FileText } from "lucide-react"
+import Link from "next/link"
+import { Shield, Lock, Cookie, Eye, Database, AlertTriangle, FileText, MessageSquare } from "lucide-react"
 import { Separator } from "@/components/ui/separator"
 import { siteConfig } from "@/lib/constants"
 
 export const metadata: Metadata = {
-  title: "隐私政策 - CryptoGuide",
+  title: "隐私政策",
   description: "了解我们如何收集、使用和保护您的个人信息。您的隐私对我们至关重要。",
   openGraph: {
-    title: "隐私政策 - CryptoGuide",
+    title: "隐私政策",
     description: "了解我们如何收集、使用和保护您的个人信息。",
   },
 }
@@ -17,49 +18,43 @@ const sections = [
     icon: Shield,
     title: "信息收集",
     content:
-      "当您访问 CryptoGuide 时，我们可能会收集您主动提供的个人信息，例如您的电子邮件地址（当您订阅通讯时）以及您通过联系表单提交的信息。此外，我们会自动收集某些技术信息，包括 IP 地址、浏览器类型、操作系统、引用页面以及访问时间戳，这些信息有助于我们优化网站性能和用户体验。",
+      "本站不要求注册账号，不收集访客邮箱，也不发送营销邮件或通讯。访问本站时，服务器日志和匿名分析工具可能记录 IP 地址、浏览器/设备类型、来源页面、访问时间和访问页面；点击出站链接时，我们会记录目标、时间和来源页面，用于统计与防滥用。",
   },
   {
     icon: Cookie,
-    title: "Cookie 的使用",
+    title: "Cookie 与本地存储",
     content:
-      "我们使用 Cookie 和类似跟踪技术来提升您的浏览体验。Cookie 是存储在您设备上的小型文本文件，用于记住您的偏好、分析网站流量以及提供个性化内容。您可以通过浏览器设置管理或禁用 Cookie，但请注意，某些功能可能因此无法正常使用。我们使用的 Cookie 包括必要的功能性 Cookie 以及用于匿名流量分析的分析性 Cookie。",
-  },
-  {
-    icon: Database,
-    title: "信息存储与安全",
-    content:
-      "我们采取合理的技术和组织措施来保护您的个人信息免受未经授权的访问、修改、披露或销毁。这些措施包括 SSL/TLS 加密传输、防火墙保护以及定期安全审计。然而，请注意，没有任何互联网传输或电子存储方法是完全安全的。您的信息仅在实现收集目的所必需的期限内保留，或按法律要求保留。",
+      "本站使用少量必要的本地存储来记住主题偏好，并使用匿名分析工具了解页面访问情况。我们不做广告画像，也不出售访客数据。你可以在浏览器中清除或禁用 Cookie/本地存储，但部分偏好设置可能失效。",
   },
   {
     icon: Eye,
     title: "信息使用",
     content:
-      "我们收集的信息用于以下目的：提供、维护和改进我们的服务；向您发送您所请求的信息（如通讯）；回复您的咨询和请求；分析使用趋势以优化网站内容和结构；检测、预防和解决技术问题或潜在的安全威胁。我们不会将您的个人信息用于与上述目的无关的用途。",
+      "收集的技术信息仅用于：分析内容效果、排查错误和死链、识别异常流量、改进站点结构。我们不会用它向你发送邮件、推送营销信息，或建立个人画像。",
+  },
+  {
+    icon: Database,
+    title: "日志与点击数据",
+    content:
+      "服务器日志和出站点击记录会按运营需要保留一段合理时间。你可以通过反馈页面请求查询或删除与你相关的日志记录；我们会在核实后处理。本站不设官方邮箱，反馈统一走 Telegram 或 X。",
   },
   {
     icon: Lock,
-    title: "信息共享与披露",
+    title: "信息共享",
     content:
-      "我们不会向第三方出售您的个人信息。我们仅在以下情况下可能与第三方共享您的信息：获得您的明确同意；为提供服务所必需的受信任合作伙伴（如邮件发送服务），且这些合作伙伴受保密协议约束；法律要求或为保护我们的合法权益。",
-  },
-  {
-    icon: Mail,
-    title: "您的权利",
-    content:
-      "根据适用的数据保护法律，您有权访问、更正或删除我们持有的您的个人信息。您还可以限制或反对某些数据处理活动，以及要求数据可携带性。如果您希望行使这些权利，请通过下方联系方式与我们联系。我们将在合理时间内响应您的请求。",
+      "我们不会出售访客信息。仅在以下情况可能与第三方共享：使用托管、分析等必要服务商（受其隐私条款约束）；法律要求；或为保护本站和访客的合法权益。联盟链接的跳转由对应平台按其隐私政策处理。",
   },
   {
     icon: AlertTriangle,
     title: "第三方链接",
     content:
-      "我们的网站可能包含指向第三方网站或服务的链接。这些网站拥有独立的隐私政策，我们对此不承担任何责任。我们建议您在提供个人信息前阅读所访问的任何第三方网站的隐私政策。",
+      "本站包含指向交易所、钱包、工具等第三方网站的链接，其中部分为联盟链接。这些网站有独立的隐私政策，我们无法控制其数据处理方式；在提交个人信息前，请先阅读对方的隐私政策。",
   },
   {
     icon: FileText,
     title: "政策更新",
     content:
-      "我们可能会不时更新本隐私政策。任何变更将在本页面发布更新版本，并附上修订日期。重大变更时，我们可能会通过网站通知或电子邮件方式提醒您。建议您定期查看本页面以了解最新信息。",
+      "本政策可能随功能调整而更新，最新版本会发布在本页面并标注更新日期。我们不会通过电子邮件另行通知。建议你在使用前查看本页。",
   },
 ]
 
@@ -74,7 +69,7 @@ export default function PrivacyPage() {
             "@context": "https://schema.org",
             "@type": "WebPage",
             name: "隐私政策",
-            description: "CryptoGuide 隐私政策",
+            description: "币圈指南隐私政策",
             breadcrumb: {
               "@type": "BreadcrumbList",
               itemListElement: [
@@ -111,7 +106,7 @@ export default function PrivacyPage() {
           <div className="rounded-xl border border-border/60 bg-card p-6 sm:p-8">
             <p className="text-sm leading-relaxed text-muted-foreground">
               {siteConfig.name}（以下简称&quot;我们&quot;）深知个人信息对您的重要性，并会全力保护您的隐私。
-              本隐私政策说明了在您使用 CryptoGuide 网站（以下简称&quot;本网站&quot;）时，我们如何收集、使用、存储和保护您的个人信息。
+              本隐私政策说明了在您使用币圈指南网站（以下简称&quot;本网站&quot;）时，我们如何收集、使用、存储和保护您的个人信息。
               请您仔细阅读本政策。继续使用本网站即表示您同意本政策中描述的数据处理实践。
             </p>
           </div>
@@ -138,18 +133,18 @@ export default function PrivacyPage() {
       {/* Contact CTA */}
       <section className="border-t border-border/40 bg-gradient-to-b from-background via-gold/[0.02] to-background">
         <div className="mx-auto max-w-3xl px-4 py-16 text-center sm:px-6 lg:px-8">
-          <Mail className="mx-auto h-10 w-10 text-gold/60" />
+          <MessageSquare className="mx-auto h-10 w-10 text-gold/60" />
           <h2 className="mt-4 text-2xl font-bold">有任何隐私相关问题？</h2>
           <p className="mt-2 text-muted-foreground">
-            如果您对本隐私政策有任何疑问或担忧，请随时与我们联系
+            请通过反馈页面联系我们；本站不设官方邮箱，也不通过邮件沟通。
           </p>
-          <a
+          <Link
             href="/contact"
             className="mt-6 inline-flex items-center rounded-lg bg-gradient-gold px-6 py-3 text-sm font-medium text-white shadow-md shadow-gold/20 transition-all hover:shadow-lg hover:shadow-gold/30"
           >
-            联系我们
-            <Mail className="ml-2 h-4 w-4" />
-          </a>
+            反馈与纠错
+            <MessageSquare className="ml-2 h-4 w-4" />
+          </Link>
         </div>
       </section>
     </div>

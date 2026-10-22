@@ -12,7 +12,6 @@ export interface SiteConfig {
   ogImage: string
   author: string
   locale: string
-  contactEmail: string
   navItems: NavItem[]
 }
 
@@ -25,7 +24,6 @@ export const siteConfig: SiteConfig = {
   ogImage: "/og.png",
   author: "币圈指南团队",
   locale: "zh-CN",
-  contactEmail: "hello@bqzn.top",
   navItems: [
     { label: "首页", href: "/" },
     { label: "交易所", href: "/exchanges" },
@@ -63,6 +61,7 @@ export const footerLinks: FooterLinkGroup[] = [
       { label: "Bybit", href: "/exchanges/bybit" },
       { label: "Bitget", href: "/exchanges/bitget" },
       { label: "Gate.io", href: "/exchanges/gate-io" },
+      { label: "币安 vs OKX 对比", href: "/compare/binance-vs-okx" },
     ],
   },
   {
@@ -78,11 +77,8 @@ export const footerLinks: FooterLinkGroup[] = [
 
 export const xHandle = "@biquanzhinan"
 export const xProfileUrl = "https://x.com/biquanzhinan"
-export const substackUrl = "https://substack.com/@biquanzhinan"
-
 export const socialLinks = [
   { label: "X", href: xProfileUrl, icon: "x" },
-  { label: "Substack", href: substackUrl, icon: "substack" },
   { label: "Telegram", href: "https://t.me/biquanzhinan", icon: "telegram" },
 ]
 

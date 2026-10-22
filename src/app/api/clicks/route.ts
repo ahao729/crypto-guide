@@ -8,7 +8,7 @@ import { z } from "zod"
 const clicksQuerySchema = z.object({
   page: z.coerce.number().int().min(1).default(1),
   pageSize: z.coerce.number().int().min(1).max(100).default(20),
-  targetType: z.enum(["exchange", "article"]).optional(),
+  targetType: z.enum(["exchange", "article", "partner"]).optional(),
   targetId: z.string().optional(),
   dateFrom: z.string().datetime().optional(),
   dateTo: z.string().datetime().optional(),

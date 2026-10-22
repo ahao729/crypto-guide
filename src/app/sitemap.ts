@@ -5,15 +5,43 @@ import { siteConfig } from '@/lib/constants'
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = siteConfig.url
 
-  // Static pages
-  const staticPages = [
-    { url: baseUrl, lastModified: new Date(), changeFrequency: 'daily' as const, priority: 1 },
-    { url: `${baseUrl}/articles`, lastModified: new Date(), changeFrequency: 'daily' as const, priority: 0.9 },
-    { url: `${baseUrl}/exchanges`, lastModified: new Date(), changeFrequency: 'weekly' as const, priority: 0.9 },
-    { url: `${baseUrl}/resources`, lastModified: new Date(), changeFrequency: 'weekly' as const, priority: 0.7 },
-    { url: `${baseUrl}/about`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.3 },
-    { url: `${baseUrl}/disclosure`, lastModified: new Date(), changeFrequency: 'yearly' as const, priority: 0.2 },
+  // Static pages. No `lastModified: new Date()` here: a timestamp that changes
+  // on every request is not a real content-update signal.
+  const staticPages: MetadataRoute.Sitemap = [
+    { url: baseUrl, changeFrequency: 'daily', priority: 1 },
+    { url: `${baseUrl}/articles`, changeFrequency: 'daily', priority: 0.9 },
+    { url: `${baseUrl}/exchanges`, changeFrequency: 'weekly', priority: 0.9 },
+    { url: `${baseUrl}/exchange-ranking`, changeFrequency: 'weekly', priority: 0.8 },
+    { url: `${baseUrl}/compare/binance-vs-okx`, changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${baseUrl}/tools`, changeFrequency: 'weekly', priority: 0.8 },
+    { url: `${baseUrl}/faq`, changeFrequency: 'monthly', priority: 0.6 },
+    { url: `${baseUrl}/resources`, changeFrequency: 'weekly', priority: 0.7 },
+    { url: `${baseUrl}/options`, changeFrequency: 'monthly', priority: 0.5 },
+    { url: `${baseUrl}/about`, changeFrequency: 'monthly', priority: 0.3 },
+    { url: `${baseUrl}/contact`, changeFrequency: 'yearly', priority: 0.3 },
+    { url: `${baseUrl}/disclosure`, changeFrequency: 'yearly', priority: 0.2 },
+    { url: `${baseUrl}/privacy`, changeFrequency: 'yearly', priority: 0.2 },
+    { url: `${baseUrl}/terms`, changeFrequency: 'yearly', priority: 0.2 },
   ]
+
+  // Calculator/tool pages are evergreen link magnets; they were missing from
+  // the sitemap entirely.
+  const toolPages: MetadataRoute.Sitemap = [
+    '/tools/coin-info',
+    '/tools/converter',
+    '/tools/dca-calculator',
+    '/tools/dca-index',
+    '/tools/fee-comparison',
+    '/tools/grid-calculator',
+    '/tools/kline',
+    '/tools/kline-patterns',
+    '/tools/options-calculator',
+    '/tools/profit-calculator',
+  ].map((path) => ({
+    url: `${baseUrl}${path}`,
+    changeFrequency: 'monthly' as const,
+    priority: 0.7,
+  }))
 
   // Dynamic article pages
   const articles = await prisma.article.findMany({
@@ -61,5 +89,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.6,
   }))
 
-  return [...staticPages, ...articlePages, ...exchangePages, ...categoryPages, ...resourcePages]
+  return [
+    ...staticPages,
+    ...toolPages,
+    ...articlePages,
+    ...exchangePages,
+    ...categoryPages,
+    ...resourcePages,
+  ]
 }

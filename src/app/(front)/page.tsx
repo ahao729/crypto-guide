@@ -2,9 +2,17 @@ import Link from "next/link";
 import Image from "next/image";
 import type { Metadata } from "next"
 import { siteConfig, exchangeCategories } from "@/lib/constants";
+import {
+  AFFILIATE_DISCLOSURE,
+  CORE_EXCHANGE_META,
+  CORE_EXCHANGE_SLUGS,
+  type CoreExchangeSlug,
+} from "@/lib/affiliates";
 import { prisma } from "@/lib/prisma"
 import { formatDate } from "@/lib/utils"
-import { Clock, ArrowRight } from "lucide-react"
+import { StarRating } from "@/components/front/StarRating"
+import { ExchangeCtaLink } from "@/components/front/ExchangeCtaLink"
+import { Clock, ArrowRight, ShieldCheck } from "lucide-react"
 
 export const revalidate = 600 // 10 minutes
 
@@ -49,7 +57,7 @@ export default async function Home() {
     },
   }
 
-  const [latestArticles, exchangeCount, articleCount, resourceCount] =
+  const [latestArticles, topExchanges, exchangeCount, articleCount, resourceCount] =
     await Promise.all([
       prisma.article.findMany({
         where: { published: true },
@@ -63,10 +71,33 @@ export default async function Home() {
           category: { select: { name: true, slug: true } },
         },
       }),
+      prisma.exchange.findMany({
+        where: {
+          status: "active",
+          slug: { in: [...CORE_EXCHANGE_SLUGS] },
+        },
+        select: {
+          id: true,
+          name: true,
+          slug: true,
+          logo: true,
+          rating: true,
+          spotFee: true,
+          futuresFee: true,
+          referralUrl: true,
+        },
+      }),
       prisma.exchange.count({ where: { status: "active" } }),
       prisma.article.count({ where: { published: true } }),
       prisma.resource.count({ where: { published: true } }),
     ])
+
+  const orderedTopExchanges = CORE_EXCHANGE_SLUGS.map((slug) =>
+    topExchanges.find((exchange) => exchange.slug === slug),
+  ).filter(
+    (exchange): exchange is (typeof topExchanges)[number] =>
+      exchange !== undefined,
+  )
 
   return (
     <div className="animate-fade-in">
@@ -99,7 +130,7 @@ export default async function Home() {
                 href="/exchanges"
                 className="inline-flex h-12 items-center justify-center rounded-xl bg-gradient-gold px-8 text-sm font-semibold text-white shadow-lg shadow-gold/20 transition-all hover:shadow-xl hover:shadow-gold/30 hover:brightness-110"
               >
-                浏览交易所
+                查看推荐交易所
               </Link>
               <Link
                 href="/articles"
@@ -111,6 +142,114 @@ export default async function Home() {
           </div>
         </div>
       </section>
+
+      {/* Recommended exchanges */}
+      {orderedTopExchanges.length > 0 && (
+        <section className="section-padding border-t border-border/40">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+              <div className="max-w-2xl">
+                <div className="inline-flex items-center gap-1.5 rounded-full bg-gold/10 px-3 py-1 text-xs font-medium text-gold-dark">
+                  <ShieldCheck className="h-3.5 w-3.5" />
+                  合作推荐 · 含联盟链接
+                </div>
+                <h2 className="mt-3 text-3xl font-bold tracking-tight text-foreground">
+                  2026 推荐交易所
+                </h2>
+                <p className="mt-2 text-muted-foreground">
+                  新手先看币安；想要 Web3 钱包和低费率看 OKX；合约与跟单选 Bybit。
+                </p>
+              </div>
+              <div className="flex flex-wrap items-center gap-4">
+                <Link
+                  href="/exchanges"
+                  className="inline-flex items-center gap-1 text-sm font-medium text-gold hover:text-gold-dark"
+                >
+                  查看全部 {exchangeCount} 家交易所
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+                <Link
+                  href="/compare/binance-vs-okx"
+                  className="inline-flex items-center gap-1 text-sm font-medium text-muted-foreground hover:text-gold"
+                >
+                  币安 vs OKX 对比
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+              </div>
+            </div>
+
+            <div className="mt-8 grid gap-6 md:grid-cols-3">
+              {orderedTopExchanges.map((exchange) => {
+                const meta = CORE_EXCHANGE_META[exchange.slug as CoreExchangeSlug]
+                return (
+                  <div
+                    key={exchange.id}
+                    className="flex flex-col rounded-2xl border border-border/60 bg-card p-6 shadow-sm transition-all hover:border-gold/30 hover:shadow-md"
+                  >
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="flex items-center gap-3">
+                        <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-xl bg-muted">
+                          {exchange.logo ? (
+                            <Image
+                              src={exchange.logo}
+                              alt={exchange.name}
+                              fill
+                              sizes="48px"
+                              className="object-contain"
+                            />
+                          ) : (
+                            <div className="flex h-full items-center justify-center text-lg font-bold text-gold">
+                              {exchange.name.charAt(0)}
+                            </div>
+                          )}
+                        </div>
+                        <div>
+                          <h3 className="font-semibold">{exchange.name}</h3>
+                          <StarRating rating={exchange.rating} size={12} />
+                        </div>
+                      </div>
+                      <span className="rounded-full bg-gold/10 px-2 py-0.5 text-[10px] font-medium text-gold-dark">
+                        合作
+                      </span>
+                    </div>
+
+                    <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
+                      {meta.tagline}
+                    </p>
+
+                    <div className="mt-4 grid grid-cols-2 gap-2 rounded-lg bg-muted/40 p-3 text-center">
+                      <div>
+                        <div className="text-[11px] text-muted-foreground">现货费率</div>
+                        <div className="text-sm font-semibold">{exchange.spotFee ?? "--"}</div>
+                      </div>
+                      <div>
+                        <div className="text-[11px] text-muted-foreground">合约费率</div>
+                        <div className="text-sm font-semibold">{exchange.futuresFee ?? "--"}</div>
+                      </div>
+                    </div>
+
+                    <p className="mt-3 text-[11px] text-muted-foreground">
+                      邀请码 {meta.code} · 注册时自动填入
+                    </p>
+
+                    <ExchangeCtaLink
+                      exchange={exchange}
+                      className="mt-4 inline-flex h-10 w-full items-center justify-center gap-1.5 rounded-lg bg-gradient-gold px-4 text-sm font-semibold text-white shadow-sm transition-all hover:brightness-110"
+                    >
+                      {meta.cta}
+                      <ArrowRight className="h-4 w-4" />
+                    </ExchangeCtaLink>
+                  </div>
+                )
+              })}
+            </div>
+
+            <p className="mt-4 text-[11px] leading-relaxed text-muted-foreground">
+              {AFFILIATE_DISCLOSURE} 评分与费率由编辑整理，具体以交易所官方页面为准。
+            </p>
+          </div>
+        </section>
+      )}
 
       {/* Features / Stats Section */}
       <section className="section-padding">
@@ -228,7 +367,7 @@ export default async function Home() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-2xl text-center">
             <h2 className="text-3xl font-bold tracking-tight text-foreground">准备好开始了吗？</h2>
-            <p className="mt-3 text-muted-foreground">加入数万用户，发现最适合你的交易平台</p>
+            <p className="mt-3 text-muted-foreground">先看评测与对比，再决定注册哪一家</p>
             <div className="mt-8">
               <Link
                 href="/exchanges"

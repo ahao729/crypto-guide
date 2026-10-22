@@ -14,11 +14,11 @@ import { ArticleSearchClient } from "@/components/article-search-client"
 // 当有 searchParams 时 Next.js 自动降级为动态渲染，无需 force-dynamic
 
 export const metadata: Metadata = {
-  title: `加密货币与区块链文章教程 | ${siteConfig.shortName}`,
+  title: "加密货币与区块链文章教程",
   description: "涵盖交易所教程、区块链知识、交易策略、行业资讯和 DeFi 指南，助您快速入门加密货币世界。",
   keywords: ["加密货币教程", "区块链知识", "交易策略", "DeFi 指南", "数字货币入门", "交易所教程", "比特币", "以太坊"],
   openGraph: {
-    title: `加密货币与区块链文章教程 | ${siteConfig.shortName}`,
+    title: "加密货币与区块链文章教程",
     description: "涵盖交易所教程、区块链知识、交易策略、行业资讯和 DeFi 指南。",
     url: `${siteConfig.url}/articles`,
     siteName: siteConfig.name,
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: `加密货币与区块链文章教程 | ${siteConfig.shortName}`,
+    title: "加密货币与区块链文章教程",
     description: "涵盖交易所教程、区块链知识、交易策略、行业资讯和 DeFi 指南。",
   },
   alternates: {

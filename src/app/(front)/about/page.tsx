@@ -1,16 +1,16 @@
 import type { Metadata } from "next"
-import { siteConfig, substackUrl, xProfileUrl } from "@/lib/constants"
+import { siteConfig, xProfileUrl } from "@/lib/constants"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { MessageCircle, Users, Shield, Sparkles, Link, Gift, ExternalLink } from "lucide-react"
 import { prisma } from "@/lib/prisma"
 
 export const metadata: Metadata = {
-  title: `加入社群 - ${siteConfig.name}`,
+  title: "加入社群",
   description: `加入${siteConfig.name}官方社群，与关注加密货币的读者一起交流交易所评测、撸空投、链上机会和投资心得。`,
   keywords: ["币圈社群", "加密货币交流群", "交易所讨论群", "撸空投社群", "币圈交流群", "Telegram群", "Discord社区"],
   openGraph: {
-    title: `加入社群 - ${siteConfig.name}`,
+    title: "加入社群",
     description: `加入${siteConfig.name}官方社群，与关注加密货币的读者一起交流交易所评测、撸空投、链上机会和投资心得。`,
     url: `${siteConfig.url}/about`,
     siteName: siteConfig.name,
@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: `加入社群 - ${siteConfig.name}`,
+    title: "加入社群",
     description: `加入${siteConfig.name}官方社群，与关注加密货币的读者一起交流交易所评测、撸空投、链上机会和投资心得。`,
   },
   alternates: {
@@ -40,8 +40,8 @@ const features = [
   },
   {
     icon: Users,
-    title: "万人在线",
-    description: "汇聚数千名加密货币爱好者，不同水平互相帮助，共同成长",
+    title: "同好交流",
+    description: "汇聚关注加密货币的读者，不同水平互相帮助，共同成长",
   },
   {
     icon: Shield,
@@ -68,14 +68,6 @@ interface Platform {
   color: string
 }
 
-const substackPlatform: Platform = {
-  name: "Substack",
-  description: "较长内容的 newsletter 归档。",
-  members: "Newsletter",
-  href: substackUrl,
-  color: "bg-foreground/5 text-foreground",
-}
-
 const defaultPlatforms: Platform[] = [
   {
     name: "Telegram",
@@ -91,34 +83,19 @@ const defaultPlatforms: Platform[] = [
     href: xProfileUrl,
     color: "bg-foreground/5 text-foreground",
   },
-  substackPlatform,
 ]
 
-const isSubstackPlatform = (platform: Platform) =>
-  /substack/i.test(platform.name) || /substack\.com/i.test(String(platform.href ?? ""))
-
-// X / Substack 链接以代码常量为准，避免后台
-// site_settings.community_platforms 里的旧 JSON 指向废弃账号。
-// Substack 即使不在后台 JSON 中也补一张卡，保证入口存在。
 function normalizePlatforms(items: Platform[]): Platform[] {
-  const normalized = items.map((platform) => {
-    if (/^(x|twitter)/i.test(platform.name)) {
-      return { ...platform, href: xProfileUrl }
-    }
-    if (isSubstackPlatform(platform)) {
-      return {
-        ...platform,
-        href: substackUrl,
-        color: "bg-foreground/5 text-foreground",
-      }
-    }
-    return platform
-  })
-
-  if (!normalized.some(isSubstackPlatform)) {
-    normalized.push({ ...substackPlatform })
-  }
-  return normalized
+  return items
+    .filter(
+      (platform) =>
+        !/substack|newsletter/i.test(`${platform.name} ${platform.href}`),
+    )
+    .map((platform) =>
+      /^(x|twitter)/i.test(platform.name)
+        ? { ...platform, href: xProfileUrl }
+        : platform,
+    )
 }
 
 const aboutJsonLd = {
@@ -342,7 +319,7 @@ export default async function AboutPage() {
           <Users className="mx-auto h-10 w-10 text-gold/60" />
           <h2 className="mt-4 text-2xl font-bold">立即加入我们</h2>
           <p className="mt-2 text-muted-foreground">
-            和数千名加密货币爱好者一起，在投资路上不再孤单
+            和关注加密货币的读者一起，在投资路上不再孤单
           </p>
           <div className="mt-6 flex flex-wrap justify-center gap-4">
             {firstPlatform && (

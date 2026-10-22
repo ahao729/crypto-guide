@@ -172,11 +172,6 @@ export const siteSettingSchema = z.object({
     .string()
     .optional()
     .or(z.literal("")),
-  contactEmail: z
-    .string()
-    .email("请输入有效的邮箱地址")
-    .optional()
-    .or(z.literal("")),
   analyticsId: z
     .string()
     .optional()

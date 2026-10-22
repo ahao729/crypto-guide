@@ -30,7 +30,7 @@ export function OneKeyCTA() {
         </div>
 
         <Link
-          href="/go/onekey"
+          href="/go/onekey?src=tools&placement=tools-card"
           target="_blank"
           rel="sponsored noopener noreferrer"
           className="inline-flex shrink-0 items-center justify-center gap-1.5 rounded-lg bg-foreground px-4 py-2.5 text-sm font-medium text-background transition-opacity hover:opacity-90"

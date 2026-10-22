@@ -422,6 +422,8 @@ function ExchangeCard({
       <div className="border-t border-border/40 p-3">
         <ExchangeCtaLink
           exchange={exchange}
+          source="category"
+          placement="card"
           className="inline-flex w-full items-center justify-center gap-1.5 rounded-lg bg-gradient-gold py-2 text-sm font-medium text-white shadow-sm shadow-gold/20 transition-all hover:shadow-md hover:shadow-gold/30"
         >
           {isExchangePartner(exchange.slug) && !isDex ? "官网注册" : "访问官网"}

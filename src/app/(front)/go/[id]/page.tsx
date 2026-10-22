@@ -19,10 +19,18 @@ export const metadata: Metadata = {
 
 interface GoPageProps {
   params: Promise<{ id: string }>
+  searchParams?: Promise<{ src?: string; placement?: string }>
 }
 
-export default async function GoPage({ params }: GoPageProps) {
+function cleanAttribution(value: string | undefined) {
+  return value?.replace(/[^a-zA-Z0-9_-]/g, "").slice(0, 50) || null
+}
+
+export default async function GoPage({ params, searchParams }: GoPageProps) {
   const { id } = await params
+  const { src, placement } = searchParams ? await searchParams : {}
+  const source = cleanAttribution(src)
+  const clickPlacement = cleanAttribution(placement)
   const headersList = await headers()
 
   // Accept both the database id and the slug. Slugs make the outbound link
@@ -68,6 +76,8 @@ export default async function GoPage({ params }: GoPageProps) {
             ip,
             userAgent,
             referer,
+            source,
+            placement: clickPlacement,
           },
         }),
         prisma.exchange.update({

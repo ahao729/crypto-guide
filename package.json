@@ -12,6 +12,7 @@
     "clean:affiliates": "node scripts/clean-nonpartner-referrals.mjs",
     "fix:articles": "node scripts/fix-outdated-articles.mjs",
     "partners:apply": "node scripts/update-partner-links.mjs",
+    "report:attribution": "node scripts/attribution-report.mjs",
     "db:migrate": "prisma migrate deploy",
     "db:migrate:status": "prisma migrate status",
     "db:migrate:dev": "prisma migrate dev",

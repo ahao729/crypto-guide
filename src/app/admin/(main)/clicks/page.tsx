@@ -14,6 +14,8 @@ interface ClickLog {
   ip?: string
   userAgent?: string
   referer?: string
+  source?: string
+  placement?: string
   createdAt: string
   exchange?: { name: string }
   article?: { title: string }
@@ -100,6 +102,7 @@ export default function AdminClicksPage() {
               <thead className="bg-muted/50">
                 <tr>
                   <th className="px-4 py-3 font-medium">类型</th>
+                  <th className="px-4 py-3 font-medium">归因</th>
                   <th className="px-4 py-3 font-medium">目标</th>
                   <th className="px-4 py-3 font-medium">IP</th>
                   <th className="px-4 py-3 font-medium">来源</th>
@@ -119,6 +122,9 @@ export default function AdminClicksPage() {
                               ? "工具/钱包"
                               : log.targetType}
                       </span>
+                    </td>
+                    <td className="px-4 py-3 text-muted-foreground">
+                      {log.source ? `${log.source}${log.placement ? ` / ${log.placement}` : ""}` : "-"}
                     </td>
                     <td className="max-w-xs truncate px-4 py-3 font-medium">
                       {log.exchange?.name || log.article?.title || log.targetId}

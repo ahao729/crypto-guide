@@ -124,10 +124,13 @@ model ClickLog {
   userAgent  String?
   referer    String?
   country    String?
+  source     String?
+  placement  String?
   createdAt  DateTime @default(now())
 
   @@index([targetId, targetType])
   @@index([targetType, targetId, createdAt])
+  @@index([source, placement, createdAt])
 }
 
 model SiteSetting {

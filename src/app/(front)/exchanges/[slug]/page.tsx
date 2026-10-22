@@ -252,6 +252,8 @@ export default async function ExchangeDetailPage({ params }: ExchangeDetailPageP
             <div className="flex shrink-0 flex-col items-center gap-4">
               <ExchangeCtaLink
                 exchange={exchange}
+                source="exchange"
+                placement="hero"
                 className={
                   isExchangePartner(exchange.slug)
                     ? "inline-flex items-center gap-2 rounded-xl bg-gradient-gold px-10 py-4 text-lg font-semibold text-white shadow-lg shadow-gold/20 transition-all hover:shadow-xl hover:shadow-gold/30"
@@ -555,6 +557,8 @@ export default async function ExchangeDetailPage({ params }: ExchangeDetailPageP
 
           <ExchangeCtaLink
             exchange={exchange}
+            source="exchange"
+            placement="bottom"
             className={
               isExchangePartner(exchange.slug)
                 ? "mt-6 inline-flex items-center gap-2 rounded-xl bg-gradient-gold px-8 py-4 font-semibold text-white shadow-md shadow-gold/20 transition-all hover:shadow-lg hover:shadow-gold/30"

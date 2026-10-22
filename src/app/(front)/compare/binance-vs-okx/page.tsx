@@ -313,6 +313,8 @@ export default async function BinanceVsOkxPage() {
                 </p>
                 <ExchangeCtaLink
                   exchange={binance}
+                  source="compare"
+                  placement="cta"
                   className="mt-4 inline-flex h-10 w-full items-center justify-center gap-1.5 rounded-lg bg-gradient-gold px-4 text-sm font-semibold text-white shadow-sm transition-all hover:brightness-110"
                 >
                   注册币安
@@ -331,6 +333,8 @@ export default async function BinanceVsOkxPage() {
                 </p>
                 <ExchangeCtaLink
                   exchange={okx}
+                  source="compare"
+                  placement="cta"
                   className="mt-4 inline-flex h-10 w-full items-center justify-center gap-1.5 rounded-lg bg-gradient-gold px-4 text-sm font-semibold text-white shadow-sm transition-all hover:brightness-110"
                 >
                   注册 OKX

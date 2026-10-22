@@ -490,6 +490,8 @@ function ExchangeCard({
         <div className="mt-4 flex items-center gap-2">
           <ExchangeCtaLink
             exchange={exchange}
+            source="exchanges"
+            placement="card"
             className="inline-flex h-9 flex-1 items-center justify-center gap-1.5 rounded-lg bg-gradient-gold px-4 text-sm font-medium text-white shadow-sm transition-all hover:brightness-110"
           >
             {isExchangePartner(exchange.slug) && !isDex ? "官网注册" : "访问官网"}

@@ -135,6 +135,29 @@ export default async function ArticleDetailPage({ params }: ArticlePageProps) {
   ])
 
   const readingTime = article.content ? estimateReadingTime(processedContent) : 1
+
+  // Put a single contextual CTA after the first section instead of before the
+  // article. Long enough pieces get an inline card; short ones keep the top card.
+  const firstH2End = processedContent.indexOf("</h2>")
+  const firstParagraphEnd =
+    firstH2End >= 0 ? processedContent.indexOf("</p>", firstH2End) : -1
+  const inlineCtaIndex =
+    firstParagraphEnd >= 0
+      ? firstParagraphEnd + 4
+      : firstH2End >= 0
+        ? firstH2End + 5
+        : -1
+  const hasInlineCta =
+    inlineCtaIndex > 0 &&
+    inlineCtaIndex < processedContent.length - 200 &&
+    processedContent.length > 1200
+  const contentBeforeCta = hasInlineCta
+    ? processedContent.slice(0, inlineCtaIndex)
+    : processedContent
+  const contentAfterCta = hasInlineCta
+    ? processedContent.slice(inlineCtaIndex)
+    : ""
+
   const showUpdated =
     article.publishedAt &&
     article.updatedAt &&
@@ -285,15 +308,26 @@ export default async function ArticleDetailPage({ params }: ArticlePageProps) {
 
               {/* Article Content - optimal reading width */}
               <div className="min-w-0 flex-1 max-w-4xl">
-                <PartnerCTA
-                  title={article.title}
-                  categorySlug={article.category?.slug}
-                  tags={article.tags.map(({ tag }) => tag.name)}
-                  placement="top"
-                />
+                {!hasInlineCta && (
+                  <PartnerCTA
+                    title={article.title}
+                    categorySlug={article.category?.slug}
+                    placement="top"
+                  />
+                )}
                 <article>
                   {article.content ? (
-                    <ArticleContent html={processedContent} />
+                    <>
+                      <ArticleContent html={contentBeforeCta} />
+                      {hasInlineCta && (
+                        <PartnerCTA
+                          title={article.title}
+                          categorySlug={article.category?.slug}
+                          placement="top"
+                        />
+                      )}
+                      {contentAfterCta && <ArticleContent html={contentAfterCta} />}
+                    </>
                   ) : (
                     <p className="text-muted-foreground">文章内容正在编辑中...</p>
                   )}
@@ -325,7 +359,6 @@ export default async function ArticleDetailPage({ params }: ArticlePageProps) {
                   <PartnerCTA
                     title={article.title}
                     categorySlug={article.category?.slug}
-                    tags={article.tags.map(({ tag }) => tag.name)}
                     placement="bottom"
                   />
 

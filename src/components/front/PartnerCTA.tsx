@@ -12,35 +12,41 @@ import {
 interface PartnerCTAProps {
   title: string
   categorySlug?: string | null
-  tags?: string[]
   /** "top" is compact; "bottom" adds a little more context. */
   placement?: "top" | "bottom"
 }
 
 type CtaKind = "wallet" | "contract" | "dex" | "copy" | "exchange"
 
-function pickKind(title: string, categorySlug?: string | null, tags?: string[]) {
-  const haystack = `${title} ${categorySlug ?? ""} ${(tags ?? []).join(" ")}`.toLowerCase()
+function pickKind(title: string, categorySlug?: string | null) {
+  // Tags are intentionally excluded from the main decision: a generic tag such
+  // as "安全" should not turn a tax article into a hardware-wallet CTA.
+  const core = `${title} ${categorySlug ?? ""}`.toLowerCase()
 
   // DEX first: a title can contain "永续" without being a CEX contract page.
-  if (/dex|去中心化|链上|hyperliquid|aster/.test(haystack)) {
+  if (/dex|去中心化|链上|hyperliquid|aster/.test(core)) {
     return "dex" as const
   }
 
   // Copy-trading pages should point at the copy-trading partner.
-  if (/跟单|copy.?trading/.test(haystack)) {
+  if (/跟单|copy.?trading/.test(core)) {
     return "copy" as const
+  }
+
+  // Fee-comparison pages should default to exchanges, not trading bots.
+  if (/手续费|费率|交易成本/.test(core)) {
+    return "exchange" as const
   }
 
   // Onboarding pages should default to exchanges, even if one of their tags
   // happens to contain "安全".
-  if (/注册|开户|入金|充值|邀请码|新手/.test(haystack)) {
+  if (/注册|开户|入金|充值|邀请码|新手/.test(core)) {
     return "exchange" as const
   }
-  if (/钱包|私钥|助记词|防盗|冷钱包|wallet|security|安全/.test(haystack)) {
+  if (/钱包|私钥|助记词|防盗|冷钱包|wallet|security|安全/.test(core)) {
     return "wallet" as const
   }
-  if (/合约|跟单|网格|套利|永续|策略|futures|copy.?trading|grid/.test(haystack)) {
+  if (/合约|网格|套利|永续|策略|futures|grid/.test(core)) {
     return "contract" as const
   }
   return "exchange" as const
@@ -160,10 +166,9 @@ function OneKeyCard() {
 export function PartnerCTA({
   title,
   categorySlug,
-  tags,
   placement = "top",
 }: PartnerCTAProps) {
-  const kind = pickKind(title, categorySlug, tags)
+  const kind = pickKind(title, categorySlug)
   const heading = copy[kind].heading
   const sub = copy[kind].sub
 

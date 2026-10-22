@@ -203,6 +203,27 @@ const updates = {
 
 const UNPUBLISH = ["bitcoin-halving-2026-analysis"]
 
+// Small, deterministic content fixes for older money pages that still use a
+// 10-point editorial scale or need a freshness note.
+const CONTENT_PATCHES = {
+  "top-10-exchanges-comparison-2026": [
+    [
+      "本文从7个维度对10大主流交易所进行全面测评。",
+      "> 评分为编辑 5 分制；最后核对：2026-10。\n\n本文从7个维度对10大主流交易所进行全面测评。",
+    ],
+    ["9.5/10", "4.9/5"],
+    ["9.2/10", "4.8/5"],
+    ["9.0/10", "4.7/5"],
+    ["8.8/10", "4.5/5"],
+    ["8.5/10", "4.4/5"],
+    ["8.3/10", "4.3/5"],
+    ["8.0/10", "4.1/5"],
+    ["7.8/10", "4.0/5"],
+    ["7.5/10", "4.1/5"],
+    ["7.0/10", "3.6/5"],
+  ],
+}
+
 async function main() {
   console.log(APPLY ? "Applying article fixes…" : "Dry run (pass --apply to write)")
 
@@ -235,6 +256,26 @@ async function main() {
       await prisma.article.update({
         where: { slug },
         data: { published: false },
+      })
+    }
+  }
+
+  for (const [slug, patches] of Object.entries(CONTENT_PATCHES)) {
+    const article = await prisma.article.findUnique({ where: { slug } })
+    if (!article) {
+      console.warn(`[patch missing] ${slug}`)
+      continue
+    }
+
+    let content = article.content ?? ""
+    for (const [from, to] of patches) content = content.replaceAll(from, to)
+
+    if (content === article.content) continue
+    console.log(`[patch] ${slug}: normalized ratings / freshness note`)
+    if (APPLY) {
+      await prisma.article.update({
+        where: { slug },
+        data: { content },
       })
     }
   }

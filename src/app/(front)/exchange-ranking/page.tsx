@@ -265,7 +265,7 @@ export default async function ExchangeRankingPage({
                             <div className="relative flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-muted">
                               {exchange.logo ? (
                                 <Image
-                                  src={exchange.logo}
+                                  src={exchange.logo} unoptimized
                                   alt={exchange.name}
                                   width={56}
                                   height={56}
@@ -386,7 +386,7 @@ export default async function ExchangeRankingPage({
                       <div className="relative flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-muted">
                         {exchange.logo ? (
                           <Image
-                            src={exchange.logo}
+                            src={exchange.logo} unoptimized
                             alt={exchange.name}
                             width={48}
                             height={48}

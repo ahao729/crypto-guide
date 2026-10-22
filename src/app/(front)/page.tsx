@@ -191,7 +191,7 @@ export default async function Home() {
                         <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-xl bg-muted">
                           {exchange.logo ? (
                             <Image
-                              src={exchange.logo}
+                              src={exchange.logo} unoptimized
                               alt={exchange.name}
                               fill
                               sizes="48px"

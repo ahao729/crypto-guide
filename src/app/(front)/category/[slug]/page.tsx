@@ -346,7 +346,13 @@ function ExchangeCard({
                 </Badge>
               )}
             </div>
-            <StarRating rating={exchange.rating} className="mt-1" />
+            {exchange.rating > 0 ? (
+              <StarRating rating={exchange.rating} className="mt-1" />
+            ) : (
+              <span className="mt-1 inline-block text-xs text-muted-foreground">
+                暂未评分
+              </span>
+            )}
           </div>
         </div>
 

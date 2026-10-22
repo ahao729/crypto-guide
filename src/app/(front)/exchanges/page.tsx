@@ -91,7 +91,7 @@ export default async function ExchangesPage({ searchParams }: ExchangesPageProps
                 "@type": "ListItem",
                 position: index + 1,
                 item: {
-                  "@type": "Product",
+                  "@type": "WebPage",
                   "@id": `${siteConfig.url}/exchanges/${exchange.slug}`,
                   name: exchange.name,
                   ...(exchange.description && { description: exchange.description }),

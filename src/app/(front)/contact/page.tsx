@@ -6,6 +6,7 @@ import {
   Clock,
   ExternalLink,
   Handshake,
+  Mail,
   MessageSquare,
   ShieldCheck,
 } from "lucide-react"
@@ -16,11 +17,11 @@ import { Separator } from "@/components/ui/separator"
 export const metadata: Metadata = {
   title: "反馈与纠错",
   description:
-    "本站不设官方邮箱，也不向访客发送邮件。内容纠错、死链、合作与安全问题，请通过 Telegram 或 X 反馈。",
+    "内容纠错、死链、合作与安全问题，请发邮件至 bqzn-gf@bluemailx.com，或通过 Telegram / X 反馈。",
   openGraph: {
     title: "反馈与纠错",
     description:
-      "本站不设官方邮箱，也不向访客发送邮件。请通过 Telegram 或 X 反馈问题。",
+      "内容纠错、死链、合作与安全问题，请发邮件或通过 Telegram / X 反馈。",
   },
   alternates: {
     canonical: `${siteConfig.url}/contact`,
@@ -50,8 +51,8 @@ const feedbackItems = [
 
 const faqs = [
   {
-    q: "为什么不设官方邮箱？",
-    a: "本站目前不通过邮件做客服或营销，也不收集访客邮箱。反馈统一走 Telegram 或 X，减少垃圾邮件和钓鱼风险。",
+    q: "邮件和社群，哪个更快？",
+    a: "邮件适合正式纠错、合作和隐私请求，附上页面链接和截图即可；Telegram / X 适合快速沟通。我们不会主动发送营销邮件。",
   },
   {
     q: "多久会回复？",
@@ -59,7 +60,7 @@ const faqs = [
   },
   {
     q: "可以投稿或合作吗？",
-    a: "可以。请在 Telegram 或 X 私信里说明主题、受众和合作方式；不接受保证收益、带单、代操作类合作。",
+    a: "可以。请通过邮件、Telegram 或 X 说明主题、受众和合作方式；不接受保证收益、带单、代操作类合作。",
   },
 ]
 
@@ -73,8 +74,9 @@ export default function ContactPage() {
             "@context": "https://schema.org",
             "@type": "ContactPage",
             name: "反馈与纠错",
-            description: "通过 Telegram 或 X 向币圈指南反馈问题",
+            description: "通过邮件、Telegram 或 X 向币圈指南反馈问题",
             url: `${siteConfig.url}/contact`,
+            email: siteConfig.contactEmail,
             inLanguage: siteConfig.locale,
           }),
         }}
@@ -88,12 +90,24 @@ export default function ContactPage() {
             反馈与纠错
           </h1>
           <p className="mt-4 text-lg leading-relaxed text-muted-foreground">
-            本站不设官方邮箱，也不向访客发送邮件。内容纠错、死链、合作或安全问题，
-            请通过 Telegram 或 X 找到我们。
+            内容纠错、死链、合作或安全问题，可以发邮件到{" "}
+            <a
+              href={`mailto:${siteConfig.contactEmail}`}
+              className="font-medium text-gold underline decoration-gold/40 underline-offset-4"
+            >
+              {siteConfig.contactEmail}
+            </a>
+            ，也可以通过 Telegram 或 X 找到我们。
           </p>
           <div className="mt-8 flex flex-wrap justify-center gap-3">
+            <Button className="bg-gradient-gold text-white shadow-md shadow-gold/20" asChild>
+              <a href={`mailto:${siteConfig.contactEmail}`}>
+                发邮件
+                <Mail className="ml-2 h-4 w-4" />
+              </a>
+            </Button>
             {telegram && (
-              <Button className="bg-gradient-gold text-white shadow-md shadow-gold/20" asChild>
+              <Button variant="outline" asChild>
                 <a href={telegram.href} target="_blank" rel="noopener noreferrer">
                   加入 Telegram
                   <ExternalLink className="ml-2 h-4 w-4" />
@@ -110,7 +124,7 @@ export default function ContactPage() {
             )}
           </div>
           <p className="mt-3 text-xs text-muted-foreground">
-            不通过邮件沟通，也不收集访客邮箱。
+            邮件只用于回复你的来信，不发送营销邮件。
           </p>
         </div>
       </section>
@@ -126,6 +140,25 @@ export default function ContactPage() {
               </p>
             </div>
           ))}
+        </div>
+
+        <div className="mt-4 rounded-xl border border-gold/20 bg-gold/[0.04] p-5">
+          <div className="flex items-start gap-3">
+            <Mail className="mt-0.5 h-5 w-5 shrink-0 text-gold" />
+            <div>
+              <h2 className="font-semibold">邮件联系</h2>
+              <a
+                href={`mailto:${siteConfig.contactEmail}`}
+                className="mt-1 inline-block text-sm font-medium text-gold underline decoration-gold/40 underline-offset-4"
+              >
+                {siteConfig.contactEmail}
+              </a>
+              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                适合内容纠错、合作、隐私相关请求。请在邮件里附上页面链接、截图和具体问题；
+                我们不会主动向你发送营销邮件。
+              </p>
+            </div>
+          </div>
         </div>
 
         <Separator className="my-10" />

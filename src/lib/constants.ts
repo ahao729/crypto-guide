@@ -12,6 +12,7 @@ export interface SiteConfig {
   ogImage: string
   author: string
   locale: string
+  contactEmail: string
   navItems: NavItem[]
 }
 
@@ -24,6 +25,7 @@ export const siteConfig: SiteConfig = {
   ogImage: "/og.png",
   author: "币圈指南团队",
   locale: "zh-CN",
+  contactEmail: "bqzn-gf@bluemailx.com",
   navItems: [
     { label: "首页", href: "/" },
     { label: "交易所", href: "/exchanges" },

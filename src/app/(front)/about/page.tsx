@@ -73,7 +73,7 @@ const substackPlatform: Platform = {
   description: "较长内容的 newsletter 归档。",
   members: "Newsletter",
   href: substackUrl,
-  color: "bg-orange-500/10 text-orange-500",
+  color: "bg-foreground/5 text-foreground",
 }
 
 const defaultPlatforms: Platform[] = [
@@ -106,7 +106,11 @@ function normalizePlatforms(items: Platform[]): Platform[] {
       return { ...platform, href: xProfileUrl }
     }
     if (isSubstackPlatform(platform)) {
-      return { ...platform, href: substackUrl }
+      return {
+        ...platform,
+        href: substackUrl,
+        color: "bg-foreground/5 text-foreground",
+      }
     }
     return platform
   })

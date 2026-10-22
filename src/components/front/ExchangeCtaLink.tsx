@@ -5,6 +5,10 @@ import { getExchangeLinkTarget } from "@/lib/affiliates"
 interface ExchangeCtaLinkProps {
   exchange: { slug: string; referralUrl?: string | null }
   className?: string
+  /** Attribution bucket, e.g. home, exchanges, article, compare. */
+  source?: string
+  /** Where on the page the click happened. */
+  placement?: string
   children: ReactNode
 }
 
@@ -15,6 +19,8 @@ interface ExchangeCtaLinkProps {
 export function ExchangeCtaLink({
   exchange,
   className,
+  source,
+  placement,
   children,
 }: ExchangeCtaLinkProps) {
   const target = getExchangeLinkTarget(exchange)
@@ -33,9 +39,16 @@ export function ExchangeCtaLink({
     )
   }
 
+  const params = new URLSearchParams()
+  if (source) params.set("src", source)
+  if (placement) params.set("placement", placement)
+  const href = params.toString()
+    ? `${target.href}?${params.toString()}`
+    : target.href
+
   return (
     <Link
-      href={target.href}
+      href={href}
       target="_blank"
       rel="sponsored noopener noreferrer"
       className={className}

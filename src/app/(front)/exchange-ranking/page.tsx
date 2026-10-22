@@ -344,6 +344,8 @@ export default async function ExchangeRankingPage({
                           <div className="mt-4 flex items-center gap-2">
                             <ExchangeCtaLink
                               exchange={exchange}
+                              source="ranking"
+                              placement="top3"
                               className="inline-flex h-9 flex-1 items-center justify-center gap-1.5 rounded-lg bg-gradient-gold px-3 text-sm font-medium text-white shadow-sm transition-all hover:brightness-110"
                             >
                               {isExchangePartner(exchange.slug) ? "官网注册" : "访问官网"}
@@ -437,6 +439,8 @@ export default async function ExchangeRankingPage({
                       <div className="flex shrink-0 items-center gap-2">
                         <ExchangeCtaLink
                           exchange={exchange}
+                          source="ranking"
+                          placement="row"
                           className="inline-flex h-8 items-center justify-center rounded-lg bg-gradient-gold px-3 text-sm font-medium text-white shadow-sm transition-all hover:brightness-110"
                         >
                           {isExchangePartner(exchange.slug) ? "注册" : "官网"}

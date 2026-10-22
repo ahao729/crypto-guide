@@ -234,6 +234,8 @@ export default async function Home() {
 
                     <ExchangeCtaLink
                       exchange={exchange}
+                      source="home"
+                      placement="top3"
                       className="mt-4 inline-flex h-10 w-full items-center justify-center gap-1.5 rounded-lg bg-gradient-gold px-4 text-sm font-semibold text-white shadow-sm transition-all hover:brightness-110"
                     >
                       {meta.cta}

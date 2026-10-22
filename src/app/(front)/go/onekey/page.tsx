@@ -14,12 +14,23 @@ export const metadata: Metadata = {
   },
 }
 
+function cleanAttribution(value: string | undefined) {
+  return value?.replace(/[^a-zA-Z0-9_-]/g, "").slice(0, 50) || null
+}
+
+interface OneKeyGoPageProps {
+  searchParams?: Promise<{ src?: string; placement?: string }>
+}
+
 /**
  * Tracked outbound link for the OneKey hardware-wallet partnership.
  * Keeps the click log in the same place as exchange clicks, without adding a
  * client-side analytics dependency.
  */
-export default async function OneKeyGoPage() {
+export default async function OneKeyGoPage({ searchParams }: OneKeyGoPageProps) {
+  const { src, placement } = searchParams ? await searchParams : {}
+  const source = cleanAttribution(src)
+  const clickPlacement = cleanAttribution(placement)
   const headersList = await headers()
 
   const ip =
@@ -38,6 +49,8 @@ export default async function OneKeyGoPage() {
           ip,
           userAgent,
           referer,
+          source,
+          placement: clickPlacement,
         },
       })
     } catch (error) {

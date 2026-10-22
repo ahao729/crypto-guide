@@ -323,7 +323,7 @@ export default async function ArticleDetailPage({ params }: ArticlePageProps) {
                         <PartnerCTA
                           title={article.title}
                           categorySlug={article.category?.slug}
-                          placement="top"
+                          placement="inline"
                         />
                       )}
                       {contentAfterCta && <ArticleContent html={contentAfterCta} />}

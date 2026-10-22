@@ -129,6 +129,17 @@ async function main() {
     return body.rows || []
   }
 
+  const inspectUrls = [
+    "https://bqzn.top/",
+    "https://bqzn.top/exchanges",
+    "https://bqzn.top/compare/binance-vs-okx",
+    "https://bqzn.top/exchange-ranking",
+    "https://bqzn.top/articles/binance-registration-guide",
+    "https://bqzn.top/articles/exchange-fee-comparison",
+    "https://bqzn.top/articles/top-10-exchanges-comparison-2026",
+    "https://bqzn.top/tools",
+  ]
+
   const [totals, byQuery, byPage, byDate, sitemapsRes] = await Promise.all([
     query([], 1),
     query(["query"], 20),
@@ -136,6 +147,36 @@ async function main() {
     query(["date"], DAYS + 2),
     gscFetch(token, `/webmasters/v3/sites/${sitePath}/sitemaps`),
   ])
+
+  const urlInspection = []
+  for (const url of inspectUrls) {
+    const { response, body } = await gscFetch(
+      token,
+      "/v1/urlInspection/index:inspect",
+      {
+        method: "POST",
+        body: JSON.stringify({
+          inspectionUrl: url,
+          siteUrl: SITE,
+          languageCode: "zh-CN",
+        }),
+      }
+    )
+    const result = body?.inspectionResult?.indexStatusResult
+    urlInspection.push({
+      url,
+      ok: response.ok,
+      error: response.ok ? null : body?.error?.message || `HTTP ${response.status}`,
+      verdict: result?.verdict ?? null,
+      coverageState: result?.coverageState ?? null,
+      indexingState: result?.indexingState ?? null,
+      robotsTxtState: result?.robotsTxtState ?? null,
+      pageFetchState: result?.pageFetchState ?? null,
+      lastCrawlTime: result?.lastCrawlTime ?? null,
+      googleCanonical: result?.googleCanonical ?? null,
+      userCanonical: result?.userCanonical ?? null,
+    })
+  }
 
   const total = totals[0] || { clicks: 0, impressions: 0, ctr: 0, position: 0 }
   const report = {
@@ -167,6 +208,7 @@ async function main() {
       clicks: row.clicks,
       impressions: row.impressions,
     })),
+    urlInspection,
     sitemaps: sitemapsRes.response.ok
       ? (sitemapsRes.body.sitemap || []).map((item) => ({
           path: item.path,
@@ -210,6 +252,15 @@ async function main() {
     "|---|---:|---:|---:|---:|",
     ...report.topPages.slice(0, 10).map(
       (row) => `| ${row.page} | ${row.clicks} | ${row.impressions} | ${pct(row.ctr)} | ${row.position.toFixed(1)} |`
+    ),
+    "",
+    "## URL inspection",
+    "",
+    "| URL | Verdict | Coverage | Last crawl |",
+    "|---|---|---|---|",
+    ...report.urlInspection.map(
+      (row) =>
+        `| ${row.url} | ${row.ok ? row.verdict ?? "-" : `ERROR: ${row.error}`} | ${row.coverageState ?? "-"} | ${row.lastCrawlTime ?? "-"} |`
     ),
     "",
     "## Sitemaps",

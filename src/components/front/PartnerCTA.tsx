@@ -13,7 +13,7 @@ interface PartnerCTAProps {
   title: string
   categorySlug?: string | null
   /** "top" is compact; "bottom" adds a little more context. */
-  placement?: "top" | "bottom"
+  placement?: "top" | "inline" | "bottom"
 }
 
 type CtaKind = "wallet" | "contract" | "dex" | "copy" | "exchange"
@@ -75,7 +75,13 @@ const copy: Record<CtaKind, { heading: string; sub: string }> = {
   },
 }
 
-function ExchangeCard({ slug }: { slug: CoreExchangeSlug }) {
+function ExchangeCard({
+  slug,
+  placement,
+}: {
+  slug: CoreExchangeSlug
+  placement: string
+}) {
   const meta = CORE_EXCHANGE_META[slug]
 
   return (
@@ -92,7 +98,7 @@ function ExchangeCard({ slug }: { slug: CoreExchangeSlug }) {
         </span>
       </div>
       <Link
-        href={`/go/${slug}`}
+        href={`/go/${slug}?src=article&placement=${placement}`}
         target="_blank"
         rel="sponsored noopener noreferrer"
         className="mt-3 inline-flex h-9 w-full items-center justify-center gap-1.5 rounded-lg bg-gradient-gold px-3 text-sm font-semibold text-white shadow-sm transition-all hover:brightness-110"
@@ -104,7 +110,13 @@ function ExchangeCard({ slug }: { slug: CoreExchangeSlug }) {
   )
 }
 
-function SecondaryExchangeCard({ slug }: { slug: SecondaryExchangeSlug }) {
+function SecondaryExchangeCard({
+  slug,
+  placement,
+}: {
+  slug: SecondaryExchangeSlug
+  placement: string
+}) {
   const meta = SECONDARY_EXCHANGE_META[slug]
 
   return (
@@ -121,7 +133,7 @@ function SecondaryExchangeCard({ slug }: { slug: SecondaryExchangeSlug }) {
         </span>
       </div>
       <Link
-        href={`/go/${slug}`}
+        href={`/go/${slug}?src=article&placement=${placement}`}
         target="_blank"
         rel="sponsored noopener noreferrer"
         className="mt-3 inline-flex h-9 w-full items-center justify-center gap-1.5 rounded-lg bg-gradient-gold px-3 text-sm font-semibold text-white shadow-sm transition-all hover:brightness-110"
@@ -133,7 +145,7 @@ function SecondaryExchangeCard({ slug }: { slug: SecondaryExchangeSlug }) {
   )
 }
 
-function OneKeyCard() {
+function OneKeyCard({ placement }: { placement: string }) {
   return (
     <div className="rounded-xl border border-border/60 bg-background/70 p-4">
       <div className="flex items-start justify-between gap-2">
@@ -151,7 +163,7 @@ function OneKeyCard() {
         </span>
       </div>
       <Link
-        href="/go/onekey"
+        href={`/go/onekey?src=article&placement=${placement}`}
         target="_blank"
         rel="sponsored noopener noreferrer"
         className="mt-3 inline-flex h-9 w-full items-center justify-center gap-1.5 rounded-lg bg-gradient-gold px-3 text-sm font-semibold text-white shadow-sm transition-all hover:brightness-110"
@@ -175,28 +187,28 @@ export function PartnerCTA({
   const body =
     kind === "wallet" ? (
       <>
-        <OneKeyCard />
-        <ExchangeCard slug="binance" />
+        <OneKeyCard placement={placement} />
+        <ExchangeCard slug="binance" placement={placement} />
       </>
     ) : kind === "copy" ? (
       <>
-        <SecondaryExchangeCard slug="bitget" />
-        <ExchangeCard slug="bybit" />
+        <SecondaryExchangeCard slug="bitget" placement={placement} />
+        <ExchangeCard slug="bybit" placement={placement} />
       </>
     ) : kind === "contract" ? (
       <>
-        <ExchangeCard slug="bybit" />
-        <ExchangeCard slug="binance" />
+        <ExchangeCard slug="bybit" placement={placement} />
+        <ExchangeCard slug="binance" placement={placement} />
       </>
     ) : kind === "dex" ? (
       <>
-        <SecondaryExchangeCard slug="aster" />
-        <OneKeyCard />
+        <SecondaryExchangeCard slug="aster" placement={placement} />
+        <OneKeyCard placement={placement} />
       </>
     ) : (
       <>
-        <ExchangeCard slug="binance" />
-        <ExchangeCard slug="okx" />
+        <ExchangeCard slug="binance" placement={placement} />
+        <ExchangeCard slug="okx" placement={placement} />
       </>
     )
 

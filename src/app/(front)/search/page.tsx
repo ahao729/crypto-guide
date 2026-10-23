@@ -116,7 +116,20 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
       <div className="mx-auto max-w-5xl px-4 py-10 sm:px-6 lg:px-8">
         {!query ? (
           <section>
-            <h2 className="text-lg font-bold">热门入口</h2>
+            <h2 className="text-lg font-bold">热门搜索</h2>
+            <div className="mt-3 flex flex-wrap gap-2">
+              {["币安", "Meme", "NFT", "RWA", "LayerZero", "AI", "美股"].map((term) => (
+                <Link
+                  key={term}
+                  href={`/search?q=${encodeURIComponent(term)}`}
+                  className="rounded-full border border-border/60 bg-card px-3 py-1.5 text-xs text-muted-foreground transition-colors hover:border-gold/40 hover:text-gold"
+                >
+                  {term}
+                </Link>
+              ))}
+            </div>
+
+            <h2 className="mt-8 text-lg font-bold">热门入口</h2>
             <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
               {[
                 ["币安美股怎么买", "/articles/binance-us-stocks-guide"],

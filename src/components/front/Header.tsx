@@ -2,10 +2,9 @@
 
 import { useState, useEffect, useSyncExternalStore } from "react"
 import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import { useTheme } from "next-themes"
 import { cn } from "@/lib/utils"
-import { siteConfig } from "@/lib/constants"
 import { SiteLogo } from "./SiteLogo"
 import { Button } from "@/components/ui/button"
 import { ChevronDown, Search } from "lucide-react"
@@ -20,11 +19,13 @@ function useHydrated() {
 
 export function Header() {
   const [mobileOpen, setMobileOpen] = useState(false)
+  const [mobileGroup, setMobileGroup] = useState<"content" | "community" | null>(null)
   const [openMenu, setOpenMenu] = useState<"content" | "community" | null>(null)
   const [scrolled, setScrolled] = useState(false)
   const mounted = useHydrated()
   const { theme, setTheme } = useTheme()
   const pathname = usePathname()
+  const router = useRouter()
 
   // Track scroll position for header styling
   useEffect(() => {
@@ -36,8 +37,25 @@ export function Header() {
   // Close menus when pathname changes
   useEffect(() => {
     setMobileOpen(false)
+    setMobileGroup(null)
     setOpenMenu(null)
   }, [pathname])
+
+  // Cmd/Ctrl+K opens search, or focuses the search field when already there.
+  useEffect(() => {
+    const onKeyDown = (event: KeyboardEvent) => {
+      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
+        event.preventDefault()
+        if (pathname === "/search") {
+          document.getElementById("q")?.focus()
+        } else {
+          router.push("/search")
+        }
+      }
+    }
+    window.addEventListener("keydown", onKeyDown)
+    return () => window.removeEventListener("keydown", onKeyDown)
+  }, [pathname, router])
 
   const closeMobile = () => setMobileOpen(false)
 
@@ -181,7 +199,9 @@ export function Header() {
         <div className="hidden md:flex md:items-center md:gap-2">
           <Link
             href="/search"
-            aria-label="搜索"
+            aria-label="搜索（⌘K）"
+            aria-keyshortcuts="Meta+K Control+K"
+            title="搜索（⌘K）"
             className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-accent/10 hover:text-foreground"
           >
             <Search className="h-4 w-4" />
@@ -254,27 +274,77 @@ export function Header() {
         )}
       >
         <nav className="flex flex-col gap-1 px-4 py-4">
-          {siteConfig.navItems.map((item) => {
-            const isActive =
-              item.href === "/"
-                ? pathname === "/"
-                : pathname.startsWith(item.href)
+          {[
+            { label: "首页", href: "/" },
+            { label: "交易所", href: "/exchanges" },
+            { label: "文章", href: "/articles" },
+            { label: "工具", href: "/tools" },
+          ].map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              onClick={closeMobile}
+              className={cn(
+                "rounded-lg px-3 py-2.5 text-sm font-medium transition-colors",
+                isPathActive(item.href)
+                  ? "bg-gold/10 text-gold-dark"
+                  : "text-muted-foreground hover:bg-accent/10 hover:text-foreground"
+              )}
+            >
+              {item.label}
+            </Link>
+          ))}
+
+          {[
+            { id: "content" as const, label: "内容", items: contentMenu },
+            { id: "community" as const, label: "社群", items: communityMenu },
+          ].map((group) => {
+            const open = mobileGroup === group.id
             return (
-              <Link
-                key={item.href}
-                href={item.href}
-                onClick={closeMobile}
-                className={cn(
-                  "rounded-lg px-3 py-2.5 text-sm font-medium transition-colors",
-                  isActive
-                    ? "bg-gold/10 text-gold-dark"
-                    : "text-muted-foreground hover:bg-accent/10 hover:text-foreground"
+              <div key={group.id}>
+                <button
+                  type="button"
+                  onClick={() => setMobileGroup(open ? null : group.id)}
+                  aria-expanded={open}
+                  className={cn(
+                    "flex w-full items-center justify-between rounded-lg px-3 py-2.5 text-sm font-medium transition-colors",
+                    open
+                      ? "bg-gold/10 text-gold-dark"
+                      : "text-muted-foreground hover:bg-accent/10 hover:text-foreground"
+                  )}
+                >
+                  {group.label}
+                  <ChevronDown className={cn("h-4 w-4 transition-transform", open && "rotate-180")} />
+                </button>
+                {open && (
+                  <div className="ml-2 border-l border-border/50 pl-2">
+                    {group.items.map((item) => (
+                      <Link
+                        key={item.href}
+                        href={item.href}
+                        onClick={() => {
+                          setMobileGroup(null)
+                          closeMobile()
+                        }}
+                        className="block rounded-lg px-3 py-2 text-sm text-muted-foreground hover:bg-accent/10 hover:text-foreground"
+                      >
+                        {item.label}
+                      </Link>
+                    ))}
+                  </div>
                 )}
-              >
-                {item.label}
-              </Link>
+              </div>
             )
           })}
+
+          <Link
+            href="/search"
+            onClick={closeMobile}
+            className="flex items-center gap-2 rounded-lg px-3 py-2.5 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent/10 hover:text-foreground"
+          >
+            <Search className="h-4 w-4" /> 搜索
+          </Link>
+
           {/* Mobile theme toggle */}
           <div className="mt-1 flex items-center justify-between px-3 py-2">
             <span className="text-sm text-muted-foreground">

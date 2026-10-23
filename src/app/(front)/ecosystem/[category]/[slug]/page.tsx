@@ -1,3 +1,4 @@
+import Image from "next/image"
 import Link from "next/link"
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
@@ -133,6 +134,68 @@ export default async function BrandPage({ params }: BrandPageProps) {
             ))}
           </div>
         </header>
+
+        <section className="mt-8 grid gap-6 lg:grid-cols-[340px_1fr] lg:items-start">
+          <figure>
+            {brand.screenshot.kind === "phone" ? (
+              <div className="mx-auto w-[240px] rounded-[2rem] border-4 border-foreground/10 bg-black p-1.5 shadow-xl">
+                <div className="relative aspect-[9/19] overflow-hidden rounded-[1.5rem] bg-muted">
+                  <Image
+                    src={brand.screenshot.src}
+                    alt={brand.screenshot.alt}
+                    fill
+                    sizes="240px"
+                    className="object-cover"
+                    unoptimized
+                  />
+                </div>
+              </div>
+            ) : (
+              <div className="relative aspect-[3/2] overflow-hidden rounded-2xl border border-border/60 bg-muted shadow-sm">
+                <Image
+                  src={brand.screenshot.src}
+                  alt={brand.screenshot.alt}
+                  fill
+                  sizes="(max-width: 1024px) 100vw, 340px"
+                  className="object-cover"
+                  unoptimized
+                />
+              </div>
+            )}
+            <figcaption className="mt-3 text-center text-[11px] leading-relaxed text-muted-foreground">
+              {brand.screenshot.caption}
+              <br />
+              <a
+                href={brand.screenshot.sourceUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gold hover:underline"
+              >
+                来源：{brand.screenshot.sourceLabel} ↗
+              </a>
+            </figcaption>
+          </figure>
+
+          <div>
+            <h2 className="text-xl font-bold">常见使用场景</h2>
+            <div className="mt-4 grid gap-3 sm:grid-cols-3">
+              {brand.useCases.map((useCase) => (
+                <div
+                  key={useCase.title}
+                  className="rounded-xl border border-border/60 bg-card p-4"
+                >
+                  <h3 className="text-sm font-semibold">{useCase.title}</h3>
+                  <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
+                    {useCase.description}
+                  </p>
+                </div>
+              ))}
+            </div>
+            <p className="mt-4 text-[11px] leading-relaxed text-muted-foreground">
+              截图仅作产品界面示意，实际界面、功能和地区支持可能已更新；请以官方页面为准。
+            </p>
+          </div>
+        </section>
 
         <div className="mt-8 grid gap-6 lg:grid-cols-[1.5fr_1fr]">
           <div className="space-y-6">

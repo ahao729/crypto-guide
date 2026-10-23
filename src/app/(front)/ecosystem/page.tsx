@@ -57,6 +57,18 @@ const guides = [
     description: "包装资产、原生资产、验证模型和退出路径。",
   },
   {
+    slug: "wallet-security-visual-guide",
+    label: "步骤图",
+    title: "钱包安全设置步骤图：锁屏、签名检查与撤销授权",
+    description: "用真实截图走一遍：锁屏、看风险提示、查授权、批量撤销。",
+  },
+  {
+    slug: "bridge-small-test-visual-guide",
+    label: "步骤图",
+    title: "跨链桥小额测试步骤图：选链、核对、10 美元试单",
+    description: "用 Stargate 和 Across 的界面，先小额验证再放大。",
+  },
+  {
     slug: "oracle-guide-2026",
     label: "预言机",
     title: "预言机是什么？Chainlink、Pyth、RedStone 的作用与风险",

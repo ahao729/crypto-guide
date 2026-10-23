@@ -44,6 +44,24 @@ const articles = [
     tags: ["跨链桥", "安全"],
   },
   {
+    slug: "wallet-security-visual-guide",
+    title: "钱包安全设置步骤图：锁屏、签名检查、可疑代币与授权撤销",
+    excerpt:
+      "用 MetaMask、Trust Wallet、Rabby 的真实截图，拆解钱包安全设置、签名前检查、可疑代币识别和授权撤销。",
+    file: "content/infra/wallet-security-visual-guide.md",
+    coverImage: "/images/articles/security/wallet-security-cover.png",
+    tags: ["钱包", "安全"],
+  },
+  {
+    slug: "bridge-small-test-visual-guide",
+    title: "跨链桥小额测试步骤图：选链、核对、10 美元试单",
+    excerpt:
+      "第一次用跨链桥怎么测试？用 Stargate 和 Across 的真实界面拆解选链、金额、钱包确认和到账核对。",
+    file: "content/infra/bridge-small-test-visual-guide.md",
+    coverImage: "/images/articles/security/bridge-small-test-cover.png",
+    tags: ["跨链桥", "安全"],
+  },
+  {
     slug: "oracle-guide-2026",
     title: "预言机是什么？Chainlink、Pyth、RedStone 的作用与风险",
     excerpt:

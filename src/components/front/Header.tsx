@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils"
 import { siteConfig } from "@/lib/constants"
 import { SiteLogo } from "./SiteLogo"
 import { Button } from "@/components/ui/button"
-import { ChevronDown } from "lucide-react"
+import { ChevronDown, Search } from "lucide-react"
 
 function useHydrated() {
   return useSyncExternalStore(
@@ -179,6 +179,13 @@ export function Header() {
 
         {/* Desktop theme toggle + CTA */}
         <div className="hidden md:flex md:items-center md:gap-2">
+          <Link
+            href="/search"
+            aria-label="搜索"
+            className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-accent/10 hover:text-foreground"
+          >
+            <Search className="h-4 w-4" />
+          </Link>
           {/* Theme toggle */}
           <button
             type="button"

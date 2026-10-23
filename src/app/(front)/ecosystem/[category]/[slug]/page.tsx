@@ -194,6 +194,22 @@ export default async function BrandPage({ params }: BrandPageProps) {
             <p className="mt-4 text-[11px] leading-relaxed text-muted-foreground">
               截图仅作产品界面示意，实际界面、功能和地区支持可能已更新；请以官方页面为准。
             </p>
+            {brand.category === "wallet" && (
+              <Link
+                href="/articles/wallet-security-visual-guide"
+                className="mt-3 inline-flex items-center text-xs font-medium text-gold"
+              >
+                看钱包安全设置步骤图 <ArrowRight className="ml-1 h-3.5 w-3.5" />
+              </Link>
+            )}
+            {brand.category === "bridge" && (
+              <Link
+                href="/articles/bridge-small-test-visual-guide"
+                className="mt-3 inline-flex items-center text-xs font-medium text-gold"
+              >
+                看跨链桥小额测试步骤图 <ArrowRight className="ml-1 h-3.5 w-3.5" />
+              </Link>
+            )}
           </div>
         </section>
 

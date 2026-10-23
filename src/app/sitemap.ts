@@ -1,6 +1,7 @@
 import type { MetadataRoute } from 'next'
 import { prisma } from '@/lib/prisma'
 import { siteConfig } from '@/lib/constants'
+import { ecosystemBrands } from '@/lib/ecosystem'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = siteConfig.url
@@ -14,6 +15,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${baseUrl}/exchange-ranking`, changeFrequency: 'weekly', priority: 0.8 },
     { url: `${baseUrl}/stocks`, changeFrequency: 'weekly', priority: 0.9 },
     { url: `${baseUrl}/trends`, changeFrequency: 'weekly', priority: 0.9 },
+    { url: `${baseUrl}/ecosystem`, changeFrequency: 'weekly', priority: 0.9 },
     { url: `${baseUrl}/compare/binance-vs-okx`, changeFrequency: 'monthly', priority: 0.8 },
     { url: `${baseUrl}/tools`, changeFrequency: 'weekly', priority: 0.8 },
     { url: `${baseUrl}/faq`, changeFrequency: 'monthly', priority: 0.6 },
@@ -43,6 +45,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     url: `${baseUrl}${path}`,
     changeFrequency: 'monthly' as const,
     priority: 0.7,
+  }))
+
+  const brandPages = ecosystemBrands.map((brand) => ({
+    url: `${baseUrl}/ecosystem/${brand.category}/${brand.slug}`,
+    changeFrequency: 'monthly' as const,
+    priority: 0.6,
   }))
 
   // Dynamic article pages
@@ -94,6 +102,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   return [
     ...staticPages,
     ...toolPages,
+    ...brandPages,
     ...articlePages,
     ...exchangePages,
     ...categoryPages,

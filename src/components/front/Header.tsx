@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils"
 import { siteConfig } from "@/lib/constants"
 import { SiteLogo } from "./SiteLogo"
 import { Button } from "@/components/ui/button"
+import { ChevronDown } from "lucide-react"
 
 function useHydrated() {
   return useSyncExternalStore(
@@ -19,6 +20,7 @@ function useHydrated() {
 
 export function Header() {
   const [mobileOpen, setMobileOpen] = useState(false)
+  const [openMenu, setOpenMenu] = useState<"content" | "community" | null>(null)
   const [scrolled, setScrolled] = useState(false)
   const mounted = useHydrated()
   const { theme, setTheme } = useTheme()
@@ -31,8 +33,31 @@ export function Header() {
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
-  // Close mobile menu when pathname changes
+  // Close menus when pathname changes
+  useEffect(() => {
+    setMobileOpen(false)
+    setOpenMenu(null)
+  }, [pathname])
+
   const closeMobile = () => setMobileOpen(false)
+
+  const contentMenu = [
+    { label: "美股与 ETF", href: "/stocks", description: "开户、bStocks 与 ETF 入门" },
+    { label: "热门赛道", href: "/trends", description: "Meme、NFT、RWA、Web3、AI" },
+    { label: "基础设施", href: "/ecosystem", description: "钱包、跨链桥、预言机目录" },
+  ]
+
+  const communityMenu = [
+    { label: "常见问题", href: "/faq", description: "新手常见问题与风险提示" },
+    { label: "资源下载", href: "/resources", description: "工具、模板与学习资料" },
+    { label: "加入社群", href: "/about", description: "Telegram、X 与 Substack" },
+    { label: "联系我们", href: "/contact", description: "纠错、合作与隐私请求" },
+  ]
+
+  const isPathActive = (href: string) =>
+    href === "/" ? pathname === "/" : pathname.startsWith(href)
+  const contentActive = contentMenu.some((item) => isPathActive(item.href))
+  const communityActive = communityMenu.some((item) => isPathActive(item.href))
 
   return (
     <header
@@ -47,28 +72,109 @@ export function Header() {
         {/* Logo */}
         <SiteLogo />
 
-        {/* Desktop navigation */}
+        {/* Desktop navigation: 6 top-level items, grouped content/community menus */}
         <nav className="hidden md:flex md:items-center md:gap-1">
-          {siteConfig.navItems.map((item) => {
-            const isActive =
-              item.href === "/"
-                ? pathname === "/"
-                : pathname.startsWith(item.href)
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={cn(
-                  "rounded-lg px-3 py-2 text-sm font-medium transition-colors",
-                  isActive
-                    ? "bg-gold/10 text-gold-dark"
-                    : "text-muted-foreground hover:bg-accent/10 hover:text-foreground"
-                )}
-              >
-                {item.label}
-              </Link>
-            )
-          })}
+          {[
+            { label: "首页", href: "/" },
+            { label: "交易所", href: "/exchanges" },
+            { label: "文章", href: "/articles" },
+            { label: "工具", href: "/tools" },
+          ].map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              className={cn(
+                "rounded-lg px-3 py-2 text-sm font-medium transition-colors",
+                isPathActive(item.href)
+                  ? "bg-gold/10 text-gold-dark"
+                  : "text-muted-foreground hover:bg-accent/10 hover:text-foreground"
+              )}
+            >
+              {item.label}
+            </Link>
+          ))}
+
+          <div
+            className="relative"
+            onMouseEnter={() => setOpenMenu("content")}
+            onMouseLeave={() => setOpenMenu(null)}
+          >
+            <button
+              type="button"
+              onClick={() => setOpenMenu(openMenu === "content" ? null : "content")}
+              aria-expanded={openMenu === "content"}
+              aria-haspopup="true"
+              className={cn(
+                "flex items-center gap-1 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
+                contentActive
+                  ? "bg-gold/10 text-gold-dark"
+                  : "text-muted-foreground hover:bg-accent/10 hover:text-foreground"
+              )}
+            >
+              内容
+              <ChevronDown className="h-3.5 w-3.5" />
+            </button>
+            {openMenu === "content" && (
+              <div className="absolute left-0 top-full z-50 w-72 pt-2">
+                <div className="rounded-xl border border-border/60 bg-background/95 p-2 shadow-xl backdrop-blur-xl">
+                  {contentMenu.map((item) => (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      onClick={() => setOpenMenu(null)}
+                      className="block rounded-lg px-3 py-2.5 transition-colors hover:bg-muted"
+                    >
+                      <div className="text-sm font-medium">{item.label}</div>
+                      <div className="mt-0.5 text-xs text-muted-foreground">
+                        {item.description}
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+
+          <div
+            className="relative"
+            onMouseEnter={() => setOpenMenu("community")}
+            onMouseLeave={() => setOpenMenu(null)}
+          >
+            <button
+              type="button"
+              onClick={() => setOpenMenu(openMenu === "community" ? null : "community")}
+              aria-expanded={openMenu === "community"}
+              aria-haspopup="true"
+              className={cn(
+                "flex items-center gap-1 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
+                communityActive
+                  ? "bg-gold/10 text-gold-dark"
+                  : "text-muted-foreground hover:bg-accent/10 hover:text-foreground"
+              )}
+            >
+              社群
+              <ChevronDown className="h-3.5 w-3.5" />
+            </button>
+            {openMenu === "community" && (
+              <div className="absolute right-0 top-full z-50 w-72 pt-2">
+                <div className="rounded-xl border border-border/60 bg-background/95 p-2 shadow-xl backdrop-blur-xl">
+                  {communityMenu.map((item) => (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      onClick={() => setOpenMenu(null)}
+                      className="block rounded-lg px-3 py-2.5 transition-colors hover:bg-muted"
+                    >
+                      <div className="text-sm font-medium">{item.label}</div>
+                      <div className="mt-0.5 text-xs text-muted-foreground">
+                        {item.description}
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
         </nav>
 
         {/* Desktop theme toggle + CTA */}
@@ -137,7 +243,7 @@ export function Header() {
       <div
         className={cn(
           "overflow-hidden border-border/40 border-t bg-background/95 backdrop-blur-xl transition-all duration-300 md:hidden",
-          mobileOpen ? "max-h-96" : "max-h-0"
+          mobileOpen ? "max-h-[calc(100vh-4rem)] overflow-y-auto" : "max-h-0 overflow-hidden"
         )}
       >
         <nav className="flex flex-col gap-1 px-4 py-4">

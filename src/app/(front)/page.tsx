@@ -345,6 +345,50 @@ export default async function Home() {
         </div>
       </section>
 
+      {/* Trends Section */}
+      <section className="section-padding border-t border-border/40">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+            <div className="max-w-2xl">
+              <p className="text-xs font-medium tracking-[0.18em] text-gold">MEME · NFT · RWA · WEB3 · AI</p>
+              <h2 className="mt-2 text-3xl font-bold tracking-tight">热门赛道</h2>
+              <p className="mt-3 text-muted-foreground">
+                五个高关注方向的入门、真实风险和工具，先看机制再决定是否用真钱。
+              </p>
+            </div>
+            <Link
+              href="/trends"
+              className="inline-flex h-10 shrink-0 items-center justify-center rounded-xl border border-border bg-background px-5 text-sm font-semibold transition-colors hover:bg-muted"
+            >
+              进入赛道专区 <ArrowRight className="ml-2 h-4 w-4" />
+            </Link>
+          </div>
+          <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+            {[
+              { href: "/articles/meme-coin-guide-2026", label: "Meme 币", title: "流动性与 Rug 风险" },
+              { href: "/articles/nft-guide-2026", label: "NFT", title: "应用、流动性与防骗" },
+              { href: "/articles/rwa-guide-2026", label: "RWA", title: "链上美债与真实收益" },
+              { href: "/articles/web3-guide-2026", label: "Web3.0", title: "钱包、Layer2 与 Agent" },
+              { href: "/articles/binance-ai-products-guide", label: "AI × 币安", title: "Agent OS 与 x402" },
+            ].map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="group rounded-xl border border-border/50 bg-card p-4 shadow-sm transition-all hover:border-gold/30 hover:shadow-md"
+              >
+                <span className="text-[11px] font-medium text-gold">{item.label}</span>
+                <h3 className="mt-2 text-sm font-semibold leading-snug transition-colors group-hover:text-gold">
+                  {item.title}
+                </h3>
+                <span className="mt-3 inline-flex items-center text-[11px] text-muted-foreground">
+                  阅读 <ArrowRight className="ml-1 h-3 w-3" />
+                </span>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Latest Articles Section */}
       {latestArticles.length > 0 && (
         <section className="section-padding border-t border-border/40">

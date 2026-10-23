@@ -16,7 +16,7 @@ interface PartnerCTAProps {
   placement?: "top" | "inline" | "bottom"
 }
 
-type CtaKind = "wallet" | "contract" | "dex" | "copy" | "stocks" | "exchange"
+type CtaKind = "wallet" | "contract" | "dex" | "copy" | "stocks" | "ai" | "exchange"
 
 function pickKind(title: string, categorySlug?: string | null) {
   // Tags are intentionally excluded from the main decision: a generic tag such
@@ -26,6 +26,11 @@ function pickKind(title: string, categorySlug?: string | null) {
   // DEX first: a title can contain "永续" without being a CEX contract page.
   if (/dex|去中心化|链上|hyperliquid|aster/.test(core)) {
     return "dex" as const
+  }
+
+  // AI / Agent pages should point at Binance's AI stack, not a hardware wallet.
+  if (/ai|agent|智能体|binance ai/.test(core)) {
+    return "ai" as const
   }
 
   // Copy-trading pages should point at the copy-trading partner.
@@ -77,6 +82,10 @@ const copy: Record<CtaKind, { heading: string; sub: string }> = {
   stocks: {
     heading: "美股之前，先把账户和入金准备好",
     sub: "美股/ETF 有交易时段、汇率和地区限制；先小额试单，再考虑加仓。",
+  },
+  ai: {
+    heading: "先用小额测试，再让 AI 执行",
+    sub: "AI 会出错，Agent 钱包要设预算、白名单和人工确认；不要给无限权限。",
   },
   exchange: {
     heading: "开始之前，先选好交易所",
@@ -201,6 +210,23 @@ function StocksNoteCard() {
   )
 }
 
+function AiNoteCard() {
+  return (
+    <div className="rounded-xl border border-border/60 bg-background/70 p-4">
+      <p className="text-[11px] font-medium text-gold">AI / Agent 风险提示</p>
+      <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+        AI 输出可能错误；Agent 自动支付要设限额、白名单和人工复核，不要暴露主钱包私钥。
+      </p>
+      <Link
+        href="/articles/binance-ai-products-guide"
+        className="mt-3 inline-flex items-center text-xs font-medium text-gold"
+      >
+        看币安 AI 产品全景 <ArrowUpRight className="ml-1 h-3.5 w-3.5" />
+      </Link>
+    </div>
+  )
+}
+
 export function PartnerCTA({
   title,
   categorySlug,
@@ -235,6 +261,11 @@ export function PartnerCTA({
       <>
         <ExchangeCard slug="binance" placement={placement} />
         <StocksNoteCard />
+      </>
+    ) : kind === "ai" ? (
+      <>
+        <ExchangeCard slug="binance" placement={placement} />
+        <AiNoteCard />
       </>
     ) : (
       <>

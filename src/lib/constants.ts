@@ -31,6 +31,7 @@ export const siteConfig: SiteConfig = {
     { label: "交易所", href: "/exchanges" },
     { label: "文章", href: "/articles" },
     { label: "美股", href: "/stocks" },
+    { label: "热点", href: "/trends" },
     { label: "工具", href: "/tools" },
     { label: "常见问题", href: "/faq" },
     { label: "资源下载", href: "/resources" },
@@ -51,6 +52,7 @@ export const footerLinks: FooterLinkGroup[] = [
       { label: "交易所", href: "/exchanges" },
       { label: "文章", href: "/articles" },
       { label: "美股", href: "/stocks" },
+      { label: "热点", href: "/trends" },
       { label: "工具", href: "/tools" },
       { label: "常见问题", href: "/faq" },
       { label: "资源下载", href: "/resources" },
@@ -76,6 +78,7 @@ export const footerLinks: FooterLinkGroup[] = [
       { label: "行业资讯", href: "/articles?category=news" },
       { label: "工具推荐", href: "/articles?category=tools" },
       { label: "美股入门", href: "/stocks" },
+      { label: "热门赛道", href: "/trends" },
     ],
   },
 ]

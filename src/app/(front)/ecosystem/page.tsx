@@ -69,6 +69,12 @@ const guides = [
     description: "用 Stargate 和 Across 的界面，先小额验证再放大。",
   },
   {
+    slug: "hardware-wallet-setup-visual-guide",
+    label: "步骤图",
+    title: "硬件钱包初始化步骤图：OneKey / Trezor",
+    description: "官方 App、设备连接、PIN 与助记词备份，先小额测试。",
+  },
+  {
     slug: "oracle-guide-2026",
     label: "预言机",
     title: "预言机是什么？Chainlink、Pyth、RedStone 的作用与风险",

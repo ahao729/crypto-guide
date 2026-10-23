@@ -16,7 +16,7 @@ interface PartnerCTAProps {
   placement?: "top" | "inline" | "bottom"
 }
 
-type CtaKind = "wallet" | "contract" | "dex" | "copy" | "stocks" | "ai" | "exchange"
+type CtaKind = "wallet" | "contract" | "dex" | "copy" | "stocks" | "ai" | "binance" | "exchange"
 
 function pickKind(title: string, categorySlug?: string | null) {
   // Tags are intentionally excluded from the main decision: a generic tag such
@@ -31,6 +31,11 @@ function pickKind(title: string, categorySlug?: string | null) {
   // AI / Agent pages should point at Binance's AI stack, not a hardware wallet.
   if (/ai|agent|智能体|binance ai/.test(core)) {
     return "ai" as const
+  }
+
+  // Binance-specific registration/KYC pages should not show OKX.
+  if (/币安|binance/.test(core) && /注册|开户|kyc|认证/.test(core)) {
+    return "binance" as const
   }
 
   // Copy-trading pages should point at the copy-trading partner.
@@ -86,6 +91,10 @@ const copy: Record<CtaKind, { heading: string; sub: string }> = {
   ai: {
     heading: "先用小额测试，再让 AI 执行",
     sub: "AI 会出错，Agent 钱包要设预算、白名单和人工确认；不要给无限权限。",
+  },
+  binance: {
+    heading: "注册之前，先确认邀请码",
+    sub: "通过本站链接进入，邀请码 BQZN1 通常会自动填入；地区不支持就不要绕过 KYC。",
   },
   exchange: {
     heading: "开始之前，先选好交易所",
@@ -210,6 +219,23 @@ function StocksNoteCard() {
   )
 }
 
+function BinanceNoteCard() {
+  return (
+    <div className="rounded-xl border border-border/60 bg-background/70 p-4">
+      <p className="text-[11px] font-medium text-gold">注册与 KYC 提醒</p>
+      <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+        邀请码 BQZN1；KYC 需要真实证件，不要购买“代过 KYC”。
+      </p>
+      <Link
+        href="/articles/binance-registration-guide"
+        className="mt-3 inline-flex items-center text-xs font-medium text-gold"
+      >
+        看文字版注册教程 <ArrowUpRight className="ml-1 h-3.5 w-3.5" />
+      </Link>
+    </div>
+  )
+}
+
 function AiNoteCard() {
   return (
     <div className="rounded-xl border border-border/60 bg-background/70 p-4">
@@ -266,6 +292,11 @@ export function PartnerCTA({
       <>
         <ExchangeCard slug="binance" placement={placement} />
         <AiNoteCard />
+      </>
+    ) : kind === "binance" ? (
+      <>
+        <ExchangeCard slug="binance" placement={placement} />
+        <BinanceNoteCard />
       </>
     ) : (
       <>

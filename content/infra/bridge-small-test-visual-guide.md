@@ -10,11 +10,11 @@
 4. 核对费用、到账时间和目标链资产；
 5. 确认没问题，再考虑分批放大。
 
-下面用 Stargate 和 Across 的真实界面做步骤图。
+下面用 Stargate 和 Across 的真实界面做步骤图。图中的数字对应步骤，箭头指向要操作的区域。
 
 ## 第 1 步：从官方入口进入
 
-![Stargate 产品界面：跨链转移](/images/articles/security/stargate-small-test.jpg)
+![Stargate 产品界面：跨链转移](/images/articles/security/annotated/stargate-small-test.jpg)
 
 > 截图：Stargate 官方产品界面；来源：[stargate.finance](https://stargate.finance/)
 
@@ -24,7 +24,7 @@
 
 ## 第 2 步：选源链、目标链和资产
 
-![Across 产品界面：Bridge & swap](/images/articles/security/across-small-test.jpg)
+![Across 产品界面：Bridge & swap](/images/articles/security/annotated/across-small-test.jpg)
 
 > 截图：Across 官方产品界面；来源：[across.to](https://across.to/)
 

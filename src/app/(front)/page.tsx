@@ -120,7 +120,7 @@ export default async function Home() {
             </div>
             <h1 className="text-4xl font-bold tracking-tight text-foreground sm:text-5xl lg:text-6xl">
               发现最适合你的
-              <span className="text-gradient-gold">加密货币交易所</span>
+              <span className="block text-gradient-gold">加密货币交易所</span>
             </h1>
             <p className="mt-6 text-lg leading-relaxed text-muted-foreground">
               {siteConfig.description}
@@ -288,142 +288,91 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* US Stocks Section */}
-      <section className="section-padding border-t border-border/40 bg-muted/20">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-            <div className="max-w-2xl">
-              <p className="text-xs font-medium tracking-[0.18em] text-gold">美股 · ETF · bStocks</p>
-              <h2 className="mt-2 text-3xl font-bold tracking-tight">美股与 ETF 入门</h2>
-              <p className="mt-3 text-muted-foreground">
-                币安已向部分非美国市场开放美股/ETF。先看开户与入金，再分清代币化证券和直接持股。
-              </p>
-            </div>
-            <Link
-              href="/stocks"
-              className="inline-flex h-10 shrink-0 items-center justify-center rounded-xl border border-border bg-background px-5 text-sm font-semibold transition-colors hover:bg-muted"
-            >
-              进入美股专区 <ArrowRight className="ml-2 h-4 w-4" />
-            </Link>
-          </div>
-          <div className="mt-8 grid gap-4 md:grid-cols-3">
-            {[
-              {
-                href: "/articles/binance-us-stocks-guide",
-                label: "开户与入金",
-                title: "币安美股怎么买？2026 完整流程",
-              },
-              {
-                href: "/articles/bstocks-vs-us-stocks",
-                label: "产品机制",
-                title: "bStocks 和直接买美股有什么区别",
-              },
-              {
-                href: "/articles/us-stock-etf-beginners",
-                label: "ETF 入门",
-                title: "SPY、VOO、QQQ 怎么选",
-              },
-            ].map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className="group rounded-xl border border-border/50 bg-card p-5 shadow-sm transition-all hover:border-gold/30 hover:shadow-md"
-              >
-                <span className="text-xs font-medium text-gold">{item.label}</span>
-                <h3 className="mt-2 text-base font-semibold leading-snug transition-colors group-hover:text-gold">
-                  {item.title}
-                </h3>
-                <span className="mt-3 inline-flex items-center text-xs text-muted-foreground">
-                  阅读全文 <ArrowRight className="ml-1 h-3 w-3" />
-                </span>
-              </Link>
-            ))}
-          </div>
-          <p className="mt-4 text-xs text-muted-foreground">
-            美股/ETF 功能按地区开放，美国用户通常不可用；本文含联盟链接。
-          </p>
-        </div>
-      </section>
-
-      {/* Trends Section */}
+      {/* Explore Section */}
       <section className="section-padding border-t border-border/40">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
             <div className="max-w-2xl">
-              <p className="text-xs font-medium tracking-[0.18em] text-gold">MEME · NFT · RWA · WEB3 · AI</p>
-              <h2 className="mt-2 text-3xl font-bold tracking-tight">热门赛道</h2>
+              <p className="text-xs font-medium tracking-[0.18em] text-gold">EXPLORE</p>
+              <h2 className="mt-2 text-3xl font-bold tracking-tight">探索更多</h2>
               <p className="mt-3 text-muted-foreground">
-                五个高关注方向的入门、真实风险和工具，先看机制再决定是否用真钱。
+                美股、热门赛道和基础设施，按你的下一笔操作进入。
               </p>
             </div>
             <Link
-              href="/trends"
+              href="/articles"
               className="inline-flex h-10 shrink-0 items-center justify-center rounded-xl border border-border bg-background px-5 text-sm font-semibold transition-colors hover:bg-muted"
             >
-              进入赛道专区 <ArrowRight className="ml-2 h-4 w-4" />
+              查看全部文章 <ArrowRight className="ml-2 h-4 w-4" />
             </Link>
           </div>
-          <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
-            {[
-              { href: "/articles/meme-coin-guide-2026", label: "Meme 币", title: "流动性与 Rug 风险" },
-              { href: "/articles/nft-guide-2026", label: "NFT", title: "应用、流动性与防骗" },
-              { href: "/articles/rwa-guide-2026", label: "RWA", title: "链上美债与真实收益" },
-              { href: "/articles/web3-guide-2026", label: "Web3.0", title: "钱包、Layer2 与 Agent" },
-              { href: "/articles/binance-ai-products-guide", label: "AI × 币安", title: "Agent OS 与 x402" },
-            ].map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className="group rounded-xl border border-border/50 bg-card p-4 shadow-sm transition-all hover:border-gold/30 hover:shadow-md"
-              >
-                <span className="text-[11px] font-medium text-gold">{item.label}</span>
-                <h3 className="mt-2 text-sm font-semibold leading-snug transition-colors group-hover:text-gold">
-                  {item.title}
-                </h3>
-                <span className="mt-3 inline-flex items-center text-[11px] text-muted-foreground">
-                  阅读 <ArrowRight className="ml-1 h-3 w-3" />
-                </span>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
 
-      {/* Infrastructure Section */}
-      <section className="section-padding border-t border-border/40 bg-muted/20">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-            <div className="max-w-2xl">
-              <p className="text-xs font-medium tracking-[0.18em] text-gold">WALLETS · BRIDGES · ORACLES</p>
-              <h2 className="mt-2 text-3xl font-bold tracking-tight">基础设施地图</h2>
-              <p className="mt-3 text-muted-foreground">
-                18 个主流热钱包、跨链桥和预言机品牌，附支持网络、功能与风险。
-              </p>
-            </div>
-            <Link
-              href="/ecosystem"
-              className="inline-flex h-10 shrink-0 items-center justify-center rounded-xl border border-border bg-background px-5 text-sm font-semibold transition-colors hover:bg-muted"
-            >
-              查看完整目录 <ArrowRight className="ml-2 h-4 w-4" />
-            </Link>
-          </div>
           <div className="mt-8 grid gap-4 md:grid-cols-3">
             {[
-              { href: "/ecosystem#wallet", label: "热钱包", title: "MetaMask、Trust、Phantom、Rabby", text: "联网签名工具：方便，但私钥和授权风险由你承担。" },
-              { href: "/ecosystem#bridge", label: "跨链桥", title: "LayerZero、Wormhole、Across、CCTP", text: "先看资产形态、验证模型和退出路径，再小额测试。" },
-              { href: "/ecosystem#oracle", label: "预言机", title: "Chainlink、Pyth、RedStone、API3", text: "价格数据上链，延迟、操纵和集成错误都会放大风险。" },
+              {
+                href: "/stocks",
+                label: "美股与 ETF",
+                title: "从开户到第一只 ETF",
+                description:
+                  "币安美股、ETF 与 bStocks 的入门、交易时间和风险。",
+                links: [
+                  ["币安美股怎么买", "/articles/binance-us-stocks-guide"],
+                  ["SPY / VOO / QQQ", "/articles/us-stock-etf-beginners"],
+                ],
+              },
+              {
+                href: "/trends",
+                label: "热门赛道",
+                title: "Meme、NFT、RWA、Web3、AI",
+                description:
+                  "五个高关注方向的机制、真实应用和风险。",
+                links: [
+                  ["币安 AI 产品全景", "/articles/binance-ai-products-guide"],
+                  ["Meme 币风险清单", "/articles/meme-coin-guide-2026"],
+                ],
+              },
+              {
+                href: "/ecosystem",
+                label: "基础设施",
+                title: "钱包、跨链桥、预言机",
+                description:
+                  "18 个主流品牌的功能、支持网络和风险。",
+                links: [
+                  ["热钱包怎么选", "/articles/hot-wallet-comparison-2026"],
+                  ["跨链桥风险对比", "/articles/cross-chain-bridge-guide-2026"],
+                ],
+              },
             ].map((item) => (
-              <Link
+              <div
                 key={item.href}
-                href={item.href}
-                className="group rounded-xl border border-border/50 bg-card p-5 shadow-sm transition-all hover:border-gold/30 hover:shadow-md"
+                className="rounded-2xl border border-border/50 bg-card p-6 shadow-sm"
               >
-                <span className="text-[11px] font-medium text-gold">{item.label}</span>
-                <h3 className="mt-2 text-sm font-semibold leading-snug transition-colors group-hover:text-gold">
-                  {item.title}
-                </h3>
-                <p className="mt-2 text-xs leading-relaxed text-muted-foreground">{item.text}</p>
-              </Link>
+                <Link href={item.href} className="group block">
+                  <span className="text-[11px] font-medium text-gold">
+                    {item.label}
+                  </span>
+                  <h3 className="mt-2 text-lg font-bold leading-snug transition-colors group-hover:text-gold">
+                    {item.title}
+                  </h3>
+                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                    {item.description}
+                  </p>
+                  <span className="mt-4 inline-flex items-center text-xs font-medium text-gold">
+                    进入专区 <ArrowRight className="ml-1 h-3.5 w-3.5" />
+                  </span>
+                </Link>
+                <div className="mt-4 space-y-1.5 border-t border-border/40 pt-3">
+                  {item.links.map(([label, href]) => (
+                    <Link
+                      key={href}
+                      href={href}
+                      className="block text-xs text-muted-foreground transition-colors hover:text-gold"
+                    >
+                      → {label}
+                    </Link>
+                  ))}
+                </div>
+              </div>
             ))}
           </div>
         </div>

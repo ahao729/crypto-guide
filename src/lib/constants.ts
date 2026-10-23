@@ -37,6 +37,7 @@ export const siteConfig: SiteConfig = {
     { label: "常见问题", href: "/faq" },
     { label: "资源下载", href: "/resources" },
     { label: "加入社群", href: "/about" },
+    { label: "搜索", href: "/search" },
   ],
 }
 

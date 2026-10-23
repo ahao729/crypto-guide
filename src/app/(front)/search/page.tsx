@@ -1,5 +1,6 @@
 import Link from "next/link"
 import type { Metadata } from "next"
+import { after } from "next/server"
 import { ArrowRight } from "lucide-react"
 import { prisma } from "@/lib/prisma"
 import { siteConfig } from "@/lib/constants"
@@ -77,6 +78,18 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
     : []
 
   const count = articles.length + exchanges.length + brands.length
+
+  if (query) {
+    after(async () => {
+      try {
+        await prisma.searchLog.create({
+          data: { query, resultCount: count },
+        })
+      } catch (error) {
+        console.error("Failed to record anonymous search:", error)
+      }
+    })
+  }
 
   return (
     <div className="min-h-screen">

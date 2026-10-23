@@ -133,6 +133,16 @@ model ClickLog {
   @@index([source, placement, createdAt])
 }
 
+model SearchLog {
+  id          String   @id @default(cuid())
+  query       String
+  resultCount Int      @default(0)
+  createdAt   DateTime @default(now())
+
+  @@index([createdAt])
+  @@index([query, createdAt])
+}
+
 model SiteSetting {
   id    String @id @default(cuid())
   key   String @unique

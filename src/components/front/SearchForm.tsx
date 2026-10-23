@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import { ArrowRight, Search } from "lucide-react"
 
 interface SuggestionData {
@@ -23,6 +23,7 @@ export function SearchForm({ initialQuery = "" }: { initialQuery?: string }) {
   const [data, setData] = useState<SuggestionData | null>(null)
   const [open, setOpen] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [activeIndex, setActiveIndex] = useState(-1)
   const inputRef = useRef<HTMLInputElement>(null)
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
 
@@ -49,6 +50,7 @@ export function SearchForm({ initialQuery = "" }: { initialQuery?: string }) {
         if (!response.ok) throw new Error("Search failed")
         const result = (await response.json()) as SuggestionData
         setData(result)
+        setActiveIndex(-1)
         setOpen(true)
       } catch (error) {
         if ((error as Error).name !== "AbortError") setData(null)
@@ -70,9 +72,40 @@ export function SearchForm({ initialQuery = "" }: { initialQuery?: string }) {
     router.push(`/search?q=${encodeURIComponent(query)}`)
   }
 
+  const suggestions = useMemo(() => {
+    if (!data) return []
+    return [
+      ...data.articles.map((article) => ({
+        id: `article-${article.slug}`,
+        href: `/articles/${article.slug}`,
+        kind: "文章",
+        title: article.title,
+        meta: article.category?.name ?? "文章",
+      })),
+      ...data.exchanges.map((exchange) => ({
+        id: `exchange-${exchange.slug}`,
+        href: `/exchanges/${exchange.slug}`,
+        kind: "交易所",
+        title: exchange.name,
+        meta: exchange.rating.toFixed(1),
+      })),
+      ...data.brands.map((brand) => ({
+        id: `brand-${brand.category}-${brand.slug}`,
+        href: `/ecosystem/${brand.category}/${brand.slug}`,
+        kind: "基础设施",
+        title: brand.name,
+        meta: brand.tagline,
+      })),
+    ]
+  }, [data])
+
   const hasResults =
     !!data &&
     (data.articles.length > 0 || data.exchanges.length > 0 || data.brands.length > 0)
+
+  const indexOf = (id: string) => suggestions.findIndex((item) => item.id === id)
+  const activeClass = (id: string) =>
+    indexOf(id) === activeIndex ? "bg-muted" : "hover:bg-muted"
 
   return (
     <form
@@ -91,7 +124,10 @@ export function SearchForm({ initialQuery = "" }: { initialQuery?: string }) {
             id="q"
             name="q"
             value={value}
-            onChange={(event) => setValue(event.target.value)}
+            onChange={(event) => {
+              setValue(event.target.value)
+              setActiveIndex(-1)
+            }}
             onFocus={() => {
               if (data && value.trim().length >= 2) setOpen(true)
             }}
@@ -99,7 +135,40 @@ export function SearchForm({ initialQuery = "" }: { initialQuery?: string }) {
               closeTimer.current = setTimeout(() => setOpen(false), 160)
             }}
             onKeyDown={(event) => {
-              if (event.key === "Escape") setOpen(false)
+              if (event.key === "Escape") {
+                setOpen(false)
+                setActiveIndex(-1)
+                return
+              }
+              if (event.key === "ArrowDown") {
+                if (!open) {
+                  if (value.trim().length >= 2) setOpen(true)
+                  return
+                }
+                if (suggestions.length === 0) return
+                event.preventDefault()
+                setActiveIndex((index) =>
+                  index < 0 ? 0 : (index + 1) % suggestions.length,
+                )
+                return
+              }
+              if (event.key === "ArrowUp") {
+                if (!open || suggestions.length === 0) return
+                event.preventDefault()
+                setActiveIndex((index) =>
+                  index <= 0 ? suggestions.length - 1 : index - 1,
+                )
+                return
+              }
+              if (event.key === "Enter" && open && activeIndex >= 0) {
+                const active = suggestions[activeIndex]
+                if (active) {
+                  event.preventDefault()
+                  setOpen(false)
+                  setActiveIndex(-1)
+                  router.push(active.href)
+                }
+              }
             }}
             placeholder="例如：币安注册、Meme、LayerZero、RWA"
             autoComplete="off"
@@ -107,6 +176,9 @@ export function SearchForm({ initialQuery = "" }: { initialQuery?: string }) {
             aria-expanded={open}
             aria-controls="search-suggestions"
             aria-autocomplete="list"
+            aria-activedescendant={
+              activeIndex >= 0 ? `search-option-${activeIndex}` : undefined
+            }
             className="h-11 w-full rounded-xl border border-border bg-card pl-9 pr-3 text-sm outline-none transition-colors focus:border-gold/50"
           />
         </div>
@@ -121,6 +193,7 @@ export function SearchForm({ initialQuery = "" }: { initialQuery?: string }) {
       {open && (
         <div
           id="search-suggestions"
+          role="listbox"
           className="absolute left-0 right-0 top-full z-40 mt-2 max-h-[70vh] overflow-y-auto rounded-xl border border-border/60 bg-background/95 p-2 shadow-xl backdrop-blur-xl"
           onMouseDown={() => {
             if (closeTimer.current) clearTimeout(closeTimer.current)
@@ -143,7 +216,11 @@ export function SearchForm({ initialQuery = "" }: { initialQuery?: string }) {
                     <Link
                       key={article.slug}
                       href={`/articles/${article.slug}`}
-                      className="block rounded-lg px-3 py-2 hover:bg-muted"
+                      id={`search-option-${indexOf(`article-${article.slug}`)}`}
+                      role="option"
+                      aria-selected={indexOf(`article-${article.slug}`) === activeIndex}
+                      onMouseEnter={() => setActiveIndex(indexOf(`article-${article.slug}`))}
+                      className={`block rounded-lg px-3 py-2 ${activeClass(`article-${article.slug}`)}`}
                     >
                       <div className="text-sm font-medium">{article.title}</div>
                       {article.category && (
@@ -165,7 +242,11 @@ export function SearchForm({ initialQuery = "" }: { initialQuery?: string }) {
                     <Link
                       key={exchange.slug}
                       href={`/exchanges/${exchange.slug}`}
-                      className="flex items-center justify-between rounded-lg px-3 py-2 text-sm hover:bg-muted"
+                      id={`search-option-${indexOf(`exchange-${exchange.slug}`)}`}
+                      role="option"
+                      aria-selected={indexOf(`exchange-${exchange.slug}`) === activeIndex}
+                      onMouseEnter={() => setActiveIndex(indexOf(`exchange-${exchange.slug}`))}
+                      className={`flex items-center justify-between rounded-lg px-3 py-2 text-sm ${activeClass(`exchange-${exchange.slug}`)}`}
                     >
                       <span>{exchange.name}</span>
                       <span className="text-xs text-gold">{exchange.rating.toFixed(1)}</span>
@@ -183,7 +264,17 @@ export function SearchForm({ initialQuery = "" }: { initialQuery?: string }) {
                     <Link
                       key={`${brand.category}-${brand.slug}`}
                       href={`/ecosystem/${brand.category}/${brand.slug}`}
-                      className="block rounded-lg px-3 py-2 hover:bg-muted"
+                      id={`search-option-${indexOf(`brand-${brand.category}-${brand.slug}`)}`}
+                      role="option"
+                      aria-selected={
+                        indexOf(`brand-${brand.category}-${brand.slug}`) === activeIndex
+                      }
+                      onMouseEnter={() =>
+                        setActiveIndex(indexOf(`brand-${brand.category}-${brand.slug}`))
+                      }
+                      className={`block rounded-lg px-3 py-2 ${activeClass(
+                        `brand-${brand.category}-${brand.slug}`,
+                      )}`}
                     >
                       <div className="text-sm font-medium">{brand.name}</div>
                       <div className="mt-0.5 text-[11px] text-muted-foreground">
@@ -199,7 +290,12 @@ export function SearchForm({ initialQuery = "" }: { initialQuery?: string }) {
                 onClick={() => goToResults()}
                 className="flex w-full items-center justify-between rounded-lg border-t border-border/40 px-3 py-2.5 text-xs font-medium text-gold hover:bg-muted"
               >
-                查看全部结果
+                <span>
+                  查看全部结果
+                  <span className="ml-2 font-normal text-muted-foreground">
+                    ↑↓ 选择 · 回车直达
+                  </span>
+                </span>
                 <ArrowRight className="h-3.5 w-3.5" />
               </button>
             </>

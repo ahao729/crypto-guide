@@ -13,6 +13,7 @@
     "fix:articles": "node scripts/fix-outdated-articles.mjs",
     "partners:apply": "node scripts/update-partner-links.mjs",
     "report:attribution": "node scripts/attribution-report.mjs",
+    "report:search": "node scripts/search-report.mjs",
     "rewrite:money": "node scripts/apply-money-pages.mjs",
     "seed:stocks": "node scripts/seed-stocks.mjs",
     "seed:trends": "node scripts/seed-trends.mjs",

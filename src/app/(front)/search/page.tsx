@@ -1,10 +1,11 @@
 import Link from "next/link"
 import type { Metadata } from "next"
-import { ArrowRight, Search as SearchIcon } from "lucide-react"
+import { ArrowRight } from "lucide-react"
 import { prisma } from "@/lib/prisma"
 import { siteConfig } from "@/lib/constants"
 import { ecosystemBrands } from "@/lib/ecosystem"
 import { BrandMark } from "@/components/front/BrandMark"
+import { SearchForm } from "@/components/front/SearchForm"
 
 export const metadata: Metadata = {
   title: "搜索",
@@ -88,28 +89,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
           <p className="mt-3 text-sm text-muted-foreground">
             搜文章、交易所和 18 个基础设施品牌。
           </p>
-          <form action="/search" method="get" role="search" className="mt-6 flex gap-2">
-            <label htmlFor="q" className="sr-only">
-              搜索关键词
-            </label>
-            <div className="relative flex-1">
-              <SearchIcon className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-              <input
-                id="q"
-                name="q"
-                defaultValue={query}
-                placeholder="例如：币安注册、Meme、LayerZero、RWA"
-                autoFocus={!query}
-                className="h-11 w-full rounded-xl border border-border bg-card pl-9 pr-3 text-sm outline-none transition-colors focus:border-gold/50"
-              />
-            </div>
-            <button
-              type="submit"
-              className="inline-flex h-11 items-center justify-center rounded-xl bg-gradient-gold px-5 text-sm font-semibold text-white shadow-sm"
-            >
-              搜索
-            </button>
-          </form>
+          <SearchForm initialQuery={query} />
         </div>
       </section>
 

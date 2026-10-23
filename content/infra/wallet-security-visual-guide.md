@@ -9,7 +9,7 @@
 3. 不碰可疑代币/空投，定期检查授权；
 4. 助记词离线备份，大额资产用冷钱包/多签。
 
-下面用真实产品截图拆开讲。
+下面用真实产品截图拆开讲。图中的金色圆圈数字对应步骤，箭头指向需要点击/核对的位置。
 
 ## 第 1 步：从官方渠道安装，先锁住入口
 
@@ -22,7 +22,7 @@
 
 ## 第 2 步：签名前看风险提示
 
-![MetaMask 官方截图：签名前的交易与风险提示](/images/articles/security/metamask-transaction-check.jpg)
+![MetaMask 官方截图：签名前的交易与风险提示](/images/articles/security/annotated/metamask-transaction-check.jpg)
 
 > 截图：MetaMask App Store 官方截图（签名/安全检查示意）；来源：[App Store](https://apps.apple.com/us/app/metamask-trade-crypto/id1438144202)
 
@@ -35,7 +35,7 @@
 
 ## 第 3 步：识别可疑代币和风险提示
 
-![Trust Wallet 官方截图：可疑代币/风险提示](/images/articles/security/trust-token-warning.jpg)
+![Trust Wallet 官方截图：可疑代币/风险提示](/images/articles/security/annotated/trust-token-warning.jpg)
 
 > 截图：Trust Wallet App Store 官方截图（风险代币提示示意）；来源：[App Store](https://apps.apple.com/us/app/trust-crypto-bitcoin-wallet/id1288339409)
 
@@ -50,7 +50,7 @@
 
 ## 第 4 步：检查授权列表
 
-![Rabby 官方帮助中心：授权列表](/images/articles/security/rabby-approvals-list.png)
+![Rabby 官方帮助中心：授权列表](/images/articles/security/annotated/rabby-approvals-list.png)
 
 > 截图：Rabby 官方帮助中心“如何撤销授权”；来源：[Rabby Support](https://support.rabby.io/en/articles/14150713-how-to-revoke-approvals)
 
@@ -65,7 +65,7 @@
 
 ## 第 5 步：批量撤销不用的授权
 
-![Rabby 官方帮助中心：批量撤销](/images/articles/security/rabby-batch-revoke.png)
+![Rabby 官方帮助中心：批量撤销](/images/articles/security/annotated/rabby-batch-revoke.png)
 
 > 截图：Rabby 官方帮助中心批量撤销界面；来源：[Rabby Support](https://support.rabby.io/en/articles/14150713-how-to-revoke-approvals)
 

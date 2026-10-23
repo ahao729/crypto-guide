@@ -62,6 +62,15 @@ const articles = [
     tags: ["跨链桥", "安全"],
   },
   {
+    slug: "hardware-wallet-setup-visual-guide",
+    title: "硬件钱包初始化步骤图：OneKey / Trezor 开箱、连接与备份",
+    excerpt:
+      "用 OneKey 和 Trezor 的官方截图，拆解硬件钱包选择、App 连接、设备 PIN、助记词备份和地址核对。",
+    file: "content/infra/hardware-wallet-setup-visual-guide.md",
+    coverImage: "/images/articles/hardware/hardware-wallet-cover.png",
+    tags: ["钱包", "安全"],
+  },
+  {
     slug: "oracle-guide-2026",
     title: "预言机是什么？Chainlink、Pyth、RedStone 的作用与风险",
     excerpt:

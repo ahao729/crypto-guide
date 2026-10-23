@@ -389,6 +389,46 @@ export default async function Home() {
         </div>
       </section>
 
+      {/* Infrastructure Section */}
+      <section className="section-padding border-t border-border/40 bg-muted/20">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+            <div className="max-w-2xl">
+              <p className="text-xs font-medium tracking-[0.18em] text-gold">WALLETS · BRIDGES · ORACLES</p>
+              <h2 className="mt-2 text-3xl font-bold tracking-tight">基础设施地图</h2>
+              <p className="mt-3 text-muted-foreground">
+                18 个主流热钱包、跨链桥和预言机品牌，附支持网络、功能与风险。
+              </p>
+            </div>
+            <Link
+              href="/ecosystem"
+              className="inline-flex h-10 shrink-0 items-center justify-center rounded-xl border border-border bg-background px-5 text-sm font-semibold transition-colors hover:bg-muted"
+            >
+              查看完整目录 <ArrowRight className="ml-2 h-4 w-4" />
+            </Link>
+          </div>
+          <div className="mt-8 grid gap-4 md:grid-cols-3">
+            {[
+              { href: "/ecosystem#wallet", label: "热钱包", title: "MetaMask、Trust、Phantom、Rabby", text: "联网签名工具：方便，但私钥和授权风险由你承担。" },
+              { href: "/ecosystem#bridge", label: "跨链桥", title: "LayerZero、Wormhole、Across、CCTP", text: "先看资产形态、验证模型和退出路径，再小额测试。" },
+              { href: "/ecosystem#oracle", label: "预言机", title: "Chainlink、Pyth、RedStone、API3", text: "价格数据上链，延迟、操纵和集成错误都会放大风险。" },
+            ].map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="group rounded-xl border border-border/50 bg-card p-5 shadow-sm transition-all hover:border-gold/30 hover:shadow-md"
+              >
+                <span className="text-[11px] font-medium text-gold">{item.label}</span>
+                <h3 className="mt-2 text-sm font-semibold leading-snug transition-colors group-hover:text-gold">
+                  {item.title}
+                </h3>
+                <p className="mt-2 text-xs leading-relaxed text-muted-foreground">{item.text}</p>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Latest Articles Section */}
       {latestArticles.length > 0 && (
         <section className="section-padding border-t border-border/40">

@@ -22,6 +22,17 @@ const nextConfig: NextConfig = {
         destination: "/articles/bitcoin-halving-2026",
         statusCode: 301,
       },
+      {
+        // Thin/outdated articles retired during index cleanup.
+        source: "/articles/hong-kong-crypto-regulation",
+        destination: "/articles",
+        statusCode: 301,
+      },
+      {
+        source: "/articles/crypto-market-review-2026-q1",
+        destination: "/articles?category=news",
+        statusCode: 301,
+      },
     ];
   },
 

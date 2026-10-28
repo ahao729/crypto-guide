@@ -30,13 +30,19 @@ export async function generateMetadata({ params }: ResourcePageProps): Promise<M
   const { slug } = await params
   const resource = await prisma.resource.findUnique({
     where: { slug },
-    select: { title: true, description: true },
+    select: { title: true, description: true, content: true },
   })
 
   if (!resource) return { title: "资源未找到" }
 
+  const indexable = (resource.content?.length ?? 0) >= 700
+
   return {
     title: resource.title,
+    robots: {
+      index: indexable,
+      follow: true,
+    },
     description: resource.description?.slice(0, 160) || `${resource.title} - 加密货币学习资源`,
     openGraph: {
       title: resource.title,

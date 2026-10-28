@@ -83,6 +83,7 @@ export const footerLinks: FooterLinkGroup[] = [
       { label: "美股入门", href: "/stocks" },
       { label: "热门赛道", href: "/trends" },
       { label: "基础设施", href: "/ecosystem" },
+      { label: "AI 工具与实战", href: "/ai" },
     ],
   },
 ]

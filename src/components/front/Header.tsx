@@ -63,6 +63,7 @@ export function Header() {
     { label: "美股与 ETF", href: "/stocks", description: "开户、bStocks 与 ETF 入门" },
     { label: "热门赛道", href: "/trends", description: "Meme、NFT、RWA、Web3、AI" },
     { label: "基础设施", href: "/ecosystem", description: "钱包、跨链桥、预言机目录" },
+    { label: "AI 工具与实战", href: "/ai", description: "搜索、Agent 与研究工作流" },
   ]
 
   const communityMenu = [

@@ -10,6 +10,7 @@ import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
 import { siteConfig } from "@/lib/constants"
 import { getExchangeOfficialUrl, isExchangePartner } from "@/lib/affiliates"
+import { getExchangeEditorial } from "@/lib/exchange-editorial"
 import { processArticleHtml } from "@/lib/article-utils"
 import { formatDate, toFiveStarRating } from "@/lib/utils"
 import {
@@ -47,10 +48,13 @@ export async function generateMetadata({ params }: ExchangeDetailPageProps): Pro
     return { title: "交易所未找到" }
   }
 
-  const title = `${exchange.name} 评测与注册教程`
-  const description = exchange.description
-    ? exchange.description.slice(0, 160)
-    : `${exchange.name} 加密货币交易所详细介绍，包括交易费率、支持币种、安全性和用户评价。`
+  const editorial = getExchangeEditorial(slug)
+  const title = editorial?.metaTitle ?? `${exchange.name} 评测与注册教程`
+  const description =
+    editorial?.metaDescription ??
+    (exchange.description
+      ? exchange.description.slice(0, 160)
+      : `${exchange.name} 加密货币交易所详细介绍，包括交易费率、支持币种、安全性和用户评价。`)
 
   return {
     title,
@@ -91,6 +95,7 @@ export default async function ExchangeDetailPage({ params }: ExchangeDetailPageP
     notFound()
   }
 
+  const editorial = getExchangeEditorial(slug)
   const featureList = exchange.features?.split(/[,;；，]/).filter(Boolean) ?? []
   const coinList = exchange.supportedCoins?.split(",").filter(Boolean) ?? []
   const isDex = exchange.category?.slug === "dex"
@@ -182,6 +187,23 @@ export default async function ExchangeDetailPage({ params }: ExchangeDetailPageP
           }),
         }}
       />
+      {editorial && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "FAQPage",
+              mainEntity: editorial.faqs.map((faq) => ({
+                "@type": "Question",
+                name: faq.question,
+                acceptedAnswer: { "@type": "Answer", text: faq.answer },
+              })),
+            }),
+          }}
+        />
+      )}
+
       {/* Back link */}
       <div className="mx-auto max-w-7xl px-4 pt-8 sm:px-6 lg:px-8">
         <Link
@@ -331,6 +353,90 @@ export default async function ExchangeDetailPage({ params }: ExchangeDetailPageP
                     className="leading-relaxed text-foreground/90 [&>h2]:mt-8 [&>h2]:mb-4 [&>h2]:text-xl [&>h2]:font-bold [&>h3]:mt-6 [&>h3]:mb-3 [&>h3]:text-lg [&>h3]:font-semibold [&>p]:mb-4 [&>p]:leading-7 [&>ul]:mb-4 [&>ul]:list-disc [&>ul]:pl-6 [&>ol]:mb-4 [&>ol]:list-decimal [&>ol]:pl-6 [&>li]:mb-1 [&>li]:leading-7 [&>a]:text-gold [&>a]:underline [&>a]:underline-offset-2"
                     dangerouslySetInnerHTML={{ __html: contentHtml ?? "" }}
                   />
+                </div>
+              </section>
+            )}
+
+            {editorial && (
+              <section className="rounded-2xl border border-gold/20 bg-gold/[0.03] p-5 sm:p-6">
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <h2 className="text-2xl font-bold">编辑评测</h2>
+                  <span className="text-xs text-muted-foreground">
+                    最后核对：{editorial.lastChecked} · 费率以官方页面为准
+                  </span>
+                </div>
+                <p className="mt-4 text-sm leading-7 text-foreground/90">
+                  {editorial.intro}
+                </p>
+
+                <div className="mt-6 grid gap-3 sm:grid-cols-2">
+                  <div className="rounded-xl border border-green-500/20 bg-green-500/[0.04] p-4">
+                    <h3 className="text-sm font-semibold text-green-700 dark:text-green-400">适合谁</h3>
+                    <ul className="mt-2 space-y-1.5 text-sm leading-relaxed text-muted-foreground">
+                      {editorial.bestFor.map((item) => <li key={item}>• {item}</li>)}
+                    </ul>
+                  </div>
+                  <div className="rounded-xl border border-amber-500/20 bg-amber-500/[0.04] p-4">
+                    <h3 className="text-sm font-semibold text-amber-700 dark:text-amber-400">不适合谁</h3>
+                    <ul className="mt-2 space-y-1.5 text-sm leading-relaxed text-muted-foreground">
+                      {editorial.notFor.map((item) => <li key={item}>• {item}</li>)}
+                    </ul>
+                  </div>
+                </div>
+
+                <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                  <div>
+                    <h3 className="text-sm font-semibold">优点</h3>
+                    <ul className="mt-2 space-y-1.5 text-sm leading-relaxed text-muted-foreground">
+                      {editorial.pros.map((item) => <li key={item}>• {item}</li>)}
+                    </ul>
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-semibold">注意点</h3>
+                    <ul className="mt-2 space-y-1.5 text-sm leading-relaxed text-muted-foreground">
+                      {editorial.watchouts.map((item) => <li key={item}>• {item}</li>)}
+                    </ul>
+                  </div>
+                </div>
+
+                <h3 className="mt-6 text-sm font-semibold">费用示例（标准档，未计 VIP/活动）</h3>
+                <div className="mt-2 overflow-x-auto rounded-xl border border-border/50 bg-background/60">
+                  <table className="w-full text-left text-sm">
+                    <tbody>
+                      {editorial.feeExamples.map((row) => (
+                        <tr key={row.label} className="border-b border-border/30 last:border-0">
+                          <td className="px-4 py-2.5 text-muted-foreground">{row.label}</td>
+                          <td className="px-4 py-2.5 text-right font-medium">{row.value}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+
+                <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
+                  <span className="font-medium text-foreground">出入金：</span>{editorial.funding}
+                </p>
+
+                <div className="mt-4 flex flex-wrap gap-x-4 gap-y-2">
+                  {editorial.links.map((link) => (
+                    <Link
+                      key={link.href}
+                      href={link.href}
+                      className="text-sm font-medium text-gold underline decoration-gold/40 underline-offset-4"
+                    >
+                      {link.label}
+                    </Link>
+                  ))}
+                </div>
+
+                <h3 className="mt-6 text-sm font-semibold">常见问题</h3>
+                <div className="mt-2 space-y-2">
+                  {editorial.faqs.map((faq) => (
+                    <details key={faq.question} className="rounded-lg border border-border/50 bg-background/60 p-3">
+                      <summary className="cursor-pointer text-sm font-medium">{faq.question}</summary>
+                      <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{faq.answer}</p>
+                    </details>
+                  ))}
                 </div>
               </section>
             )}

@@ -133,6 +133,12 @@ function ExchangeCard({
         {meta.cta}
         <ArrowUpRight className="h-3.5 w-3.5" />
       </Link>
+      <Link
+        href={`/exchanges/${slug}`}
+        className="mt-2 block text-center text-[11px] text-muted-foreground transition-colors hover:text-gold"
+      >
+        查看完整评测
+      </Link>
     </div>
   )
 }
@@ -167,6 +173,12 @@ function SecondaryExchangeCard({
       >
         {meta.cta}
         <ArrowUpRight className="h-3.5 w-3.5" />
+      </Link>
+      <Link
+        href={`/exchanges/${slug}`}
+        className="mt-2 block text-center text-[11px] text-muted-foreground transition-colors hover:text-gold"
+      >
+        查看完整评测
       </Link>
     </div>
   )

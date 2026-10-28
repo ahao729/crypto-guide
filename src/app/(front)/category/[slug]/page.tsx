@@ -7,6 +7,7 @@ import { StarRating } from "@/components/front/StarRating"
 import { Badge } from "@/components/ui/badge"
 import { siteConfig } from "@/lib/constants"
 import { isExchangePartner } from "@/lib/affiliates"
+import { categoryEditorials } from "@/lib/category-editorial"
 import { ExchangeCtaLink } from "@/components/front/ExchangeCtaLink"
 import { ArrowLeft, Coins, FileText, TrendingUp, ArrowUpRight } from "lucide-react"
 
@@ -30,7 +31,9 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
   }
 
   const title = category.name
-  const description = category.description || `浏览 ${category.name} 分类下的加密货币交易所和文章内容`
+  const description =
+    categoryEditorials[slug]?.intro ??
+    (category.description || `浏览 ${category.name} 分类下的加密货币交易所和文章内容`)
 
   return {
     title,
@@ -80,6 +83,20 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
       "@id": `${siteConfig.url}/category/${slug}`,
     },
   }
+
+  const editorial = categoryEditorials[slug]
+
+  const categoryFaqJsonLd = editorial
+    ? {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        mainEntity: editorial.faqs.map((faq) => ({
+          "@type": "Question",
+          name: faq.question,
+          acceptedAnswer: { "@type": "Answer", text: faq.answer },
+        })),
+      }
+    : null
 
   const categoryBreadcrumbJsonLd = {
     "@context": "https://schema.org",
@@ -138,6 +155,53 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
           </div>
         </div>
       </section>
+
+      {categoryFaqJsonLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(categoryFaqJsonLd) }}
+        />
+      )}
+
+      {editorial && (
+        <section className="mx-auto max-w-7xl px-4 pt-10 sm:px-6 lg:px-8">
+          <div className="rounded-2xl border border-gold/20 bg-gold/[0.03] p-5 sm:p-6">
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <h2 className="text-2xl font-bold">{category.name}怎么选</h2>
+              <span className="text-xs text-muted-foreground">最后整理：2026-10-29</span>
+            </div>
+            <p className="mt-4 max-w-4xl text-sm leading-7 text-foreground/90">
+              {editorial.intro}
+            </p>
+            <ul className="mt-4 grid gap-2 text-sm leading-relaxed text-muted-foreground sm:grid-cols-3">
+              {editorial.howTo.map((item) => (
+                <li key={item} className="rounded-lg border border-border/50 bg-background/50 p-3">
+                  {item}
+                </li>
+              ))}
+            </ul>
+            <div className="mt-4 flex flex-wrap gap-x-4 gap-y-2">
+              {editorial.links.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className="text-sm font-medium text-gold underline decoration-gold/40 underline-offset-4"
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </div>
+            <div className="mt-5 grid gap-2 sm:grid-cols-2">
+              {editorial.faqs.map((faq) => (
+                <details key={faq.question} className="rounded-lg border border-border/50 bg-background/50 p-3">
+                  <summary className="cursor-pointer text-sm font-medium">{faq.question}</summary>
+                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{faq.answer}</p>
+                </details>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Content */}
       <section className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">

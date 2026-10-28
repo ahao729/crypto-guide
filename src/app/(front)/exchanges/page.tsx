@@ -143,6 +143,14 @@ export default async function ExchangesPage({ searchParams }: ExchangesPageProps
                 币安 vs OKX 怎么选？看完整对比 →
               </Link>
             </p>
+            <p className="mt-2 text-sm">
+              <Link
+                href="/compare/bybit-vs-bitget"
+                className="font-medium text-gold underline decoration-gold/40 underline-offset-4 hover:text-gold-dark"
+              >
+                Bybit vs Bitget：合约与跟单怎么选 →
+              </Link>
+            </p>
           </div>
 
           {/* Stats */}

@@ -94,6 +94,7 @@ export const exchangeEditorials: Record<string, ExchangeEditorial> = {
       { label: "$10,000 现货 Taker（0.10%）", value: "约 $10/单边" },
     ],
     links: [
+      { label: "Bybit vs Bitget", href: "/compare/bybit-vs-bitget" },
       { label: "Bitget 跟单教程", href: "/articles/what-is-copy-trading-bitget" },
       { label: "手续费对比", href: "/articles/exchange-fee-comparison" },
       { label: "交易所排名", href: "/exchange-ranking" },
@@ -123,6 +124,7 @@ export const exchangeEditorials: Record<string, ExchangeEditorial> = {
       { label: "$50,000 合约 Taker（0.06%）", value: "约 $30/单边" },
     ],
     links: [
+      { label: "Bitget vs Bybit", href: "/compare/bybit-vs-bitget" },
       { label: "Bitget 跟单教程", href: "/articles/what-is-copy-trading-bitget" },
       { label: "手续费对比", href: "/articles/exchange-fee-comparison" },
       { label: "交易所排名", href: "/exchange-ranking" },

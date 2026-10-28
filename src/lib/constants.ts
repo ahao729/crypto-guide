@@ -84,6 +84,7 @@ export const footerLinks: FooterLinkGroup[] = [
       { label: "热门赛道", href: "/trends" },
       { label: "基础设施", href: "/ecosystem" },
       { label: "评测方法", href: "/methodology" },
+      { label: "Bybit vs Bitget", href: "/compare/bybit-vs-bitget" },
       { label: "AI 工具与实战", href: "/ai" },
     ],
   },

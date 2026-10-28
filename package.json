@@ -11,6 +11,7 @@
     "rotate-admin": "tsx scripts/rotate-admin-password.ts",
     "clean:affiliates": "node scripts/clean-nonpartner-referrals.mjs",
     "fix:articles": "node scripts/fix-outdated-articles.mjs",
+    "cleanup:articles": "node scripts/cleanup-old-articles.mjs",
     "partners:apply": "node scripts/update-partner-links.mjs",
     "report:attribution": "node scripts/attribution-report.mjs",
     "report:search": "node scripts/search-report.mjs",

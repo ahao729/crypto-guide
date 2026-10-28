@@ -361,9 +361,12 @@ export default async function ExchangeDetailPage({ params }: ExchangeDetailPageP
               <section className="rounded-2xl border border-gold/20 bg-gold/[0.03] p-5 sm:p-6">
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <h2 className="text-2xl font-bold">编辑评测</h2>
-                  <span className="text-xs text-muted-foreground">
-                    最后核对：{editorial.lastChecked} · 费率以官方页面为准
-                  </span>
+                  <div className="flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
+                    <span>最后核对：{editorial.lastChecked} · 费率以官方页面为准</span>
+                    <Link href="/methodology" className="font-medium text-gold hover:underline">
+                      评测方法
+                    </Link>
+                  </div>
                 </div>
                 <p className="mt-4 text-sm leading-7 text-foreground/90">
                   {editorial.intro}

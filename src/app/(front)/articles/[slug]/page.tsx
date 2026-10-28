@@ -16,6 +16,7 @@ import TableOfContents from "@/components/front/TableOfContents"
 import ShareSection from "@/components/front/ShareSection"
 import ArticleNavigation from "@/components/front/ArticleNavigation"
 import { PartnerCTA } from "@/components/front/PartnerCTA"
+import { AiSubscribeCTA } from "@/components/front/AiSubscribeCTA"
 
 export const revalidate = 1800 // 30 minutes
 
@@ -135,6 +136,8 @@ export default async function ArticleDetailPage({ params }: ArticlePageProps) {
   ])
 
   const readingTime = article.content ? estimateReadingTime(processedContent) : 1
+  const isGeneralAi =
+    article.category?.slug === "ai-tools" || article.category?.slug === "ai-agents"
 
   // Put a single contextual CTA after the first section instead of before the
   // article. Long enough pieces get an inline card; short ones keep the top card.
@@ -308,7 +311,7 @@ export default async function ArticleDetailPage({ params }: ArticlePageProps) {
 
               {/* Article Content - optimal reading width */}
               <div className="min-w-0 flex-1 max-w-4xl">
-                {!hasInlineCta && (
+                {!isGeneralAi && !hasInlineCta && (
                   <PartnerCTA
                     title={article.title}
                     categorySlug={article.category?.slug}
@@ -319,7 +322,7 @@ export default async function ArticleDetailPage({ params }: ArticlePageProps) {
                   {article.content ? (
                     <>
                       <ArticleContent html={contentBeforeCta} />
-                      {hasInlineCta && (
+                      {!isGeneralAi && hasInlineCta && (
                         <PartnerCTA
                           title={article.title}
                           categorySlug={article.category?.slug}
@@ -356,11 +359,15 @@ export default async function ArticleDetailPage({ params }: ArticlePageProps) {
                   {/* Previous / Next Article Navigation */}
                   <ArticleNavigation prev={prevArticle} next={nextArticle} />
 
-                  <PartnerCTA
-                    title={article.title}
-                    categorySlug={article.category?.slug}
-                    placement="bottom"
-                  />
+                  {isGeneralAi ? (
+                    <AiSubscribeCTA />
+                  ) : (
+                    <PartnerCTA
+                      title={article.title}
+                      categorySlug={article.category?.slug}
+                      placement="bottom"
+                    />
+                  )}
 
                   <div className="mt-8 rounded-xl border border-amber-500/20 bg-amber-500/5 p-4 text-xs leading-relaxed text-muted-foreground">
                     <p>

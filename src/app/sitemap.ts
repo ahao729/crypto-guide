@@ -19,6 +19,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${baseUrl}/methodology`, changeFrequency: 'monthly', priority: 0.5 },
     { url: `${baseUrl}/ai`, changeFrequency: 'weekly', priority: 0.9 },
     { url: `${baseUrl}/compare/binance-vs-okx`, changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${baseUrl}/compare/bybit-vs-bitget`, changeFrequency: 'monthly', priority: 0.8 },
     { url: `${baseUrl}/tools`, changeFrequency: 'weekly', priority: 0.8 },
     { url: `${baseUrl}/faq`, changeFrequency: 'monthly', priority: 0.6 },
     { url: `${baseUrl}/resources`, changeFrequency: 'weekly', priority: 0.7 },

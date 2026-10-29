@@ -179,14 +179,34 @@ export default async function ArticleDetailPage({ params }: ArticlePageProps) {
             headline: article.title,
             description: article.excerpt || undefined,
             keywords: article.tags.map(({ tag }) => tag.name).join(", ") || undefined,
-            author: article.author ? { "@type": "Person", name: article.author } : undefined,
+            author: article.author
+              ? {
+                  "@type": "Person",
+                  name: article.author,
+                  url: `${siteConfig.url}/about`,
+                }
+              : undefined,
             datePublished: article.publishedAt?.toISOString(),
             dateModified: article.updatedAt?.toISOString() || article.publishedAt?.toISOString(),
-            image: article.coverImage || undefined,
+            image: article.coverImage
+              ? new URL(article.coverImage, siteConfig.url).toString()
+              : undefined,
             publisher: {
               "@type": "Organization",
               name: siteConfig.name,
+              url: siteConfig.url,
+              logo: {
+                "@type": "ImageObject",
+                url: `${siteConfig.url}/logo.png`,
+              },
             },
+            isPartOf: {
+              "@type": "WebSite",
+              name: siteConfig.name,
+              url: siteConfig.url,
+            },
+            inLanguage: siteConfig.locale,
+            isAccessibleForFree: true,
             mainEntityOfPage: {
               "@type": "WebPage",
               "@id": `${siteConfig.url}/articles/${slug}`,
